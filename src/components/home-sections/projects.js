@@ -43,7 +43,7 @@ const Projects = () => {
         window.location.href='https://github.com/skurnal2/ColorApp';
         break;
       case 'portfolio_site':
-        window.location.href='https://github.com/skurnal2/ReactProjects/tree/master/portolio-site';
+        window.location.href='https://github.com/skurnal2/portfolio-website-sid';
         break;
       case 'old_portfolio':
         window.location.href='https://sidprojectsapp.000webhostapp.com/';
