@@ -9,8 +9,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  Redirect,
+  Link  
 } from "react-router-dom";
 
 //Common Imports within Routes
@@ -203,7 +202,7 @@ class App extends React.Component {
           <div className="full-menu-wrapper" style={menuStyle}>
               <Link to="/" onClick={() => this.handleMenu()}>Home</Link>
               <Link to="/projects" onClick={() => this.handleMenu()}>Projects</Link>
-              <a href="http://github.com/skurnal2">
+              <a href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon
                   className="github-symbol"
                   icon={["fab", "github"]}
@@ -224,7 +223,7 @@ class App extends React.Component {
             <div className="nav-links">
               <Link to="/">Home</Link>
               <Link to="/projects">Projects</Link>
-              <a href="http://github.com/skurnal2">
+              <a href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon
                   className="github-symbol"
                   icon={["fab", "github"]}

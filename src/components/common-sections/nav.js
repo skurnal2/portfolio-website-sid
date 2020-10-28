@@ -15,7 +15,7 @@ class Nav extends React.Component {
         <div className="nav-links">
           <a href="#">Home</a>
           <a href="#">Projects</a>
-          <a href="http://github.com/skurnal2">
+          <a href="http://github.com/skurnal2" target="_blank">
             <FontAwesomeIcon
               className="github-symbol"
               icon={["fab", "github"]}

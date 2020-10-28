@@ -19,37 +19,37 @@ const Projects = () => {
   function goToThisLink(item) {
     switch(item) {
       case 'resume':
-        window.location.href='https://github.com/skurnal2/ResumeAssignment';
+        window.open('https://github.com/skurnal2/ResumeAssignment');
         break;
       case 'sunshine':
-        window.location.href='https://skurnal2.github.io/Sunshine-Meme-Generator/';
+        window.open('https://skurnal2.github.io/Sunshine-Meme-Generator/');
         break;
       case 'geo_covid':
-        window.location.href='https://github.com/skurnal2/ReactProjects/tree/master/geo-covid';
+        window.open('https://github.com/skurnal2/ReactProjects/tree/master/geo-covid');
         break;
       case 'highway_dodge':
-        window.location.href='https://github.com/skurnal2/HighwayDodge';
+        window.open('https://github.com/skurnal2/HighwayDodge');
         break;
       case 'bee_chat':
-        window.location.href='https://github.com/skurnal2/ReactProjects/tree/master/bee-chat-web';
+        window.open('https://github.com/skurnal2/ReactProjects/tree/master/bee-chat-web');
         break;
       case 'la_auto':
-        window.location.href='http://laautodetail.com/';
+        window.open('http://laautodetail.com/');
         break;
       case 'wallify':
-        window.location.href='https://github.com/skurnal2/ReactProjects/tree/master/wallify';
+        window.open('https://github.com/skurnal2/ReactProjects/tree/master/wallify');
         break;
       case 'color_app':
-        window.location.href='https://github.com/skurnal2/ColorApp';
+        window.open('https://github.com/skurnal2/ColorApp');
         break;
       case 'portfolio_site':
-        window.location.href='https://github.com/skurnal2/portfolio-website-sid';
+        window.open('https://github.com/skurnal2/portfolio-website-sid');
         break;
       case 'old_portfolio':
-        window.location.href='https://sidprojectsapp.000webhostapp.com/';
+        window.open('https://sidprojectsapp.000webhostapp.com/');
         break;
       case 'laptops_catalog':
-        window.location.href='https://sidprojectsapp.000webhostapp.com/CatalogProject/';
+        window.open('https://sidprojectsapp.000webhostapp.com/CatalogProject/');
         break;
     }
   }
