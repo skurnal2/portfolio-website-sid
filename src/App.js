@@ -43,14 +43,10 @@ class App extends React.Component {
   gsapFunctions() {
     //Reload GSAP animations on Screen thresholds
     if (window.screen.width > 1024 && this.state.currentWidth < 1024) {      
-      this.setState({
-        currentWidth: window.screen.width        
-      });
+      this.state.currentWidth = window.screen.width;
       this.gsapFunctions();
     } else if (window.screen.width < 1024 && this.state.currentWidth > 1024) {
-      this.setState({
-        currentWidth: window.screen.width        
-      });
+      this.state.currentWidth = window.screen.width;
       this.gsapFunctions();
     }
 
@@ -246,7 +242,8 @@ class App extends React.Component {
           {/* Routes (depends on current route in URL) */}
           <Switch>
             <Route exact path="/">
-              <Redirect to="/home" />              
+              {/* <Redirect to="/home" /> */}
+              <HomePage />  
             </Route>
             <Route path="/home">
               <HomePage />              

@@ -85,12 +85,10 @@ nav {
                 background: linear-gradient(0.45turn,rgba(0,0,0,0), $color3);
                 height: 6rem;            
                 width: 6rem;                 
-                top: -10px;
+                top: -20px;
                 left: -40px;
                 
                 animation: circle-up-down 2.5s ease-in-out infinite;
-                
-            
             }
 
             &:first-child {
