@@ -18,8 +18,7 @@ $color5: #4e2c00;
 }
 
 //Tool Tip
-.tool-tip {
-    font-size: 1.5rem;
+.tool-tip {    
     background-color: $color1 !important;
     border-radius: 1.5rem;
 
@@ -32,6 +31,8 @@ $color5: #4e2c00;
         ul {
             list-style: none;
             font-family: 'Racing Sans One', sans-serif;
+            font-size: 1.5rem;
+
             li {
                 display: inline-block;
                 background-color: $color3;
