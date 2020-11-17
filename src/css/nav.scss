@@ -1,8 +1,8 @@
 //Fonts
-@import url(https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap);
-@import url(https://fonts.googleapis.com/css2?family=Righteous&display=swap);
-@import url(https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap);
-@import url(https://fonts.googleapis.com/css2?family=Sora&display=swap);
+// @import url(https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap);
+// @import url(https://fonts.googleapis.com/css2?family=Righteous&display=swap);
+// @import url(https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap);
+// @import url(https://fonts.googleapis.com/css2?family=Sora&display=swap);
 
 
 //Colors
@@ -15,15 +15,48 @@ $color5: #4e2c00;
 
 
 //Fonts
-$font1: 'Racing Sans One', serif;
-$font2: 'Righteous', cursive;
+$font1: 'Racing Sans One', sans-serif;
+$font2: 'Righteous', sans-serif;
 $font3: 'Rubik Mono One', sans-serif;
 $font4: 'Sora', sans-serif;
 
+//Universal Styles
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box;    
+}
+
+//Scrollbar design
+* {
+    scrollbar-width: thin;
+    scrollbar-color: $color1 $color3;
+  
+  &::-webkit-scrollbar {
+    width: 20px;
+  }
+  &::-webkit-scrollbar-track {
+    background: $color2;
+    background: linear-gradient(190deg, $color2 0%, $color3 100%);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $color1;
+    border-radius: 20px;
+    border: 3px solid $color2;
+    transition: .2s;
+
+    &:hover {
+        background-color: $color4;
+    }
+  }
+}
+
+div {
+    cursor:url(../images/custom-cursor.png), auto;
+}
+
+a {
+    cursor:url(../images/custom-cursor-pointer.png), auto;
 }
 
 // NAVBAR LAYOUT
@@ -72,8 +105,7 @@ nav {
         -webkit-text-stroke: 1px $color1;                
         font-weight: normal;        
         font-size: 2.5vh;
-        position: relative;
-        cursor: pointer;        
+        position: relative;        
         
         #h1-circle {                                  
             position: absolute;            
@@ -131,6 +163,11 @@ nav {
         padding: .4rem;
         color: white;
         font-size: 1.5rem;
+        transition: .2s;
+
+        &:hover {
+            color: $color3;
+        }
     }
 }
 

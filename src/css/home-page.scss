@@ -239,7 +239,8 @@ main {
                     transition: .5s;
                 }
 
-                &:hover {
+                &:hover {                                    
+
                     img {
                         transform: scale(1.1);
                         left: -1rem;
@@ -265,6 +266,8 @@ main {
                 }
 
                 &:hover {
+                    cursor:url(../images/custom-cursor-pointer.png), auto;
+
                     div {
                         bottom: -1rem;
                         padding-bottom: 3.2rem;                                         
@@ -299,8 +302,7 @@ main {
             background: linear-gradient(to right, $color3, $color2);
             padding: 1rem;
             margin-right: .75rem;
-            margin-bottom: .75rem;
-            cursor: pointer;
+            margin-bottom: .75rem;            
             transition: .2s;
             border-radius: 1rem;            
 

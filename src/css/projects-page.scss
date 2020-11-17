@@ -4,7 +4,42 @@
     box-sizing: border-box;
 }
 
+//Colors
+
+$color1: #492B7C;
+$color2: #ED8A0A;
+$color3: #F6D912;
+$color4: #37225a;
+$color5: #4e2c00;
+
 // LAYOUT START
 #projects-panel {
     padding-top: 10rem;
+}
+
+//Tool Tip
+.tool-tip {
+    font-size: 1.5rem;
+    background-color: $color1 !important;
+    border-radius: 1.5rem;
+
+    div {        
+        span {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            font-family: 'Racing Sans One', sans-serif;
+            li {
+                display: inline-block;
+                background-color: $color3;
+                color: $color4;
+                padding: 0 5px;
+                margin: 5px 5px;
+                border-radius: .3rem;
+            }
+        }
+    }
 }

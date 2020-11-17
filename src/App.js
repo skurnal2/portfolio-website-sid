@@ -46,7 +46,7 @@ class App extends React.Component {
       this.gsapFunctions();
     } else if (window.screen.width < 1024 && this.state.currentWidth > 1024) {
       this.state.currentWidth = window.screen.width;
-      this.gsapFunctions();
+      this.gsapFunctions();      
     }
 
     gsap.registerPlugin(ScrollTrigger);
@@ -177,7 +177,7 @@ class App extends React.Component {
         isOpen: false,
         zIndex: "-100",
         opacity: "0",
-      });
+      });      
       console.log("Menu Open");
     } else {
       this.setState({
