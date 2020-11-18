@@ -115,12 +115,12 @@ class App extends React.Component {
       x: -400,
       duration: 35,
     });
-
+    
     ScrollTrigger.matchMedia({
       "(min-width: 1025px)": function () {
         gsap.from(".span-row-1, .span-row-3", {
           scrollTrigger: {
-            trigger: "nav",
+            trigger: ".container",
             start: "top",
             end: "600px 10px",
             scrub: true,
@@ -132,7 +132,7 @@ class App extends React.Component {
         });
         gsap.from(".span-row-2, .span-row-4", {
           scrollTrigger: {
-            trigger: "nav",
+            trigger: ".container",
             start: "top",
             end: "600px 10px",
             scrub: true,
