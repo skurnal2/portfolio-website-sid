@@ -107,7 +107,7 @@ const Projects = () => {
         window.open('https://skurnal2.github.io/Sunshine-Meme-Generator/');
         break;
       case 'geo_covid':
-        window.open('https://github.com/skurnal2/ReactProjects/tree/master/geo-covid');
+        window.open('https://geocovid.netlify.app/');
         break;
       case 'highway_dodge':
         window.open('https://github.com/skurnal2/HighwayDodge');
