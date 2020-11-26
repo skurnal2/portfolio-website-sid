@@ -14,6 +14,7 @@ import digital_resume_url from "../../images/digital-resume.jpg";
 import portfolio_site_url from "../../images/portfolio-site.JPG";
 import old_portfolio_url from "../../images/old-portfolio.JPG";
 import laptops_catalog_url from "../../images/laptops-catalog.JPG";
+import eonet_viewer_url from "../../images/eonet-viewer.JPG";
 
 const Projects = () => {
 
@@ -96,6 +97,13 @@ const Projects = () => {
         <li>MariaDB (MySQL)</li>
       </ul>
       break;
+    case 'eonet_viewer':
+      popup = <ul>
+        <li>React.js</li>
+        <li>Rest API (EONET NASA)</li>
+        <li>Google Maps JavaScript API</li>
+      </ul>
+      break;
   }
 
   function goToThisLink(item) {
@@ -133,6 +141,9 @@ const Projects = () => {
       case 'laptops_catalog':
         window.open('https://sidprojectsapp.000webhostapp.com/CatalogProject/');
         break;
+      case 'eonet_viewer':
+        window.open('https://eonet-viewer.netlify.app/');
+        break;
     }
   }
 
@@ -141,10 +152,10 @@ const Projects = () => {
       <div className="projects-inner">
         <h4>My Projects</h4>
         <div className="projects-container">
-          <div onClick={() => goToThisLink('resume')} data-for='info-tool-tip' data-tip='resume'>
-            <img src={digital_resume_url} alt="Siddharth Kurnal Digital Resume" />
-            <div>Digital Resume</div>
-          </div>          
+          <div onClick={() => goToThisLink('la_auto')} data-for='info-tool-tip' data-tip='la_auto'>
+            <img src={la_auto_detail_url} alt="LA Auto Detail" />
+            <div>LA Auto Detail</div>
+          </div>  
           <div onClick={() => goToThisLink('sunshine')} data-for='info-tool-tip' data-tip='sunshine'>
             <img src={sunshine_url} alt="Sunshine Meme Generator" />
             <div>Sunshine Meme Generator</div>
@@ -153,17 +164,21 @@ const Projects = () => {
             <img src={geo_covid_url} alt='Geo Covid' />
             <div>Geo Covid</div>
           </div>
+          <div onClick={() => goToThisLink('eonet_viewer')} data-for='info-tool-tip' data-tip='eonet_viewer'>
+            <img src={eonet_viewer_url} alt='EONET Viewer' />
+            <div>Eonet Events Viewer</div>
+          </div>
           <div onClick={() => goToThisLink('highway_dodge')} data-for='info-tool-tip' data-tip='highway_dodge'>
             <img src={highway_dodge_url} alt='Highway Dodge' />
             <div>Highway Dodge</div>
           </div>
+          <div onClick={() => goToThisLink('resume')} data-for='info-tool-tip' data-tip='resume'>
+            <img src={digital_resume_url} alt="Siddharth Kurnal Digital Resume" />
+            <div>Digital Resume</div>
+          </div> 
           <div onClick={() => goToThisLink('bee_chat')} data-for='info-tool-tip' data-tip='bee_chat'>
             <img src={bee_chat_url} alt="Bee Chat" />
             <div>BeeChat</div>
-          </div>
-          <div onClick={() => goToThisLink('la_auto')} data-for='info-tool-tip' data-tip='la_auto'>
-            <img src={la_auto_detail_url} alt="LA Auto Detail" />
-            <div>LA Auto Detail</div>
           </div>
           <div onClick={() => goToThisLink('wallify')} data-for='info-tool-tip' data-tip='wallify'>
             <img src={wallify_url} alt="Wallify" />
