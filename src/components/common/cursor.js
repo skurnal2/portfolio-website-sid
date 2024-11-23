@@ -27,8 +27,8 @@ const Cursor = ({
 
     const lerp = (x, y, a) => x * (1 - a) + y * a;
 
-    const moveCircle = (x, y) => {
-        gsap.set(circle.current, {x, y, xPercent: -50, yPercent: -50});
+    const moveCircle = (x, y, rotate) => {
+        gsap.set(circle.current, {x, y, xPercent: -50, yPercent: -50, rotate: rotate});
     }
 
     const animate = () => {
@@ -38,15 +38,16 @@ const Cursor = ({
             y: lerp(y, mouse.current.y, 0.75)
         };
         window.requestAnimationFrame(animate);
-        moveCircle(delayedMouse.current.x, delayedMouse.current.y);
+
+        moveCircle(delayedMouse.current.x, delayedMouse.current.y, (x+y));
     }
 
     const addMouseClickEffect = () => {
-        gsap.to(circle.current, { scale: 0.5, rotate: 90, duration: 0.2 });
+        gsap.to(circle.current, { scale: 0.5, duration: 0.2 });
     }
 
     const removeMouseClickEffect = () => {
-        gsap.to(circle.current, { scale: 1, rotate: 0, duration: 0.2 });
+        gsap.to(circle.current, { scale: 1, duration: 0.2 });
     }
 
     useEffect(() => {

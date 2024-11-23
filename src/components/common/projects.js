@@ -5,7 +5,8 @@ import ReactTooltip from 'react-tooltip';
 const Projects = ({
   id = "",
   title = "Projects",
-  data = []
+  data = [],
+  setProjectHover = null
 }) => {
 
   const [dataTip, setDataTip] = useState('');
@@ -110,7 +111,7 @@ const Projects = ({
         <div className="projects-container">
           {
             data.map((item, i) => (
-              <div key={i} onClick={() => showItem(item)} data-for='info-tool-tip' data-tip='la_auto'>
+              <div key={i} onClick={() => showItem(item)} onMouseEnter={() => setProjectHover(true)} onMouseLeave={() => setProjectHover(false)} data-for='info-tool-tip' data-tip='la_auto'>
                 <img src={item.image} alt={item.title} />
                 <div>{item.title}</div>
               </div>

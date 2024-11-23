@@ -8,26 +8,26 @@ import WorkProjects from "../home-sections/work_projects";
 import OldProjects from "../home-sections/old_projects";
 import Skills from "../home-sections/skills";
 
-class HomePage extends React.Component {
-  render() {
-    return (
-      <div>
-        <main>
-          <div id="name-container">
-            <h2 className="first-h2">SIDDHARTH</h2>
-            <h2 className="second-h2">KURNAL</h2>
-            <h3>EXPERIENCED FULL-STACK DEVELOPER</h3>
-            <div className="circle" />
-            <div className="circle" />
-          </div>
-        </main>
-        <Services />
-        <WorkProjects / >
-        <OldProjects / >
-        <Skills />
-      </div>
-    );
-  }
-}
+const HomePage = ({
+  setCursorEnlarged
+}) => {
+  return (
+    <div>
+      <main>
+        <div id="name-container">
+          <h2 className="first-h2">SIDDHARTH</h2>
+          <h2 className="second-h2">KURNAL</h2>
+          <h3>EXPERIENCED FULL-STACK DEVELOPER</h3>
+          <div className="circle" />
+          <div className="circle" />
+        </div>
+      </main>
+      <Services />
+      <WorkProjects setProjectHover={setCursorEnlarged} />
+      <OldProjects setProjectHover={setCursorEnlarged} />
+      <Skills />
+    </div>
+  );
+};
 
 export default HomePage;

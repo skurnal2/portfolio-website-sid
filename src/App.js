@@ -258,10 +258,10 @@ const App = () => {
           {/* Routes (depends on current route in URL) */}
           <Switch>
             <Route exact path="/">
-              <HomePage />  
+              <HomePage setCursorEnlarged={setCursorEnlarged} />  
             </Route>
             <Route path="/home">
-              <HomePage />              
+              <HomePage setCursorEnlarged={setCursorEnlarged} />              
             </Route>
             <Route path="/contact">
               <ContactPage />              

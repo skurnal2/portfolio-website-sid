@@ -9,6 +9,8 @@
     transition: transform 0.3s ease-out, height 0.3s ease-out, width 0.3s ease-out, backdrop-filter 0.3s ease-out, filter 0.3s ease-out, background-color 0.3s ease-in-out;
     background-color: rgba(255, 255, 255, 0.411);
 
+    background-color: $color3opacity;
+
     &.enlarged {
         // border-width: 2px;
         // background-color: $color1opacity;
@@ -16,7 +18,8 @@
 
         // filter: blur(5px);
         mix-blend-mode: difference;
-        background-color: white;
-        // border-color: transparent;
+        // background-color: white;
+        border-color: transparent;
+        background-color: $color3;
     }
 }

@@ -27,9 +27,11 @@ const oldProjectsData = [
 ]
 
 
-const OldProjects = () => {
+const OldProjects = ({
+    setProjectHover
+}) => {
     return(
-        <Projects title="Old Projects" data={oldProjectsData}/>
+        <Projects title="Old Projects" data={oldProjectsData} setProjectHover={setProjectHover}/>
     );
 }
 
