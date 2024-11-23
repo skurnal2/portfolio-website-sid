@@ -203,6 +203,13 @@ const App = () => {
     });
   }
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
   const cursorEnlargeEffect = () => {
     return {
       onMouseEnter: () => setCursorEnlarged(true),
@@ -215,8 +222,8 @@ const App = () => {
       <div className="parent">
         <div className="container">
           <div className="full-menu-wrapper" style={menuStyle}>
-              <Link to="/" onClick={handleMenu}>Home</Link>
-              <Link to="/projects" onClick={handleMenu}>Projects</Link>
+              <a onClick={scrollToTop}>Home</a>
+              <a onClick={handleMenu}>Projects</a>
               <a href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon
                   className="github-symbol"
@@ -235,7 +242,7 @@ const App = () => {
               <span id="title-second">Kurnal</span>
             </h1>
             <div className="nav-links">
-              <Link to="/" {...cursorEnlargeEffect()}><span>Home</span></Link>
+              <a {...cursorEnlargeEffect()} onClick={scrollToTop}><span>Home</span></a>
               <a {...cursorEnlargeEffect()} onClick={goToProjects}><span>Projects</span></a>
               <a {...cursorEnlargeEffect()} href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
                 <span>

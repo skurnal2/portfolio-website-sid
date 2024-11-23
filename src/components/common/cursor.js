@@ -2,11 +2,10 @@ import gsap from 'gsap';
 import React, { useEffect, useRef } from 'react';
 
 const Cursor = ({
-    cursorEnlarged = false,
-    shape = "circle"
+    cursorEnlarged = false
 }) => {
     const size = cursorEnlarged ? 80 : 20;
-    const borderRadius = shape == "circle" ? "50%" : "10px";
+    const borderRadius = cursorEnlarged ? "10px" : "5px";
     const circle = useRef();
     const mouse = useRef({
         x: 0,

@@ -52,15 +52,15 @@ nav {
         
         .h1-circle {                                  
             position: absolute;            
-            border-radius: 50%;
+            border-radius: 30%;
             margin-left: 45%;
             visibility: none;
                  
             &:nth-child(2) {
                 background: linear-gradient(0.45turn,rgba(0,0,0,0), $color3);
-                height: 6rem;            
-                width: 6rem;                 
-                top: -20px;
+                height: 4rem;            
+                width: 4rem;                 
+                top: 1px;
                 left: -40px;
                 
                 animation: circle-up-down 2.5s ease-in-out infinite;
@@ -68,9 +68,9 @@ nav {
 
             &:first-child {
                 background: linear-gradient(0.45turn,rgba(0,0,0,0), $color2);
-                height: 10rem;            
-                width: 10rem;                 
-                top: -6.5rem;
+                height: 7rem;            
+                width: 7rem;                 
+                top: -3rem;
                 left: 10px;
 
                 animation: circle-up-down 3s ease-in-out infinite;
@@ -79,7 +79,7 @@ nav {
             
             @keyframes circle-up-down {
                 50% {
-                    transform: translateY(-3px);
+                    transform: translateY(-4vh) rotate(10deg);
                 }
             }
         }
