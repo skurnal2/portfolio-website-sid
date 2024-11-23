@@ -1,16 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-//Colors
-
-$color1: #492B7C;
-$color2: #ED8A0A;
-$color3: #F6D912;
-$color4: #37225a;
-$color5: #4e2c00;
+@import 'variables';
 
 // LAYOUT START
 #projects-panel {

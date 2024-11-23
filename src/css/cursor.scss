@@ -1,0 +1,22 @@
+.awesome-cursor {
+    border-radius: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    border: 1px solid white;
+    pointer-events: none;
+    transition: transform 0.3s ease-out, height 0.3s ease-out, width 0.3s ease-out, backdrop-filter 0.3s ease-out, filter 0.3s ease-out, background-color 0.3s ease-in-out;
+    background-color: rgba(255, 255, 255, 0.411);
+
+    &.enlarged {
+        // border-width: 2px;
+        // background-color: $color1opacity;
+        // backdrop-filter: blur(3px);
+
+        // filter: blur(5px);
+        mix-blend-mode: difference;
+        background-color: white;
+        // border-color: transparent;
+    }
+}

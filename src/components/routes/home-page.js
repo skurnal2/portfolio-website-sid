@@ -4,7 +4,8 @@ import '../../css/nav.scss';
 
 //Component Imports
 import Services from "../home-sections/services";
-import Projects from "../home-sections/projects";
+import WorkProjects from "../home-sections/work_projects";
+import OldProjects from "../home-sections/old_projects";
 import Skills from "../home-sections/skills";
 
 class HomePage extends React.Component {
@@ -15,13 +16,14 @@ class HomePage extends React.Component {
           <div id="name-container">
             <h2 className="first-h2">SIDDHARTH</h2>
             <h2 className="second-h2">KURNAL</h2>
-            <h3>WEB / MOBILE DEVELOPER</h3>
+            <h3>EXPERIENCED FULL-STACK DEVELOPER</h3>
             <div className="circle" />
             <div className="circle" />
           </div>
         </main>
         <Services />
-        <Projects />
+        <WorkProjects / >
+        <OldProjects / >
         <Skills />
       </div>
     );

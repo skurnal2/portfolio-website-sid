@@ -1,5 +1,5 @@
 //Imports
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -13,40 +13,39 @@ import {
 } from "react-router-dom";
 
 //Common Imports within Routes
-import "./css/nav.scss";
+import "./css/global.scss";
 
 //Page imports
 import HomePage from "./components/routes/home-page";
-import ProjectsPage from "./components/routes/projects-page";
 import ContactPage from "./components/routes/contact-page";
+
+//Component Imports
+import Cursor from "./components/common/cursor";
 
 library.add(faGithub, faBars);
 
-class App extends React.Component {
-  constructor() {
-    super();
+const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [zIndex, setZIndex] = useState("-100");
+  const [opacity, setOpacity] = useState("0");
+  const [currentWidth, setCurrentWidth] = useState(window.screen.width);
 
-    this.state = {
-      isOpen: false,
-      zIndex: "-100",
-      opacity: "0",
-      currentWidth: window.screen.width,
-    };
-  }
+  //Cursor States
+  const [cursorEnlarged, setCursorEnlarged] = useState(false);
 
-  componentDidMount() {
-    this.gsapFunctions();
-  }
+  useEffect(() => {
+    gsapFunctions();
+  }, []);
 
   // Custom Functions START
-  gsapFunctions() {
+  const gsapFunctions = () => {
     //Reload GSAP animations on Screen thresholds
-    if (window.screen.width > 1024 && this.state.currentWidth < 1024) {      
-      this.state.currentWidth = window.screen.width;
-      this.gsapFunctions();
-    } else if (window.screen.width < 1024 && this.state.currentWidth > 1024) {
-      this.state.currentWidth = window.screen.width;
-      this.gsapFunctions();      
+    if (window.screen.width > 1024 && currentWidth < 1024) {      
+      setCurrentWidth(window.screen.width);
+      gsapFunctions();
+    } else if (window.screen.width < 1024 && currentWidth > 1024) {
+      setCurrentWidth(window.screen.width);
+      gsapFunctions();      
     }
 
     gsap.registerPlugin(ScrollTrigger);
@@ -55,6 +54,7 @@ class App extends React.Component {
       duration: 1,
       opacity: 0,
       y: -150,
+      x: -100,
       stagger: -0.25,
     });
 
@@ -91,6 +91,7 @@ class App extends React.Component {
       duration: 4,
       opacity: 0,
       y: -250,
+      rotate: 20,
       stagger: 0.3,
       ease: "elastic",
     });
@@ -171,37 +172,51 @@ class App extends React.Component {
     });
   }
 
-  handleMenu() {
-    if (this.state.isOpen) {
-      this.setState({
-        isOpen: false,
-        zIndex: "-100",
-        opacity: "0",
-      });      
+  const handleMenu = () => {
+    if (isOpen) {
+      setIsOpen(false);
+      setZIndex("-100");
+      setOpacity("0");
       console.log("Menu Open");
     } else {
-      this.setState({
-        isOpen: true,
-        zIndex: "300",
-        opacity: "1",
-      });
+      setIsOpen(true);
+      setZIndex("300");
+      setOpacity("1");
       console.log("Menu Close");
     }
   }
   //Custom Functions END
 
-  render() {
-    const menuStyle = {
-      zIndex: this.state.zIndex,
-      opacity: this.state.opacity,
-    };
+  const menuStyle = {
+    zIndex,
+    opacity,
+  };
+  
+  const goToProjects = (e) => {
+    e.preventDefault();
+    const projectsSection = document.querySelector('#projects');
+    const coordinates = projectsSection.getBoundingClientRect();
+    const offset = -150; // Add offset to account for nav bar height
+    window.scrollTo({
+      top: coordinates.top + window.scrollY + offset,
+      behavior: 'smooth'
+    });
+  }
 
-    return (
-      <Router>
+  const cursorEnlargeEffect = () => {
+    return {
+      onMouseEnter: () => setCursorEnlarged(true),
+      onMouseLeave: () => setCursorEnlarged(false)
+    };
+  }
+
+  return (
+    <Router>
+      <div className="parent">
         <div className="container">
           <div className="full-menu-wrapper" style={menuStyle}>
-              <Link to="/" onClick={() => this.handleMenu()}>Home</Link>
-              <Link to="/projects" onClick={() => this.handleMenu()}>Projects</Link>
+              <Link to="/" onClick={handleMenu}>Home</Link>
+              <Link to="/projects" onClick={handleMenu}>Projects</Link>
               <a href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon
                   className="github-symbol"
@@ -209,57 +224,46 @@ class App extends React.Component {
                 />
                 GitHub
               </a>
-              {/* <Link to="/contact" onClick={() => this.handleMenu()}>Contact</Link> */}
               <a href="mailto:contact@siddharthkurnal.com">Contact</a> 
           </div>
           <nav>
             <h1>
-              <div id="h1-circle" />
-              <div id="h1-circle" />
+              <div className="h1-circle" />
+              <div className="h1-circle" />
               <span id="title-first">Siddharth</span>
               <br />
               <span id="title-second">Kurnal</span>
             </h1>
             <div className="nav-links">
-              <Link to="/">Home</Link>
-              <Link to="/projects">Projects</Link>
-              <a href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon
-                  className="github-symbol"
-                  icon={["fab", "github"]}
-                />
-                GitHub
+              <Link to="/" {...cursorEnlargeEffect()}><span>Home</span></Link>
+              <a {...cursorEnlargeEffect()} onClick={goToProjects}><span>Projects</span></a>
+              <a {...cursorEnlargeEffect()} href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
+                <span>
+                <FontAwesomeIcon className="github-symbol" icon={["fab", "github"]}/>GitHub</span>
               </a>
-              {/* <Link to="/contact">Contact</Link> */}
-              <a href="mailto:contact@siddharthkurnal.com">Contact</a> 
+              <a {...cursorEnlargeEffect()} href="mailto:contact@siddharthkurnal.com"><span>Contact</span></a> 
             </div>
           </nav>
-          <div className="nav-menu-button" onClick={() => this.handleMenu()}>
+          <div className="nav-menu-button" onClick={handleMenu}>
             <FontAwesomeIcon className="menu-symbol" icon={["fa", "bars"]} />
           </div>
 
           {/* Routes (depends on current route in URL) */}
           <Switch>
             <Route exact path="/">
-              {/* <Redirect to="/home" /> */}
               <HomePage />  
             </Route>
             <Route path="/home">
               <HomePage />              
             </Route>
-            <Route path="/projects">
-              <ProjectsPage />              
-            </Route>
             <Route path="/contact">
               <ContactPage />              
             </Route>
           </Switch>          
-
-          {/* <footer>Footer</footer> */}
         </div>
-      </Router>
-    );
-  }
+        <Cursor cursorEnlarged={cursorEnlarged}/>
+      </div>
+    </Router>
+  );
 }
-
 export default App;

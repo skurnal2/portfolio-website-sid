@@ -1,0 +1,39 @@
+@import 'variables';
+@import 'nav';
+@import 'cursor';
+
+
+//Universal Styles
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;    
+}
+
+//Scrollbar design
+* {
+    scrollbar-color: $color1;
+  
+    &::-webkit-scrollbar {
+        width: 20px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $color3;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $color1;
+        border-radius: 20px;
+        border: 3px solid $color3;
+        transition: .2s;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}
+
+* {
+    cursor: none;
+}

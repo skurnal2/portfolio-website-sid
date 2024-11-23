@@ -6,8 +6,8 @@ class Nav extends React.Component {
     return (
       <nav>
         <h1>
-          <div id="h1-circle" />
-          <div id="h1-circle" />
+          <div className="h1-circle" />
+          <div className="h1-circle" />
           <span id="title-first">Siddharth</span>
           <br />
           <span id="title-second">Kurnal</span>
