@@ -1,5 +1,5 @@
 //Imports
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +15,7 @@ import HomePage from "./components/pages/home-page";
 //Component Imports
 import Cursor from "./components/common/cursor";
 import Lenis from "lenis";
+import { setRandomTheme } from "./components/common/colors";
 
 library.add(faGithub, faBars);
 
@@ -36,8 +37,9 @@ const App = () => {
   const [cursorBackdropBlur, setCursorBackdropBlur] = useState(true);
 
   useLayoutEffect(() => {
+    setRandomTheme();
     animationFunctions();
-  }, [])
+  }, []);
 
   // Custom Functions START
   const animationFunctions = () => {
@@ -293,6 +295,7 @@ const App = () => {
                   setCursorBorder(false);
                   setCursorDoubleSize(true);
                   setCursorBackgroundOpacity(0.75);
+                  setCursorBackdropBlur(true);
                 },
                 onMouseLeave: () => {
                   setCursorBlendColor(false);
@@ -307,7 +310,6 @@ const App = () => {
                   setCursorCircle(true);
                   setCursorDoubleSize(false);
                   setCursorBlendColor(false);
-                  setCursorBackdropBlur(true);
                   setCursorBackgroundOpacity(0.2);
                   setCursorBorder(true);
                   setCursorBackgroundRGB('0, 0, 0');
@@ -318,7 +320,6 @@ const App = () => {
                   setCursorCircle(false);
                   setCursorBackgroundOpacity(0.75);
                   setCursorBlendColor(true);
-                  setCursorBackdropBlur(false);
                   setCursorBorder(false);
                   setCursorBackgroundRGB('');
 

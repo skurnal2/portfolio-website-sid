@@ -37,3 +37,14 @@
 * {
     cursor: none;
 }
+
+#theme-info-popup {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: block;
+    background-color: rgba(var(--color1), 1);
+    color: rgba(var(--color3), 1);
+    padding: 10px;
+    border-radius: 15px;
+}
