@@ -1,5 +1,5 @@
 //Imports
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -33,9 +33,9 @@ const App = () => {
   //Cursor States
   const [cursorEnlarged, setCursorEnlarged] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     gsapFunctions();
-  }, []);
+  }, [])
 
   // Custom Functions START
   const gsapFunctions = () => {
@@ -50,12 +50,13 @@ const App = () => {
 
     gsap.registerPlugin(ScrollTrigger);
     //GSAP Animations
-    gsap.from(".nav-links a", {
+    gsap.to(".nav-links a", {
       duration: 1,
-      opacity: 0,
-      y: -150,
-      x: -100,
+      opacity: 1,
+      y: 30,
+      x: 20,
       stagger: -0.25,
+      ease: 'elastic'
     });
 
     gsap.from("nav h1", {
@@ -67,6 +68,7 @@ const App = () => {
       },
       y: -120,
     });
+
     gsap.to("#title-first", {
       scrollTrigger: {
         trigger: ".services",
@@ -77,6 +79,7 @@ const App = () => {
       visibility: "visible",
       marginRight: 50,
     });
+
     gsap.to("#title-second", {
       scrollTrigger: {
         trigger: ".services",
@@ -87,7 +90,9 @@ const App = () => {
       visibility: "visible",
       marginLeft: 50,
     });
+
     gsap.from(".circle", {
+      delay: 1,
       duration: 4,
       opacity: 0,
       y: -250,
