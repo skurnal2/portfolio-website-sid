@@ -76,14 +76,6 @@ export const themes = [
         color5: "241, 198, 77",      // Mustard Yellow
     },
     {
-        name: "Oceanic Depths",
-        color1: "2, 62, 74",         // Deep Teal
-        color2: "40, 150, 172",      // Seafoam Green
-        color3: "0, 121, 149",       // Ocean Blue
-        color4: "144, 204, 204",     // Light Teal
-        color5: "10, 18, 23",        // Dark Navy
-    },
-    {
         name: "Frozen Peaks",
         color1: "45, 60, 82",        // Cool Blue
         color2: "200, 230, 252",     // Pale Ice
@@ -106,14 +98,6 @@ export const themes = [
         color3: "191, 165, 191",     // Soft Lavender
         color4: "43, 51, 63",        // Slate Gray
         color5: "255, 105, 88",      // Coral Peach
-    },
-    {
-        name: "Autumn Spice",
-        color1: "195, 101, 56",      // Spicy Orange
-        color2: "70, 57, 48",        // Earthy Brown
-        color3: "238, 203, 133",     // Golden Wheat
-        color4: "134, 92, 54",       // Dark Brown
-        color5: "228, 139, 91",      // Rusty Red
     },
     {
         name: "Frosted Moon",

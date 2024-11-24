@@ -240,19 +240,17 @@ const App = () => {
   const navLinksEffects = (icon) => {
     return {
       onMouseEnter: () => {
-        setCursorBlendColor(true);
+        setCursorBackgroundRGB('0,0,0');
         setCursorScale(3);
         setCursorBackgroundOpacity(0.2);
-        setCursorBorder(false);
         setCursorBackdropBlur(true);
         setCursorBorderRadius("20px");
         setCursorContent(<FontAwesomeIcon icon={icon} style={{fontSize: '30px', color: 'white'}}/>);
       },
       onMouseLeave: () => {
-        setCursorBlendColor(false);
+        setCursorBackgroundRGB('');
         setCursorScale(1);
         setCursorBackgroundOpacity(0.3);
-        setCursorBorder(true);
         setCursorBackdropBlur(true);
         setCursorBorderRadius("5px");
         setCursorContent(null);
@@ -302,13 +300,11 @@ const App = () => {
               containerProps: {
                 onMouseEnter: () => {
                   setCursorBlendColor(true);
-                  setCursorBorder(false);
                   setCursorBackgroundOpacity(0.75);
                   setCursorBackdropBlur(true);
                 },
                 onMouseLeave: () => {
                   setCursorBlendColor(false);
-                  setCursorBorder(true);
                   setCursorBackgroundOpacity(0.3);
                 }
               },
@@ -317,14 +313,12 @@ const App = () => {
                   setCursorScale(2);
                   setCursorBlendColor(false);
                   setCursorBackgroundOpacity(0.2);
-                  setCursorBorder(true);
                   setCursorBackgroundRGB('0, 0, 0');
                 },
                 onMouseLeave: () => {
                   setCursorScale(1);
                   setCursorBackgroundOpacity(0.75);
                   setCursorBlendColor(true);
-                  setCursorBorder(false);
                   setCursorBackgroundRGB('');
 
                 }
