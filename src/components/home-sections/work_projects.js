@@ -4,10 +4,11 @@ import Projects from "../common/projects";
 const workProjectsData = [];
 
 const WorkProjects = ({
-    setProjectHover
+    containerProps,
+    projectItemProps
 }) => {
     return(
-        <Projects id="projects" title="Work Projects" data={workProjectsData} setProjectHover={setProjectHover}/>
+        <Projects id="projects" title="Work Projects" data={workProjectsData} containerProps={containerProps} projectItemProps={projectItemProps}/>
     );
 }
 

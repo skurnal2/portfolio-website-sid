@@ -2,10 +2,15 @@ import gsap from 'gsap';
 import React, { useEffect, useRef } from 'react';
 
 const Cursor = ({
-    cursorEnlarged = false
+    cursorEnlarged = false,
+    cursorBlendColor = false,
+    cursorBlur = false,
+    cursorCircle = false,
+    cursorBorder = true,
+    cursorBackgroundOpacity = true
 }) => {
     const size = cursorEnlarged ? 80 : 20;
-    const borderRadius = cursorEnlarged ? "10px" : "5px";
+    const borderRadius = cursorCircle ? "50%" : (cursorEnlarged ? "10px" : "5px");
     const circle = useRef();
     const mouse = useRef({
         x: 0,
@@ -61,7 +66,15 @@ const Cursor = ({
     return (
         <div
             ref={circle}
-            className={`awesome-cursor ${cursorEnlarged ? 'enlarged' : ''}`}
+            className={`
+                awesome-cursor
+                ${cursorEnlarged ? ' enlarged' : ''}
+                ${cursorBlendColor ? ' blend' : ''}
+                ${cursorBlur ? ' blur' : ''}
+                ${cursorCircle ? ' circle' : ''}
+                ${cursorBorder ? ' border' : ''}
+                ${cursorBackgroundOpacity ? ' background-opacity' : ''}
+            `}
             style={{
                 width: size,
                 height: size,

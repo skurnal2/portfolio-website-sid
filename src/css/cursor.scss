@@ -4,22 +4,29 @@
     top: 0;
     left: 0;
     z-index: 200;
-    border: 1px solid white;
+    border: 1px solid transparent;
     pointer-events: none;
-    transition: transform 0.3s ease-out, height 0.3s ease-out, width 0.3s ease-out, backdrop-filter 0.3s ease-out, filter 0.3s ease-out, background-color 0.3s ease-in-out;
+    transition: transform 0.3s ease-out, height 0.3s ease-out, width 0.3s ease-out, filter 0.3s ease-out, background-color 0.3s ease-in-out, border-radius 0.3s ease-out, border-color 0.3s ease-out;
     background-color: rgba(255, 255, 255, 0.411);
+    background-color: $color3;
 
-    background-color: $color3opacity;
+    // handled through react
+    // &.enlarged {}
+    // &.circle {}
 
-    &.enlarged {
-        // border-width: 2px;
-        // background-color: $color1opacity;
-        // backdrop-filter: blur(3px);
-
-        // filter: blur(5px);
+    &.blend {
         mix-blend-mode: difference;
-        // background-color: white;
-        border-color: transparent;
-        background-color: $color3;
+    }
+
+    &.blur {
+        filter: blur(10px);
+    }
+
+    &.border {
+        border-color: white;
+    }
+
+    &.background-opacity {
+        background-color: $color3opacity;
     }
 }

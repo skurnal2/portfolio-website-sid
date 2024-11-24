@@ -9,7 +9,7 @@ import OldProjects from "../home-sections/old_projects";
 import Skills from "../home-sections/skills";
 
 const HomePage = ({
-  setCursorEnlarged
+  projectProps
 }) => {
   return (
     <div>
@@ -23,8 +23,8 @@ const HomePage = ({
         </div>
       </main>
       <Services />
-      <WorkProjects setProjectHover={setCursorEnlarged} />
-      <OldProjects setProjectHover={setCursorEnlarged} />
+      <WorkProjects {...projectProps} />
+      <OldProjects {...projectProps} />
       <Skills />
     </div>
   );
