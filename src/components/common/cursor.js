@@ -2,18 +2,18 @@ import gsap from 'gsap';
 import React, { useEffect, useRef } from 'react';
 
 const Cursor = ({
-    cursorEnlarged = false,
+    cursorScale = false,
     cursorBlendColor = false,
     cursorBlur = false,
-    cursorCircle = false,
     cursorBorder = true,
-    cursorDoubleSize = false,
     cursorBackdropBlur = false,
     cursorBackgroundRGB = "",
-    cursorBackgroundOpacity = 1
+    cursorBackgroundOpacity = 1,
+    cursorContent = null,
+    cursorBorderRadius = "0px"
 }) => {
-    const size = (cursorEnlarged ? 80 : 20) * (cursorDoubleSize ? 2 : 1);
-    const borderRadius = cursorCircle ? "50%" : (cursorEnlarged ? "10px" : "5px");
+    const size = cursorScale * 20;
+    const borderRadius = cursorBorderRadius;
     const circle = useRef();
     const mouse = useRef({
         x: 0,
@@ -82,7 +82,9 @@ const Cursor = ({
                 borderRadius: borderRadius,
                 backgroundColor: `rgba(${cursorBackgroundRGB ? cursorBackgroundRGB : 'var(--color3)'}, ${cursorBackgroundOpacity})`
             }}
-        />
+        >
+            {cursorContent}
+        </div>
     );
 }
 

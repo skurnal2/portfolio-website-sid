@@ -7,12 +7,10 @@
     border: 1px solid transparent;
     pointer-events: none;
     transition: transform 0.3s ease-out, height 0.3s ease-out, width 0.3s ease-out, backdrop-filter 0.3s ease-out, filter 0.3s ease-out, background-color 0.3s ease-in-out, border-radius 0.3s ease-out, border-color 0.3s ease-out;
-
-    // handled through react
-    // - background-opacity
-    // - enlarged
-    // - circle
-    // - zoom
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 
     &.blend {
         mix-blend-mode: difference;

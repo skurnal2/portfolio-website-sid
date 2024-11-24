@@ -4,7 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faCompass } from "@fortawesome/free-solid-svg-icons";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { gsap, ScrollTrigger } from "gsap/all";
+import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 
 //Common Imports within Routes
 import "./css/global.scss";
@@ -15,9 +19,11 @@ import HomePage from "./components/pages/home-page";
 //Component Imports
 import Cursor from "./components/common/cursor";
 import Lenis from "lenis";
+
+//Function Imports
 import { setRandomTheme } from "./components/common/colors";
 
-library.add(faGithub, faBars);
+library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane);
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,15 +32,15 @@ const App = () => {
   const [currentWidth, setCurrentWidth] = useState(window.screen.width);
 
   //Cursor States
-  const [cursorEnlarged, setCursorEnlarged] = useState(false);
+  const [cursorScale, setCursorScale] = useState(1);
+  const [cursorBorderRadius, setCursorBorderRadius] = useState("5px");
   const [cursorBlendColor, setCursorBlendColor] = useState(false);
   const [cursorBlur, setCursorBlur] = useState(false);
-  const [cursorCircle, setCursorCircle] = useState(false);
   const [cursorBorder, setCursorBorder] = useState(true);
   const [cursorBackgroundOpacity, setCursorBackgroundOpacity] = useState(0.3);
   const [cursorBackgroundRGB, setCursorBackgroundRGB] = useState("");
-  const [cursorDoubleSize, setCursorDoubleSize] = useState(false);
   const [cursorBackdropBlur, setCursorBackdropBlur] = useState(true);
+  const [cursorContent, setCursorContent] = useState(null);
 
   useLayoutEffect(() => {
     setRandomTheme();
@@ -231,21 +237,25 @@ const App = () => {
     });
   }
 
-  const navLinksEffects = () => {
+  const navLinksEffects = (icon) => {
     return {
       onMouseEnter: () => {
         setCursorBlendColor(true);
-        setCursorEnlarged(true);
-        setCursorBackgroundOpacity(0.75);
+        setCursorScale(3);
+        setCursorBackgroundOpacity(0.2);
         setCursorBorder(false);
-        setCursorBackdropBlur(false);
+        setCursorBackdropBlur(true);
+        setCursorBorderRadius("20px");
+        setCursorContent(<FontAwesomeIcon icon={icon} style={{fontSize: '30px', color: 'white'}}/>);
       },
       onMouseLeave: () => {
         setCursorBlendColor(false);
-        setCursorEnlarged(false);
+        setCursorScale(1);
         setCursorBackgroundOpacity(0.3);
         setCursorBorder(true);
         setCursorBackdropBlur(true);
+        setCursorBorderRadius("5px");
+        setCursorContent(null);
       }
     };
   }
@@ -274,13 +284,13 @@ const App = () => {
             <span id="title-second">Kurnal</span>
           </h1>
           <div className="nav-links">
-            <a {...navLinksEffects()} onClick={scrollToTop}><span>Home</span></a>
-            <a {...navLinksEffects()} onClick={goToProjects}><span>Projects</span></a>
-            <a {...navLinksEffects()} href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
+            <a {...navLinksEffects(["fas", "home"])} onClick={scrollToTop}><span>Home</span></a>
+            <a {...navLinksEffects(["fas", "compass"])} onClick={goToProjects}><span>Projects</span></a>
+            <a {...navLinksEffects(["fab", "github"])} href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
               <span>
               <FontAwesomeIcon className="github-symbol" icon={["fab", "github"]}/>GitHub</span>
             </a>
-            <a {...navLinksEffects()} href="mailto:contact@siddharthkurnal.com"><span>Contact</span></a> 
+            <a {...navLinksEffects(["fas", "paper-plane"])} href="mailto:contact@siddharthkurnal.com"><span>Contact</span></a> 
           </div>
         </nav>
         <div className="nav-menu-button" onClick={handleMenu}>
@@ -293,31 +303,25 @@ const App = () => {
                 onMouseEnter: () => {
                   setCursorBlendColor(true);
                   setCursorBorder(false);
-                  setCursorDoubleSize(true);
                   setCursorBackgroundOpacity(0.75);
                   setCursorBackdropBlur(true);
                 },
                 onMouseLeave: () => {
                   setCursorBlendColor(false);
                   setCursorBorder(true);
-                  setCursorDoubleSize(false);
                   setCursorBackgroundOpacity(0.3);
                 }
               },
               projectItemProps: {
                 onMouseEnter: () => {
-                  setCursorEnlarged(true);
-                  setCursorCircle(true);
-                  setCursorDoubleSize(false);
+                  setCursorScale(2);
                   setCursorBlendColor(false);
                   setCursorBackgroundOpacity(0.2);
                   setCursorBorder(true);
                   setCursorBackgroundRGB('0, 0, 0');
                 },
                 onMouseLeave: () => {
-                  setCursorEnlarged(false);
-                  setCursorDoubleSize(true);
-                  setCursorCircle(false);
+                  setCursorScale(1);
                   setCursorBackgroundOpacity(0.75);
                   setCursorBlendColor(true);
                   setCursorBorder(false);
@@ -329,15 +333,30 @@ const App = () => {
         />
       </div>
       <Cursor
-        cursorEnlarged = {cursorEnlarged}
+        cursorScale = {cursorScale}
         cursorBlendColor = {cursorBlendColor}
         cursorBlur = {cursorBlur}
-        cursorCircle = {cursorCircle}
         cursorBorder = {cursorBorder}
         cursorBackgroundRGB= {cursorBackgroundRGB}
         cursorBackgroundOpacity={cursorBackgroundOpacity}
-        cursorDoubleSize = {cursorDoubleSize}
         cursorBackdropBlur = {cursorBackdropBlur}
+        cursorContent = {cursorContent}
+        cursorBorderRadius = {cursorBorderRadius}
+      />
+      <div
+        id="theme-info-popup"
+        onClick={setRandomTheme}
+        onMouseEnter={() => {
+          setCursorScale(2);
+          setCursorBackgroundRGB('0,0,0');
+          setCursorContent(<FontAwesomeIcon icon={["fas", "sync-alt"]} style={{fontSize: '20px', color: '#ffffffc2'}}/>);
+        }}
+
+        onMouseLeave={() => {
+          setCursorScale(1);
+          setCursorBackgroundRGB('');
+          setCursorContent(null);
+        }}
       />
     </div>
   );
