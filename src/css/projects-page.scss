@@ -7,7 +7,7 @@
 
 //Tool Tip
 .tool-tip {    
-    background-color: $color1 !important;
+    background-color: rgba(var(--color1), 1) !important;
     border-radius: 1.5rem;
 
     div {        
@@ -23,8 +23,8 @@
 
             li {
                 display: inline-block;
-                background-color: $color3;
-                color: $color4;
+                background-color: rgba(var(--color3), 1);
+                color: rgba(var(--color4), 1);
                 padding: 0 5px;
                 margin: 5px 5px;
                 border-radius: .3rem;

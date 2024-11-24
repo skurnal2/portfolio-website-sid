@@ -44,7 +44,8 @@ const Projects = ({
           {
             data.map(item => (
               <div key={item.key} onClick={() => showItem(item)} data-for='info-tool-tip' data-tip={item.key} {...projectItemProps}>
-                <img src={item.image} alt={item.title} />
+                ~{item.key}~data
+                <img src={item.image} alt={item.title} />d
                 <div>{item.title}</div>
               </div>
             ))

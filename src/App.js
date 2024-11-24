@@ -30,7 +30,10 @@ const App = () => {
   const [cursorBlur, setCursorBlur] = useState(false);
   const [cursorCircle, setCursorCircle] = useState(false);
   const [cursorBorder, setCursorBorder] = useState(true);
-  const [cursorBackgroundOpacity, setCursorBackgroundOpacity] = useState(true);
+  const [cursorBackgroundOpacity, setCursorBackgroundOpacity] = useState(0.3);
+  const [cursorBackgroundRGB, setCursorBackgroundRGB] = useState("");
+  const [cursorDoubleSize, setCursorDoubleSize] = useState(false);
+  const [cursorBackdropBlur, setCursorBackdropBlur] = useState(true);
 
   useLayoutEffect(() => {
     animationFunctions();
@@ -231,14 +234,16 @@ const App = () => {
       onMouseEnter: () => {
         setCursorBlendColor(true);
         setCursorEnlarged(true);
-        setCursorBackgroundOpacity(false);
+        setCursorBackgroundOpacity(0.75);
         setCursorBorder(false);
+        setCursorBackdropBlur(false);
       },
       onMouseLeave: () => {
         setCursorBlendColor(false);
         setCursorEnlarged(false);
-        setCursorBackgroundOpacity(true);
+        setCursorBackgroundOpacity(0.3);
         setCursorBorder(true);
+        setCursorBackdropBlur(true);
       }
     };
   }
@@ -286,22 +291,37 @@ const App = () => {
                 onMouseEnter: () => {
                   setCursorBlendColor(true);
                   setCursorBorder(false);
+                  setCursorDoubleSize(true);
+                  setCursorBackgroundOpacity(0.75);
                 },
                 onMouseLeave: () => {
                   setCursorBlendColor(false);
                   setCursorBorder(true);
+                  setCursorDoubleSize(false);
+                  setCursorBackgroundOpacity(0.3);
                 }
               },
               projectItemProps: {
                 onMouseEnter: () => {
                   setCursorEnlarged(true);
-                  setCursorBlur(true);
                   setCursorCircle(true);
+                  setCursorDoubleSize(false);
+                  setCursorBlendColor(false);
+                  setCursorBackdropBlur(true);
+                  setCursorBackgroundOpacity(0.2);
+                  setCursorBorder(true);
+                  setCursorBackgroundRGB('0, 0, 0');
                 },
                 onMouseLeave: () => {
                   setCursorEnlarged(false);
-                  setCursorBlur(false);
+                  setCursorDoubleSize(true);
                   setCursorCircle(false);
+                  setCursorBackgroundOpacity(0.75);
+                  setCursorBlendColor(true);
+                  setCursorBackdropBlur(false);
+                  setCursorBorder(false);
+                  setCursorBackgroundRGB('');
+
                 }
               }
           }}
@@ -313,7 +333,10 @@ const App = () => {
         cursorBlur = {cursorBlur}
         cursorCircle = {cursorCircle}
         cursorBorder = {cursorBorder}
+        cursorBackgroundRGB= {cursorBackgroundRGB}
         cursorBackgroundOpacity={cursorBackgroundOpacity}
+        cursorDoubleSize = {cursorDoubleSize}
+        cursorBackdropBlur = {cursorBackdropBlur}
       />
     </div>
   );

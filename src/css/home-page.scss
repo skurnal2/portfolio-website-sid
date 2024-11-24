@@ -31,7 +31,7 @@ main {
 
 //Container
 .parent {
-    background: radial-gradient(circle at center, $color1, $color2, $color1, $color2);
+    background: radial-gradient(circle at center, rgba(var(--color1), 1), rgba(var(--color2), 1), rgba(var(--color1), 1), rgba(var(--color2), 1));
     background-size: 400% 400%;
     animation: gradient 10s ease infinite;
 
@@ -48,7 +48,7 @@ main {
     }
 }
 .container {
-    background-color: $color1opacity;
+    background-color: rgba(var(--color1), 0.65);
 }
 
 
@@ -58,7 +58,7 @@ main {
 
 .menu-symbol {
     font-size: 3rem;
-    color: $color2;
+    color: rgba(var(--color2), 1);
     opacity: .9;    
     padding: .4rem .2rem;              
 }
@@ -83,7 +83,7 @@ main {
     color: white;    
 
     h2 {
-        -webkit-text-stroke: 5px $color1;
+        -webkit-text-stroke: 5px rgba(var(--color1), 1);
         font-size: 10vw;
         position: absolute;
         font-weight: normal;
@@ -108,7 +108,7 @@ main {
     }
 
     h3 {
-        -webkit-text-stroke: 3px $color1;
+        -webkit-text-stroke: 3px rgba(var(--color1), 1);
         font-size: 5vw;
         position: absolute;
         font-weight: normal;
@@ -137,9 +137,10 @@ main {
         position: absolute;               
         border-radius: 30%;
         z-index: 50;
+        backdrop-filter: blur(30px);
 
         &:nth-of-type(1) {
-            background: linear-gradient(0.45turn,rgba(0,0,0,0), $color2);
+            background: linear-gradient(0.45turn,rgba(0,0,0,0), rgba(var(--color2), 1));
             height: 21vw;
             width: 21vw;
             top: 0;
@@ -149,7 +150,7 @@ main {
         }
 
         &:nth-of-type(2) {
-            background: linear-gradient(0.45turn,rgba(0,0,0,0), $color3);
+            background: linear-gradient(0.45turn,rgba(0,0,0,0), rgba(var(--color3), 1));
             height: 35vw;
             width: 35vw;
             top: 5rem;
@@ -169,7 +170,7 @@ main {
 
 //Services
 .services {
-    background-color: $color4;    
+    background-color: rgba(var(--color4), 1);    
     margin: 0 1rem;
     border-radius: 15px;
     
@@ -179,7 +180,7 @@ main {
         font-size: 3vw;        
         font-weight: normal;
         padding: 1rem 2vw; 
-        color: $color1;                        
+        color: rgba(var(--color1), 1);                        
     }  
 
     .services-container { 
@@ -190,7 +191,7 @@ main {
         span {
             font-size: 3vw;            
             display: inline-block; 
-            -webkit-text-stroke: 2px $color1opacity;
+            -webkit-text-stroke: 2px rgba(var(--color1), 0.65);
             font-style: normal;
             font-weight: normal;         
             margin-left: 2vw;
@@ -201,7 +202,7 @@ main {
             &:nth-child(5),
             &:nth-child(8),
             &:nth-child(10) {
-                color: $color3;
+                color: rgba(var(--color3), 1);
             }
         }
 
@@ -212,7 +213,7 @@ main {
 //Projects
 .projects {
     .projects-inner {
-        background: linear-gradient(180deg, $color3 0%, $color1 100%);
+        background: linear-gradient(180deg, rgba(var(--color3), 1) 0%, rgba(var(--color1), 1) 100%);
         padding: 1rem 2vw;
         margin: 1rem;        
         border-radius: 15px;
@@ -233,7 +234,7 @@ main {
                 width: 20%;   
                 border-radius: .75rem;         
                 margin: .5rem;
-                background-color: $color4;                
+                background-color: rgba(var(--color4), 1);                
                 position: relative;
                 overflow: hidden;    
                 cursor: pointer;                     
@@ -302,10 +303,10 @@ main {
         text-align: center;
         
         span {
-            color: $color1;
+            color: rgba(var(--color1), 1);
             display: inline-block;
             font-size: 1rem;            
-            background: linear-gradient(to right, $color3, $color2);
+            background: linear-gradient(to right, rgba(var(--color3), 1), rgba(var(--color2), 1));
             padding: 1rem;
             margin-right: .75rem;
             margin-bottom: .75rem;            
@@ -314,7 +315,7 @@ main {
 
             &:hover {
                 transform: scale(1.1);   
-                background: linear-gradient(to top right, $color3, $color2);                                                     
+                background: linear-gradient(to top right, rgba(var(--color3), 1), rgba(var(--color2), 1));                                                     
             }
         }
 
@@ -331,7 +332,7 @@ main {
 
     #name-container {
         h2 {            
-            -webkit-text-stroke: 2px $color1;          
+            -webkit-text-stroke: 2px rgba(var(--color1), 1);          
     
             &:first-child {
             
@@ -345,7 +346,7 @@ main {
         }
     
         h3 {            
-            -webkit-text-stroke: 1.5px $color1;
+            -webkit-text-stroke: 1.5px rgba(var(--color1), 1);
             top: 23vh;
         }
     

@@ -7,9 +7,12 @@ const Cursor = ({
     cursorBlur = false,
     cursorCircle = false,
     cursorBorder = true,
-    cursorBackgroundOpacity = true
+    cursorDoubleSize = false,
+    cursorBackdropBlur = false,
+    cursorBackgroundRGB = "",
+    cursorBackgroundOpacity = 1
 }) => {
-    const size = cursorEnlarged ? 80 : 20;
+    const size = (cursorEnlarged ? 80 : 20) * (cursorDoubleSize ? 2 : 1);
     const borderRadius = cursorCircle ? "50%" : (cursorEnlarged ? "10px" : "5px");
     const circle = useRef();
     const mouse = useRef({
@@ -68,17 +71,16 @@ const Cursor = ({
             ref={circle}
             className={`
                 awesome-cursor
-                ${cursorEnlarged ? ' enlarged' : ''}
                 ${cursorBlendColor ? ' blend' : ''}
                 ${cursorBlur ? ' blur' : ''}
-                ${cursorCircle ? ' circle' : ''}
                 ${cursorBorder ? ' border' : ''}
-                ${cursorBackgroundOpacity ? ' background-opacity' : ''}
+                ${cursorBackdropBlur ? ' backdrop-blur' : ''}
             `}
             style={{
                 width: size,
                 height: size,
-                borderRadius: borderRadius
+                borderRadius: borderRadius,
+                backgroundColor: `rgba(${cursorBackgroundRGB ? cursorBackgroundRGB : 'var(--color3)'}, ${cursorBackgroundOpacity})`
             }}
         />
     );

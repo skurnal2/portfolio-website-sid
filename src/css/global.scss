@@ -12,20 +12,20 @@
 
 //Scrollbar design
 * {
-    scrollbar-color: $color1;
+    scrollbar-color: rgba(var(--color1), 1);
   
     &::-webkit-scrollbar {
         width: 10px;
     }
 
     &::-webkit-scrollbar-track {
-        background: $color3;
+        background: rgba(var(--color3), 1);
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: $color1;
+        background-color: rgba(var(--color1), 1);
         border-radius: 20px;
-        border: 3px solid $color3;
+        border: 3px solid rgba(var(--color3), 1);
         transition: .2s;
 
         &:hover {

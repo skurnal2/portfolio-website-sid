@@ -40,12 +40,12 @@ nav {
         width: 50%;
         text-align: center;
         text-transform: uppercase;
-        -webkit-text-stroke: 1px $color1; 
+        -webkit-text-stroke: 1px rgba(var(--color1), 1); 
         border-radius: 35px;
         font-weight: normal;
         font-size: 2.5vh;
         position: relative;
-        background: $color1opacity;
+        background: rgba(var(--color1), 0.65);
         -webkit-backdrop-filter: 20px;
         backdrop-filter: blur(10px);
         overflow: hidden;
@@ -57,7 +57,7 @@ nav {
             visibility: none;
                  
             &:nth-child(2) {
-                background: linear-gradient(0.45turn,rgba(0,0,0,0), $color3);
+                background: linear-gradient(0.45turn,rgba(0,0,0,0), rgba(var(--color3), 1));
                 height: 4rem;            
                 width: 4rem;                 
                 top: 1px;
@@ -67,7 +67,7 @@ nav {
             }
 
             &:first-child {
-                background: linear-gradient(0.45turn,rgba(0,0,0,0), $color2);
+                background: linear-gradient(0.45turn,rgba(0,0,0,0), rgba(var(--color2), 1));
                 height: 7rem;            
                 width: 7rem;                 
                 top: -3rem;
@@ -108,7 +108,7 @@ nav {
             opacity: 0;
             text-decoration: none;
             padding: .4rem;
-            color: $color1;
+            color: rgba(var(--color1), 1);
             font-size: 20px;
             transition: .2s;
             position: relative;
@@ -120,8 +120,8 @@ nav {
                 left: -10px;
                 right: -35px;
                 bottom: -10px;
-                // background: linear-gradient(to bottom, $color3opacity, $color3opacity, $color3opacity, $color3opacity, $color3opacity);
-                background: $color3opacity;
+                // background: linear-gradient(to bottom, rgba(var(--color3), 0.75), rgba(var(--color3), 0.75), rgba(var(--color3), 0.75), rgba(var(--color3), 0.75), rgba(var(--color3), 0.75));
+                background: rgba(var(--color3), 0.75);
                 backdrop-filter: blur(7.5px);
                 transform: skew(35deg, 0deg);
                 z-index: -1;
@@ -211,7 +211,7 @@ nav {
         transition: .1s;
 
         &:hover {
-            color: $color3;
+            color: rgba(var(--color3), 1);
         }
     }
 }
