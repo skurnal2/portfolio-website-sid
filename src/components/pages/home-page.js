@@ -3,10 +3,9 @@ import '../../css/home-page.scss';
 import '../../css/nav.scss';
 
 //Component Imports
-import Services from "../home-sections/services";
-import WorkProjects from "../home-sections/work_projects";
-import OldProjects from "../home-sections/old_projects";
-import Skills from "../home-sections/skills";
+import Services from "../sections/services";
+import AllProjects from "../sections/all_projects";
+// import Skills from "../home-sections/skills";
 
 const HomePage = ({
   projectProps
@@ -23,9 +22,10 @@ const HomePage = ({
         </div>
       </main>
       <Services />
-      <WorkProjects {...projectProps} />
-      <OldProjects {...projectProps} />
-      <Skills />
+      <AllProjects/>
+      {/* <WorkProjects {...projectProps} /> */}
+      {/* <OldProjects {...projectProps} /> */}
+      {/* <Skills /> */}
     </div>
   );
 };

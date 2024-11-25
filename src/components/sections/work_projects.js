@@ -8,7 +8,7 @@ const WorkProjects = ({
     projectItemProps
 }) => {
     return(
-        <Projects id="projects" title="Work Projects" data={workProjectsData} containerProps={containerProps} projectItemProps={projectItemProps}/>
+        <Projects title="Work Projects" data={workProjectsData} containerProps={containerProps} projectItemProps={projectItemProps}/>
     );
 }
 

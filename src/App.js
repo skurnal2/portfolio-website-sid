@@ -82,7 +82,7 @@ const App = () => {
         trigger: ".services",
         start: "top",
         end: "100px 15px",
-        scrub: true,
+        scrub: true
       },
       y: -120,
     });
@@ -92,7 +92,8 @@ const App = () => {
         trigger: ".services",
         start: "top",
         end: "100px 15px",
-        scrub: true
+        scrub: 0.5,
+        ease: "power1.inOut"
       },
       visibility: "visible",
       marginRight: 50
@@ -103,7 +104,8 @@ const App = () => {
         trigger: ".services",
         start: "top",
         end: "100px 15px",
-        scrub: true,
+        scrub: 0.5,
+        ease: "power1.inOut"
       },
       visibility: "visible",
       marginLeft: 50
@@ -139,62 +141,43 @@ const App = () => {
       x: -400,
       duration: 35
     });
-    
+
+    gsap.to(".services", {
+      scrollTrigger: {
+        trigger: ".services",
+        start: "top center",
+        end: "+=400",
+        scrub: 0.5,
+        ease: "power1.inOut"
+      },
+      y: 200,
+      scale: 0.5,
+      rotateX: 30,
+      opacity: 0
+    });
+
+    // gsap.to("#projects", {
+    //   scrollTrigger: {
+    //     trigger: "#projects",
+    //     start: "top top",
+    //     end: "top center",
+    //     markers: true,
+    //     scrub: true
+    //   },
+    //   y: -500
+    // });
+
     // Desktop animations
     const mm = gsap.matchMedia();
-    
     mm.add("(min-width: 1025px)", () => {
-      gsap.from(".span-row-1, .span-row-3", {
-        scrollTrigger: {
-          trigger: ".container", 
-          start: "top",
-          end: "600px 10px",
-          scrub: true,
-        },
-        scale: 0.5,
-        stagger: 0.25,
-        opacity: 0,
-        duration: 11,
-      });
-
-      gsap.from(".span-row-2, .span-row-4", {
-        scrollTrigger: {
-          trigger: ".container",
-          start: "top", 
-          end: "600px 10px",
-          scrub: true,
-        },
-        scale: 0.5,
-        stagger: -0.25,
-        opacity: 0,
-        duration: 11,
-      });
-
       gsap.to("nav", {
         scrollTrigger: {
           trigger: "nav",
           start: "bottom",
-          scrub: true,
+          scrub: true
         },
         height: "4rem",
-        ease: "ease",
-      });
-    });
-
-    // Mobile animations 
-    mm.add("(max-width: 1024px)", () => {
-      gsap.from(".span-row-1, .span-row-3", {
-        duration: 1,
-        scale: 0.5,
-        stagger: 0.25,
-        opacity: 0,
-      });
-
-      gsap.from(".span-row-2, .span-row-4", {
-        duration: 0.75,
-        scale: 0.5,
-        stagger: -0.25,
-        opacity: 0,
+        ease: "ease"
       });
     });
   }
@@ -299,31 +282,24 @@ const App = () => {
             {
               containerProps: {
                 onMouseEnter: () => {
-                  setCursorBlendColor(true);
-                  setCursorBackgroundOpacity(0.75);
-                  setCursorBackdropBlur(true);
+                  setCursorBackgroundRGB('0, 0, 0');
+                  setCursorBackgroundOpacity(0.2);
                 },
                 onMouseLeave: () => {
-                  setCursorBlendColor(false);
+                  setCursorBackgroundRGB('');
                   setCursorBackgroundOpacity(0.3);
                 }
               },
               projectItemProps: {
                 onMouseEnter: () => {
-                  setCursorScale(2);
-                  setCursorBlendColor(false);
-                  setCursorBackgroundOpacity(0.2);
-                  setCursorBackgroundRGB('0, 0, 0');
+                  
                 },
                 onMouseLeave: () => {
-                  setCursorScale(1);
-                  setCursorBackgroundOpacity(0.75);
-                  setCursorBlendColor(true);
-                  setCursorBackgroundRGB('');
 
                 }
               }
-          }}
+            }
+          }
         />
       </div>
       <Cursor
@@ -351,7 +327,10 @@ const App = () => {
           setCursorBackgroundRGB('');
           setCursorContent(null);
         }}
-      />
+      >
+        <span id="theme-info-popup-label">Theme</span>
+        <span id="theme-info-popup-name"/>
+      </div>
     </div>
   );
 }

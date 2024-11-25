@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import ReactTooltip from 'react-tooltip';
 
+//Style Imports
+import "../../css/projects-page.scss";
+
 const Projects = ({
   id = "",
   title = "Projects",
@@ -36,11 +39,11 @@ const Projects = ({
   }
 
   return (
-    <div id={id} className="projects" {...containerProps}>
+    <div id={id} className="project-section" {...containerProps}>
       {dataTip}
-      <div className="projects-inner">
-        <h4>{title}</h4>
-        <div className="projects-container">
+      <div className="project-section-inner">
+        <h5>{title}</h5>
+        <div className="project-section-container">
           {
             data.map(item => (
               <div key={item.key} onClick={() => showItem(item)} data-for='info-tool-tip' data-tip={item.key} {...projectItemProps}>
