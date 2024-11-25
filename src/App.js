@@ -80,7 +80,7 @@ const App = () => {
     gsap.from("nav h1", {
       scrollTrigger: {
         trigger: ".services",
-        start: "top",
+        start: "top-=200 top",
         end: "100px 15px",
         scrub: true
       },
@@ -145,27 +145,27 @@ const App = () => {
     gsap.to(".services", {
       scrollTrigger: {
         trigger: ".services",
-        start: "top center",
-        end: "+=400",
+        start: "top+=150 center",
+        end: "+=550",
         scrub: 0.5,
         ease: "power1.inOut"
       },
-      y: 200,
+      y: 300,
       scale: 0.5,
-      rotateX: 30,
+      rotateX: 70,
       opacity: 0
     });
 
-    // gsap.to("#projects", {
-    //   scrollTrigger: {
-    //     trigger: "#projects",
-    //     start: "top top",
-    //     end: "top center",
-    //     markers: true,
-    //     scrub: true
-    //   },
-    //   y: -500
-    // });
+    gsap.to("#projects", {
+      scrollTrigger: {
+        trigger: "#projects",
+        start: "top-=100 top",
+        end: "+=550",
+        pin: true,
+        scrub: true
+      },
+      width: "100vw"
+    });
 
     // Desktop animations
     const mm = gsap.matchMedia();
