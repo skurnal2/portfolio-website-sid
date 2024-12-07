@@ -47,14 +47,31 @@
         width: 100%;
         height: calc(100% - 60px);
 
-        span.project-slide {
+        div.project-slide {
             position: absolute;
-            background-color: rgb(255, 255, 255);
+            background-color: rgba(var(--color1), 0.5);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 20px;
             padding: 10px;
             width: calc(100% - 40px);
             height: calc(100% - 40px);
             margin: 20px;
+            box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px, rgba(var(--color2), 0.15) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+            font-family: $font1;
+
+            .project-name {
+                position: absolute;
+                top: 10px;
+                left: 20px;
+                font-size: 29px;
+                background: rgba(var(--color4), 0.3);
+                padding: 2px 15px;
+                border-radius: 30px;
+                color: rgba(255, 255, 255, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+            }
         }
     }
 }

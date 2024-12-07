@@ -33,9 +33,9 @@ const Projects = () => {
             scrollTrigger: {
                 trigger: "#projects",
                 start: "top-=120 top",
-                end: "+=5000",
+                end: `+=${projects.length * 200 + 300}`,
                 pin: true,
-                scrub: true
+                scrub: 1.5
             },
             width: "100vw",
             opacity: 1
@@ -47,11 +47,11 @@ const Projects = () => {
 
         const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: '.projects',
-                start: 'top 80%',
-                end: 'bottom top',
-                scrub: true,
-                markers: true
+                trigger: '#projects',
+                start: 'top-=120 top',
+                end: `+=${projects.length * 200}`,
+                scrub: 1.5,
+                // markers: true
             }
         });
 
@@ -59,24 +59,18 @@ const Projects = () => {
             tl.fromTo(
                 slide,
                 {
-                    opacity: 0,
-                    y: 100,
-                    transform: "rotateX(-45deg) perspective(4000px) scale(0.9)",
+                    y: '100%',
+                    scale: 0.2,
+                    rotateY: 45,
+                    x: '100%',
+                    rotateZ: 45
                 },
                 {
-                    opacity: 1,
                     y: 0,
-                    transform: "rotateX(0deg) perspective(0) scale(1)",
-                    duration: 2,
-                    onStart: () => {
-                        if (index > 0) {
-                            gsap.to(projectSlides[index - 1], {
-                                opacity: 0,
-                                y: -50,
-                                duration: 1
-                            });
-                        }
-                    }
+                    scale: 1,
+                    rotateY: 0,
+                    x: 0,
+                    rotateZ: -index * 0.4
                 }
             );
         });
@@ -88,9 +82,9 @@ const Projects = () => {
             <div id="projects-slides">
                 {
                     projects.map((project, i) => (
-                        <span key={i} className="project-slide">
-                            {project.name}
-                        </span>
+                        <div key={i} className="project-slide">
+                            <span className="project-name">{project.name}</span>
+                        </div>
                     ))
                 }
             </div>
