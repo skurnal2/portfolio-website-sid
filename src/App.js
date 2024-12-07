@@ -156,17 +156,6 @@ const App = () => {
       opacity: 0
     });
 
-    gsap.to("#projects", {
-      scrollTrigger: {
-        trigger: "#projects",
-        start: "top-=100 top",
-        end: "+=550",
-        pin: true,
-        scrub: true
-      },
-      width: "100vw"
-    });
-
     // Desktop animations
     const mm = gsap.matchMedia();
     mm.add("(min-width: 1025px)", () => {
@@ -176,8 +165,9 @@ const App = () => {
           start: "bottom",
           scrub: true
         },
-        height: "4rem",
-        ease: "ease"
+        height: "9vh",
+        ease: "ease",
+        stagger: true
       });
     });
   }
