@@ -61,12 +61,13 @@ const Projects = () => {
                 {
                     opacity: 0,
                     y: 100,
+                    transform: "rotateX(-45deg) perspective(4000px) scale(0.9)",
                 },
                 {
                     opacity: 1,
                     y: 0,
-                    duration: 1,
-                    delay: index * 0.3,
+                    transform: "rotateX(0deg) perspective(0) scale(1)",
+                    duration: 2,
                     onStart: () => {
                         if (index > 0) {
                             gsap.to(projectSlides[index - 1], {
