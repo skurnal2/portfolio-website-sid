@@ -1,5 +1,5 @@
 //Imports
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -47,6 +47,10 @@ const App = () => {
   useLayoutEffect(() => {
     setRandomTheme();
     animationFunctions();
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   // Custom Functions START
