@@ -67,8 +67,8 @@ const Projects = (props) => {
                     y: '100%',
                     scale: 0.2,
                     rotateY: 45,
-                    x: '100%',
-                    rotateZ: 45
+                    x: index % 2 ? '-100%' : '100%',
+                    rotateZ: index % 2 ? -55 : 55
                 },
                 {
                     y: 0,
