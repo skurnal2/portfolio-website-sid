@@ -36,14 +36,16 @@
     position: fixed;
     opacity: 0;
     transform: scale(0.95);
-    bottom: 10px;
+    bottom: 0;
     right: 10px;
-    display: block;
+    display: flex;
+    gap: 10px;
     background-color: rgba(var(--color1), 0.5);
     backdrop-filter: blur(10px);
     color: rgba(var(--color3), 1);
     padding: 10px;
-    border-radius: 15px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     font-family: $font1;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
     border: 1px solid rgba(255, 255, 255, 0.37);
@@ -51,6 +53,7 @@
     animation: pop-in-slow 1s forwards 2s;
     z-index: 100;
     transition: background-color 1s, color 1s;
+    border-bottom: none;
 
     &::before {
         content: '';
@@ -60,19 +63,33 @@
         width: 100%;
         height: 100%;
         background-color: rgba(10, 10, 10, 0.25);
-        border-radius: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
         z-index: 80;
     }
 
+    svg {
+        opacity: 0.3;
+        animation: rotate-infinite 5s linear infinite;
+    }
+
+    @keyframes rotate-infinite {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 
     @keyframes pop-in-slow {
         0% {
             opacity: 0;
-            transform: scale(0.95);
+            transform: scale(0.95) translateY(10px);
         }
         100% {
             opacity: 1;
-            transform: scale(1);
+            transform: scale(1) translateY(0);
         }
     }
 }

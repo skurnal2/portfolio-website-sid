@@ -13,17 +13,10 @@ export const setRandomTheme = () => {
   });
 
   // Theme Info Popup
-  let themeInfo = document.getElementById("theme-info-popup");
-  if (!themeInfo) {
-      // Create the div only if it doesn't exist
-      themeInfo = document.createElement("div");
-      themeInfo.id = "theme-info-popup";
-      document.body.appendChild(themeInfo);
-      
-  }
+  let themeInfoName = document.getElementById("theme-info-popup-name");
 
   // Update the content of the div
-  themeInfo.textContent = `${randomTheme.name}`;
+  themeInfoName.textContent = `${randomTheme.name}`;
 };
 
 export const themes = [

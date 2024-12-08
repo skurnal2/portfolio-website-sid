@@ -10,6 +10,7 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { gsap, ScrollTrigger } from "gsap/all";
 import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSmile } from "@fortawesome/free-solid-svg-icons";
+import { faPalette } from "@fortawesome/free-solid-svg-icons";
 
 //Common Imports within Routes
 import "./css/global.scss";
@@ -24,7 +25,7 @@ import Lenis from "lenis";
 //Function Imports
 import { setRandomTheme } from "./components/common/colors";
 
-library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane, faFaceSmile);
+library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane, faFaceSmile, faPalette);
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -321,7 +322,7 @@ const App = () => {
           setCursorContent(null);
         }}
       >
-        <span id="theme-info-popup-label">Theme</span>
+        <FontAwesomeIcon icon={["fa", "palette"]} style={{fontSize: '20px', color: '#ffffffc2'}}/>
         <span id="theme-info-popup-name"/>
       </div>
     </div>
