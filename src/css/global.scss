@@ -39,11 +39,12 @@
     bottom: 0;
     right: 10px;
     display: flex;
-    gap: 10px;
+    gap: 7.5px;
     background-color: rgba(var(--color1), 0.5);
     backdrop-filter: blur(10px);
     color: rgba(var(--color3), 1);
     padding: 10px;
+    align-items: center;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     font-family: $font1;
@@ -69,7 +70,6 @@
     }
 
     svg {
-        opacity: 0.3;
         animation: rotate-infinite 5s linear infinite;
     }
 
