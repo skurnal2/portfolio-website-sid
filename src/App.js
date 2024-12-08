@@ -1,5 +1,8 @@
 //Imports
 import React, { useState, useLayoutEffect, useEffect } from "react";
+import ReactGA from 'react-ga4';
+
+// Font Awesome Imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -44,12 +47,24 @@ const App = () => {
   const [cursorBackdropBlur, setCursorBackdropBlur] = useState(true);
   const [cursorContent, setCursorContent] = useState(null);
 
+  const initializeGA = () => {
+    ReactGA.initialize('G-VV8X7KDEV9');
+  };
+
   useLayoutEffect(() => {
     setRandomTheme();
     animationFunctions();
   }, []);
 
   useEffect(() => {
+    // Initialize Google Analytics on page load
+    initializeGA();
+    
+    // Track the initial pageview
+    ReactGA.send('pageview', {
+      page_path: window.location.pathname + window.location.search,
+    });
+
     window.scrollTo(0, 0);
   }, []);
 
