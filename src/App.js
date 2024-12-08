@@ -9,6 +9,7 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { gsap, ScrollTrigger } from "gsap/all";
 import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
+import { faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 
 //Common Imports within Routes
 import "./css/global.scss";
@@ -23,7 +24,7 @@ import Lenis from "lenis";
 //Function Imports
 import { setRandomTheme } from "./components/common/colors";
 
-library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane);
+library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane, faFaceSmile);
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -196,7 +197,7 @@ const App = () => {
     e.preventDefault();
     const projectsSection = document.querySelector('#projects');
     const coordinates = projectsSection.getBoundingClientRect();
-    const offset = -150; // Add offset to account for nav bar height
+    const offset = 20; // Add offset to account for nav bar height
     window.scrollTo({
       top: coordinates.top + window.scrollY + offset,
       behavior: 'smooth'
@@ -272,20 +273,22 @@ const App = () => {
             {
               containerProps: {
                 onMouseEnter: () => {
-                  setCursorBackgroundRGB('0, 0, 0');
-                  setCursorBackgroundOpacity(0.2);
+                  setCursorBorderRadius(10);
                 },
                 onMouseLeave: () => {
-                  setCursorBackgroundRGB('');
-                  setCursorBackgroundOpacity(0.3);
+                  setCursorBorderRadius(5);
                 }
               },
               projectItemProps: {
                 onMouseEnter: () => {
-                  
+                  setCursorScale(3);
+                  setCursorBorderRadius(30);
+                  setCursorContent(<FontAwesomeIcon icon={["fa", "face-smile"]} style={{fontSize: '30px', color: '#ffffffc2'}}/>);
                 },
                 onMouseLeave: () => {
-
+                  setCursorScale(1);
+                  setCursorBorderRadius(10);
+                  setCursorContent("");
                 }
               }
             }

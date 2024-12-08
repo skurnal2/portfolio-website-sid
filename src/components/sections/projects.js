@@ -22,7 +22,13 @@ const projects = [
     }
 ];
 
-const Projects = () => {
+const Projects = (props) => {
+
+    const {
+        containerProps,
+        projectItemProps
+    } = props;
+
     useEffect(() => {
         animateProjectBackdrop();
         animateProjectCards();
@@ -50,8 +56,7 @@ const Projects = () => {
                 trigger: '#projects',
                 start: 'top-=120 top',
                 end: `+=${projects.length * 200}`,
-                scrub: 1.5,
-                // markers: true
+                scrub: 1.5
             }
         });
 
@@ -77,12 +82,12 @@ const Projects = () => {
     };
 
     return (
-        <div id="projects">
+        <div {...containerProps} id="projects">
             <h4>Projects</h4>
             <div id="projects-slides">
                 {
                     projects.map((project, i) => (
-                        <div key={i} className="project-slide">
+                        <div {...projectItemProps} key={i} className="project-slide">
                             <span className="project-name">{project.name}</span>
                         </div>
                     ))

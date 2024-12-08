@@ -21,7 +21,7 @@ const HomePage = ({
         </div>
       </main>
       <Services />
-      <Projects/>
+      <Projects {...projectProps} />
     </div>
   );
 };
