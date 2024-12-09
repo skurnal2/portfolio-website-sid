@@ -13,7 +13,7 @@ const HomePage = ({
     <div>
       <main>
         <div id="name-container">
-          <h2 className="first-h2">SIDDHARTH</h2>
+          <h2 className="first-h2">KUKY</h2>
           <h2 className="second-h2">KURNAL</h2>
           <h3>EXPERIENCED FULL-STACK DEVELOPER</h3>
           <div className="circle" />
