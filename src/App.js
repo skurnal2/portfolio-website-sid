@@ -271,7 +271,7 @@ const App = () => {
           <h1>
             <div className="h1-circle" />
             <div className="h1-circle" />
-            <span id="title-first">Siddharth</span>
+            <span id="title-first">Siddharth 🦝</span>
             <br />
             <span id="title-second">Kurnal</span>
           </h1>
