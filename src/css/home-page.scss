@@ -265,7 +265,6 @@ main {
             -webkit-text-stroke: 2px rgba(var(--color1), 1);          
     
             &:first-child {
-            
                text-align: left;              
             }
     
@@ -300,29 +299,10 @@ main {
 
     //Services
     .services {
-        h4 {
-            font-size: 3vw;
-        }
-
         .services-container {
             span {
                 word-spacing: -.5rem;                
             }
         }
     }
-}
-
-@media only screen and (max-width: 768px) {
-    //Services
-    .services {
-        margin-top: -7vh;
-
-        h4 {
-            font-size: 5vw;
-        } 
-    }
-}
-
-@media only screen and (max-width: 360px) {
-
 }

@@ -3,6 +3,8 @@
 
 import { useEffect } from "react";
 import gsap from "gsap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons'; // Added import for font awesome star icon
 
 // Style Import
 import "../../css/projects.scss";
@@ -61,21 +63,24 @@ const Projects = (props) => {
         });
 
         projectSlides.forEach((slide, index) => {
+            const slidePush = `${20 * index}px`;
+
             tl.fromTo(
                 slide,
                 {
                     y: '100%',
                     scale: 0.2,
                     rotateY: 45,
-                    x: index % 2 ? '-100%' : '100%',
+                    x: index % 2 ? '-90%' : '90%',
                     rotateZ: index % 2 ? -55 : 55
                 },
                 {
-                    y: 0,
+                    y: index * -10,
                     scale: 1,
                     rotateY: 0,
-                    x: 0,
-                    rotateZ: -index * 0.4
+                    x: slidePush,
+                    rotateZ: index * -0.8,
+                    width: `calc(100% - ${slidePush} - 40px)`
                 }
             );
         });
@@ -88,7 +93,12 @@ const Projects = (props) => {
                 {
                     projects.map((project, i) => (
                         <div {...projectItemProps} key={i} className="project-slide">
-                            <span className="project-name">{project.name}</span>
+                            <span className="project-name">
+                                <span className="project-icon">
+                                    <FontAwesomeIcon icon={faStar}/>
+                                </span>
+                                {project.name}
+                            </span>
                         </div>
                     ))
                 }

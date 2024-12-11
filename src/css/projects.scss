@@ -62,15 +62,31 @@
             font-family: $font1;
 
             .project-name {
-                position: absolute;
-                top: 10px;
-                left: 20px;
+                display: inline-block;
+                margin-top: 10px;
+                margin-left: 10px;
                 font-size: 29px;
                 background: rgba(var(--color4), 0.3);
                 padding: 2px 15px;
                 border-radius: 30px;
                 color: rgba(255, 255, 255, 0.9);
                 border: 1px solid rgba(255, 255, 255, 0.4);
+
+                span.project-icon {
+                    font-size: 20px;
+                    height: 100%;
+                    display: inline-flex;
+                    margin-right: 8px;
+
+                    svg {
+                        opacity: 0.5;
+                        animation: rotate 8s infinite linear;
+                        @keyframes rotate {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    }
+                }
             }
         }
     }

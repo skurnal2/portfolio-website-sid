@@ -1,5 +1,5 @@
 import gsap from 'gsap';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Cursor = ({
     cursorScale = false,
@@ -12,6 +12,8 @@ const Cursor = ({
     cursorContent = null,
     cursorBorderRadius = "0px"
 }) => {
+    const [isMobile, setIsMobile] = useState(true);
+
     const size = cursorScale * 20;
     const borderRadius = cursorBorderRadius;
     const circle = useRef();
@@ -60,6 +62,7 @@ const Cursor = ({
 
     useEffect(() => {
         animate();
+        setIsMobile(window.innerWidth <= 768);
         window.addEventListener("mousemove", manageMouseMove);
         window.addEventListener("mousedown", addMouseClickEffect);
         window.addEventListener("mouseup", removeMouseClickEffect);
@@ -67,6 +70,7 @@ const Cursor = ({
     }, [])
 
     return (
+        isMobile ? null :
         <div
             ref={circle}
             className={`

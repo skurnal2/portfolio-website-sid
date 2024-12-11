@@ -159,9 +159,7 @@ nav {
     
             &:hover {
                 &:before {
-                    transform: skew(35deg, 0deg) translateY(15px);
-                    border-bottom-left-radius: 20px;
-                    border-bottom-right-radius: 25px;
+                    transform: skew(35deg, 0deg) translateY(25px);
                 }
                 span {
                     transform: translateY(15px) translateX(10px);
