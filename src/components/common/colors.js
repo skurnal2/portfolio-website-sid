@@ -38,14 +38,6 @@ export const themes = [
         color5: "78, 44, 0",         // Dark Brown
     },
     {
-        name: "Dusky Horizon",
-        color1: "42, 61, 81",        // Charcoal Blue
-        color2: "60, 72, 92",        // Steel Blue
-        color3: "236, 245, 253",     // Misty White
-        color4: "191, 207, 223",     // Pale Gray
-        color5: "239, 87, 34",       // Fiery Orange
-    },
-    {
         name: "Electric Bliss",
         color1: "51, 59, 88",        // Dark Blue-Gray
         color2: "242, 35, 35",       // Bright Red

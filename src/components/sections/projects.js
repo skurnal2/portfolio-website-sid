@@ -99,6 +99,9 @@ const Projects = (props) => {
                                 </span>
                                 {project.name}
                             </span>
+                            <div className="project-content">
+                                <span>Coming Soon</span>
+                            </div>
                         </div>
                     ))
                 }
