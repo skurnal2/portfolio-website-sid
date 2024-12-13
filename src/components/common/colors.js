@@ -1,6 +1,15 @@
 export const setRandomTheme = () => {
-  // Pick a random theme from the themes array
-  const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+  const themeLoaded = localStorage.getItem('themeLoaded') === 'true';
+  let randomTheme = {};
+
+  if(themeLoaded) {
+    // Pick a random theme from the themes array
+    randomTheme = themes[Math.floor(Math.random() * themes.length)];
+  } else {
+    // Always load Coral Reef theme at first
+    randomTheme = themes.find(theme => theme.name === "Coral Reef");
+    localStorage.setItem('themeLoaded', 'true');
+  }
 
   // Get the root element (document's root <html>)
   const root = document.documentElement;
@@ -21,14 +30,6 @@ export const setRandomTheme = () => {
 
 export const themes = [
     {
-        name: "Shaded Stone",
-        color1: "26, 32, 44",        // Dark Slate
-        color2: "45, 55, 72",        // Mid-tone Gray
-        color3: "237, 242, 247",     // Soft White
-        color4: "203, 213, 224",     // Light Gray
-        color5: "229, 62, 62",       // Crimson Red
-    },
-    {
         name: "Royal Twilight",
         color1: "73, 43, 124",       // Deep Purple
         color2: "237, 138, 10",      // Golden Yellow
@@ -43,14 +44,6 @@ export const themes = [
         color3: "236, 245, 253",     // Misty White
         color4: "191, 207, 223",     // Pale Gray
         color5: "239, 87, 34",       // Fiery Orange
-    },
-    {
-        name: "Emerald Mist",
-        color1: "12, 37, 37",        // Deep Teal
-        color2: "23, 78, 58",        // Forest Green
-        color3: "182, 225, 211",     // Light Seafoam
-        color4: "0, 92, 83",         // Dark Teal
-        color5: "193, 53, 132",      // Rich Magenta
     },
     {
         name: "Electric Bliss",
@@ -75,22 +68,6 @@ export const themes = [
         color3: "240, 126, 65",      // Coral
         color4: "112, 145, 172",     // Soft Steel Blue
         color5: "16, 41, 63",        // Deep Midnight Blue
-    },
-    {
-        name: "Lavender Whispers",
-        color1: "117, 63, 162",      // Deep Lavender
-        color2: "223, 206, 255",     // Light Lavender
-        color3: "235, 163, 92",      // Golden Peach
-        color4: "48, 25, 55",        // Dark Purple
-        color5: "174, 71, 124",      // Rich Magenta
-    },
-    {
-        name: "Shadow Blossom",
-        color1: "52, 32, 43",        // Dark Plum
-        color2: "128, 94, 116",      // Dusty Rose
-        color3: "191, 165, 191",     // Soft Lavender
-        color4: "43, 51, 63",        // Slate Gray
-        color5: "255, 105, 88",      // Coral Peach
     },
     {
         name: "Frosted Moon",
