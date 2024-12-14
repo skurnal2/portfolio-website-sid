@@ -1,7 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../../css/contact.scss";
+import gsap from 'gsap';
 
 const Contact = (props) => {
+
+    useEffect(() => {
+        animateContactBackdrop();
+        animateContactCard();
+    }, []);
+
+    const animateContactBackdrop = () => {
+        gsap.to("#contact", {
+            scrollTrigger: {
+                trigger: "#contact",
+                start: "top-=120 top",
+                end: `+=${1 * 200 + 300}`,
+                pin: true,
+                scrub: 1.5
+            },
+            width: "100vw",
+            opacity: 1
+        });
+    };
+
+    const animateContactCard = () => {
+        const contactSlides = document.querySelectorAll('.contact-content-right');
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top-=120 top',
+                end: `+=${1 * 200}`,
+                scrub: 1.5
+            }
+        });
+
+        contactSlides.forEach((slide, index) => {
+            const slidePush = `${20 * index}px`;
+
+            tl.fromTo(
+                slide,
+                {
+                    y: '100%',
+                    scale: 0.2,
+                    rotateY: 45,
+                    x: index % 2 ? '-90%' : '90%',
+                    rotateZ: index % 2 ? -55 : 55
+                },
+                {
+                    y: index * -10,
+                    scale: 1,
+                    rotateY: 0,
+                    x: slidePush,
+                    rotateZ: index * -0.8,
+                    width: `calc(100% - ${slidePush} - 40px)`
+                }
+            );
+        });
+    };
 
     const emptyForm = {
         name: '',
@@ -43,7 +99,7 @@ const Contact = (props) => {
     };
 
     return(
-        <div className="contact" {...props}>
+        <div id="contact" className="contact" {...props}>
             <h4>Contact</h4>
             <div className="contact-content">
                 <div className="contact-content-left">
