@@ -91,15 +91,50 @@
 
             .project-content {
                 display: flex;
-                justify-content: center;
-                align-items: center;
                 height: 100%;
 
-                span {
-                    border-radius: 40px;
-                    background-color: rgba(255, 255, 255, 0.2);
+                &-image {
+                    width: 50%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+
+                    img {
+                        background-color: rgba(255, 255, 255, 0.75);
+                        max-height: 400px;
+                        max-width: 100%;
+                        border-radius: 40px;
+                        opacity: 0.75;
+                    }
+                }
+
+                &-description {
+                    font-family: $font4;
+                    width: 50%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     padding: 10px 20px;
-                    font-size: 40px;
+
+                    &-details {
+                        display: inline-block;
+                        background-color: rgba(0, 0, 0, 0.4);
+                        width: 100%;
+                        border-radius: 20px;
+                        padding: 30px 20px 30px 50px;
+                        box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px, rgba(var(--color2), 0.1) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+                        border: 1px solid rgba(255, 255, 255, 0.4);
+
+                        ul {
+                            li {
+                                margin-bottom: 20px;
+
+                            }
+                        }
+                    }
                 }
             }
         }
