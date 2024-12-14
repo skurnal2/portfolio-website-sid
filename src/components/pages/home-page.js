@@ -5,9 +5,11 @@ import '../../css/nav.scss';
 //Component Imports
 import Services from "../sections/services";
 import Projects from "../sections/projects";
+import Contact from "../sections/contact";
 
 const HomePage = ({
-  projectProps
+  projectProps,
+  contactProps
 }) => {
   return (
     <div>
@@ -22,6 +24,7 @@ const HomePage = ({
       </main>
       <Services />
       <Projects {...projectProps} />
+      <Contact {...contactProps}/>
     </div>
   );
 };

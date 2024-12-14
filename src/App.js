@@ -326,6 +326,26 @@ const App = () => {
               }
             }
           }
+          contactProps={{
+            onMouseEnter: () => {
+              setCursorBlendColor(true);
+              setCursorBackdropBlur(false);
+              setCursorBackgroundRGB('255,255,255');
+              setCursorBorder(false);
+              setCursorBackgroundOpacity(1);
+              setCursorScale(4);
+              setCursorBlur(3);
+            },
+            onMouseLeave: () => {
+              setCursorBlendColor(false);
+              setCursorBackdropBlur(true);
+              setCursorBackgroundRGB('');
+              setCursorBorder(true);
+              setCursorScale(1);
+              setCursorBlur(0);
+              setCursorBackgroundOpacity(0);
+            }
+          }}
         />
       </div>
       <Cursor

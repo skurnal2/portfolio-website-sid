@@ -1,0 +1,140 @@
+@import 'variables';
+
+.contact {
+    height: 80vh;
+    min-height: 80vh;
+    backdrop-filter: blur(10px);
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 1rem 1rem 2rem 1rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        background: url(../images/noise.svg);
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border-radius: 15px;
+        opacity: 0.1;
+    }
+
+    h4, .item-heading {
+        height: 60px;
+        font-size: 30px;  
+        padding: 10px;
+        margin: 0 2vw 1rem 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom-right-radius: 15px;
+        font-family: "Sora", sans-serif;
+        font-weight: lighter;
+        color: rgba(255, 255, 255, 0.75);
+        background-color: rgba(0, 0, 0, 0.2);
+        display: inline-block;
+        box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    }
+
+    &-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 60px);
+        display: flex;
+
+        > div {
+            overflow: hidden;
+            margin: 30px;
+        }
+       
+        &-left {
+            width: 35%;
+            
+            &-content {
+                // background-color: rgba(255, 255, 255, 0.1);
+                height: 100%;
+                display: flex;
+                justify-content: center;
+
+                &-text {
+                    font-family: $font3;
+                    font-size: 70px;
+                    display: flex;
+                    flex-direction: column;
+                    color: rgba(255, 255, 255, 0.9);
+                    text-shadow: 6px 6px 0px rgba(var(--color2), 0.75);
+
+                    span {
+                        &:nth-child(2),
+                        &:nth-child(4) {
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+
+        &-right {
+            width: 65%;
+            border-radius: 20px;
+            background-color: rgba(0, 0, 0, 0.4);
+            box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px, rgba(var(--color2), 0.1) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+
+            &-content {
+                height: 100%;
+                padding: 20px 40px;
+
+                form {
+                    .form-group {
+                        display: flex;
+                        justify-content: space-evenly;
+                        margin-bottom: 15px;
+
+                        label {
+                            width: 20%;
+                            color: #ffffffda;
+                            font-size: 25px;
+                            font-family: $font4;
+                        }
+
+                        input, textarea {
+                            width: 80%;
+                            background-color: #00000095;
+                            border: 1px solid rgba(255, 255, 255, 0.4);
+                            border-radius: 10px;
+                            padding: 10px;
+                            font-size: 20px;
+                            color: white;
+                        }
+
+                        textarea {
+                            height: 200px;
+                        }
+                    }
+
+                    .submit-button-container {
+                        display: flex;
+                        justify-content: flex-end;
+
+                        button {
+                            font-size: 30px;
+                            padding: 5px 20px;
+                            background-color: #00000095;
+                            color: #ffffffd4;
+                            border: none;
+                            border-radius: 10px;
+                            box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px, rgba(var(--color2), 0.1) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+                            border: 1px solid rgba(255, 255, 255, 0.4);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
