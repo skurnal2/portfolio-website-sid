@@ -14,6 +14,7 @@ import { gsap, ScrollTrigger } from "gsap/all";
 import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 //Common Imports within Routes
 import "./css/global.scss";
@@ -28,7 +29,7 @@ import Lenis from "lenis";
 //Function Imports
 import { setRandomTheme } from "./components/common/colors";
 
-library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane, faFaceSmile, faStar);
+library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane, faFaceSmile, faStar, faUser);
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -252,6 +253,10 @@ const App = () => {
     };
   }
 
+  const showResume = () => {
+    window.open('/resume.pdf', '_blank');
+  }
+
   return (
     <div className="parent">
       <div className="container">
@@ -277,6 +282,7 @@ const App = () => {
           </h1>
           <div className="nav-links">
             <a {...navLinksEffects(["fas", "home"])} onClick={scrollToTop}><span>Home</span></a>
+            <a {...navLinksEffects(["fas", "user"])} onClick={showResume}><span>Résumé</span></a>
             <a {...navLinksEffects(["fas", "compass"])} onClick={goToProjects}><span>Projects</span></a>
             <a {...navLinksEffects(["fab", "github"])} href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
               <span>
