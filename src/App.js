@@ -69,6 +69,14 @@ const App = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const trackNavClick = (navItem) => {
+    ReactGA.event({
+      category: 'Navigation',
+      action: `Clicked ${navItem}`,
+      label: navItem,
+    });
+  };
+
   // Custom Functions START
   const animationFunctions = () => {
     // Lenis
@@ -281,17 +289,16 @@ const App = () => {
             <span id="title-second">Kurnal</span>
           </h1>
           <div className="nav-links">
-            <a {...navLinksEffects(["fas", "home"])} onClick={scrollToTop}><span>Home</span></a>
-            <a {...navLinksEffects(["fas", "user"])} onClick={showResume}><span>Résumé</span></a>
-            <a {...navLinksEffects(["fas", "compass"])} onClick={goToProjects}><span>Projects</span></a>
-            <a {...navLinksEffects(["fab", "github"])} href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
-              <span>
-              <FontAwesomeIcon className="github-symbol" icon={["fab", "github"]}/>GitHub</span>
+            <a {...navLinksEffects(["fas", "home"])} onClick={(e) => { scrollToTop(e); trackNavClick("Home"); }}><span>Home</span></a>
+            <a {...navLinksEffects(["fas", "user"])} onClick={(e) => { showResume(e); trackNavClick("Résumé"); }}><span>Résumé</span></a>
+            <a {...navLinksEffects(["fas", "compass"])} onClick={(e) => { goToProjects(e); trackNavClick("Projects"); }}><span>Projects</span></a>
+            <a {...navLinksEffects(["fab", "github"])} href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer" onClick={() => { trackNavClick("GitHub"); }}>
+              <span><FontAwesomeIcon className="github-symbol" icon={["fab", "github"]}/>GitHub</span>
             </a>
             <a {...navLinksEffects(["fas", "paper-plane"])} href="mailto:contact@siddharthkurnal.com"><span>Contact</span></a> 
           </div>
         </nav>
-        <div className="nav-menu-button" onClick={handleMenu}>
+        <div className="nav-menu-button" onClick={(e) => { handleMenu(e); trackNavClick("Menu"); }}>
           <FontAwesomeIcon className="menu-symbol" icon={["fa", "bars"]} />
         </div>
         <HomePage
