@@ -1,20 +1,45 @@
-@import 'variables';
-@import 'nav';
-@import 'cursor';
-
+@use 'variables' as *;
+@use 'nav';
+@use 'cursor';
 
 //Universal Styles
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: none;
+}
+
+// The native cursor is only hidden where the custom cursor actually renders:
+// a device with a fine pointer, for a user who has not asked for reduced
+// motion. Everyone else keeps a real, working system cursor. Text fields keep
+// their I-beam either way so the typing affordance is never lost.
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    * {
+        cursor: none;
+    }
+
+    input,
+    textarea {
+        cursor: text;
+    }
+
+    select {
+        cursor: pointer;
+    }
+}
+
+// With the system cursor hidden, a visible focus ring is the only way to tell
+// where you are when navigating by keyboard.
+:focus-visible {
+    outline: 3px solid rgba(var(--color2), 1);
+    outline-offset: 3px;
+    border-radius: 4px;
 }
 
 //Scrollbar design
 * {
-    scrollbar-color: rgba(var(--color1), 1);
-  
+    scrollbar-color: rgba(var(--color1), 1) rgba(var(--color3), 1);
+
     &::-webkit-scrollbar {
         width: 10px;
     }
@@ -55,6 +80,8 @@
     z-index: 100;
     transition: background-color 1s, color 1s;
     border-bottom: none;
+    // it is a real button now, so strip the UA chrome
+    font-size: inherit;
 
     &::before {
         content: '';
@@ -91,5 +118,22 @@
             opacity: 1;
             transform: scale(1) translateY(0);
         }
+    }
+}
+
+// This site leans hard on motion: infinite rotations, a looping background
+// gradient, floating shapes and scroll-driven pinning. All of it is switched
+// off for anyone who has asked their OS for reduced motion. The GSAP and Lenis
+// equivalents are gated in JS (see src/components/common/motion.js).
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+        scroll-behavior: auto !important;
     }
 }

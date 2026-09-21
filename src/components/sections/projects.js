@@ -1,23 +1,28 @@
-// import WorkProjects from "../sections/work_projects";
-// import OldProjects from "../sections/old_projects";
-
-import { useEffect } from "react";
-import gsap from "gsap";
+import { useLayoutEffect } from "react";
+import { gsap, ScrollTrigger } from "gsap/all";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons'; // Added import for font awesome star icon
 
 import rag_url from "../../images/rag.jpg";
 import sortable_tree_url from "../../images/sortable_tree.gif";
+import sortable_tree_static_url from "../../images/sortable_tree_static.png";
 import openai_url from "../../images/openai.jpg";
-import highway_dodge_url from "../../images/highway_dodge_screen.png";
+import highway_dodge_url from "../../images/highway_dodge_screen.jpg";
+
+import { SCROLL_EFFECTS_OK } from "../common/motion";
 
 // Style Import
 import "../../css/projects.scss";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
     {
         name: "Knowledge Base Management with Pinecone for AI Agents",
         image: rag_url,
+        width: 898,
+        height: 532,
+        alt: "Diagram of a retrieval-augmented generation pipeline: a prompt and query search a knowledge base, the relevant information is returned as enhanced context, and a large language model endpoint generates the response.",
         details: (
             <ul>
                 <li>Used <b>Pinecone</b> to store and retrieve vector embeddings efficiently, enabling accurate similarity searches and improving chatbot query precision.</li>
@@ -32,6 +37,12 @@ const projects = [
     {
         name: "Locations Management Hierarchy Page",
         image: sortable_tree_url,
+        // The animated GIF is swapped for its first frame when the visitor has
+        // asked for reduced motion — a looping GIF cannot be paused otherwise.
+        staticImage: sortable_tree_static_url,
+        width: 784,
+        height: 456,
+        alt: "A nested, drag-and-drop location tree with expand and collapse controls and a search bar, showing rows being reordered between parent and child nodes.",
         details: (
             <ul>
                 <li>Customized <b>React Sortable Tree Library</b>: Tailored the React Sortable Tree library to meet business requirements, enabling efficient management of thousands of company locations.</li>
@@ -45,6 +56,9 @@ const projects = [
     {
         name: "Dynamic Form Generator using AI",
         image: openai_url,
+        width: 1024,
+        height: 540,
+        alt: "The OpenAI logo and wordmark over a striped magenta and green graphic.",
         details: (
             <ul>
                 <li>Integrated <b>OpenAI's latest models</b> via API, allowing users to create dynamic forms by entering prompts or uploading PDFs/images.</li>
@@ -58,6 +72,9 @@ const projects = [
     {
         name: "HighwayDodge - Cross-Platform Mobile Game",
         image: highway_dodge_url,
+        width: 953,
+        height: 604,
+        alt: "Three HighwayDodge game screens built with libGDX: a menu with a Play button, top-down gameplay dodging cars on a highway, and a Game Over screen showing the current time and high score.",
         details: (
             <ul>
                 <li><b>Cross-Platform Game Development</b>: Developed a mobile game for both <b>Android</b> and <b>iOS</b> platforms using the <b>LibGDX</b> framework, ensuring compatibility across devices and enhancing user experience on both systems.</li>
@@ -77,9 +94,20 @@ const Projects = (props) => {
         projectItemProps
     } = props;
 
-    useEffect(() => {
-        animateProjectBackdrop();
-        animateProjectCards();
+    useLayoutEffect(() => {
+        // The pin-and-scrub card stack depends on the slides being absolutely
+        // stacked on one another. It is confined to wide viewports with motion
+        // allowed; everywhere else projects.scss lays them out as a plain
+        // vertical list. gsap.matchMedia reverts the inline styles for us when
+        // the query stops matching, so resizing across the breakpoint is clean.
+        const mm = gsap.matchMedia();
+
+        mm.add(SCROLL_EFFECTS_OK, () => {
+            animateProjectBackdrop();
+            animateProjectCards();
+        });
+
+        return () => mm.revert();
     }, []);
 
     const animateProjectBackdrop = () => {
@@ -138,7 +166,7 @@ const Projects = (props) => {
             <div id="projects-slides">
                 {
                     projects.map((project, i) => (
-                        <div {...projectItemProps} key={i} className="project-slide">
+                        <div {...projectItemProps} key={project.name} className="project-slide">
                             <span className="project-name">
                                 <span className="project-icon">
                                     <FontAwesomeIcon icon={faStar}/>
@@ -147,11 +175,26 @@ const Projects = (props) => {
                             </span>
                             <div className="project-content">
                                 <div className="project-content-image">
-                                    <img src={project?.image}/>
+                                    <picture>
+                                        {project.staticImage && (
+                                            <source
+                                                media="(prefers-reduced-motion: reduce)"
+                                                srcSet={project.staticImage}
+                                            />
+                                        )}
+                                        <img
+                                            src={project.image}
+                                            alt={project.alt}
+                                            width={project.width}
+                                            height={project.height}
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                    </picture>
                                 </div>
                                 <div className="project-content-description">
                                     <span className="project-content-description-details">
-                                        {project?.details}
+                                        {project.details}
                                     </span>
                                 </div>
                             </div>

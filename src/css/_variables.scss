@@ -1,9 +1,6 @@
-//Fonts
-@import url(https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap);
-@import url(https://fonts.googleapis.com/css2?family=Righteous&display=swap);
-@import url(https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap);
-@import url(https://fonts.googleapis.com/css2?family=Sora&display=swap);
-
+// Fonts are loaded via <link rel="stylesheet"> in public/index.html so the
+// browser can start fetching them during the initial HTML parse. Loading them
+// with @import here would delay discovery until after the CSS has parsed.
 
 //Colors
 :root {
@@ -16,7 +13,10 @@
 }
 
 //Fonts
-$font1: 'Racing Sans One', serif;
-$font2: 'Righteous', cursive;
+$font1: 'Racing Sans One', cursive, sans-serif;
+$font2: 'Righteous', cursive, sans-serif;
 $font3: 'Rubik Mono One', sans-serif;
 $font4: 'Sora', sans-serif;
+
+//Breakpoints
+$bp-mobile: 1024px;

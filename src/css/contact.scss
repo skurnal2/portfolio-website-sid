@@ -1,4 +1,74 @@
-@import 'variables';
+@use 'variables' as *;
+
+// Same story as #projects: the pinned/scrubbed entrance only runs on wide
+// viewports with motion allowed, so everywhere else the section needs to lay
+// itself out as an ordinary stacked block that grows with its content.
+@mixin contact-static-layout {
+    .contact {
+        height: auto;
+        min-height: 0;
+        backdrop-filter: none;
+        margin: 1rem .75rem 2rem .75rem;
+
+        &-content {
+            position: static;
+            height: auto;
+            flex-direction: column;
+
+            > div {
+                margin: 15px;
+            }
+
+            &-left {
+                width: auto;
+
+                &-content-text {
+                    font-size: 2.5rem;
+                    text-shadow: 3px 3px 0px rgba(var(--color2), 0.75);
+                }
+            }
+
+            &-right {
+                width: auto;
+                transform: none;
+
+                &-content {
+                    padding: 15px 18px;
+
+                    form {
+                        .form-group {
+                            // side-by-side label/field collapses to two
+                            // unusable columns on a phone
+                            flex-direction: column;
+                            align-items: stretch;
+                            gap: 6px;
+
+                            label {
+                                width: 100%;
+                                font-size: 18px;
+                            }
+
+                            input,
+                            textarea {
+                                width: 100%;
+                                font-size: 16px; // < 16px makes iOS Safari zoom on focus
+                            }
+
+                            textarea {
+                                height: 130px;
+                            }
+                        }
+
+                        .submit-button-container button {
+                            font-size: 22px;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 .contact {
     height: 80vh;
@@ -25,13 +95,13 @@
 
     h4, .item-heading {
         height: 60px;
-        font-size: 30px;  
+        font-size: 30px;
         padding: 10px;
         margin: 0 2vw 1rem 0;
         border-right: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom-right-radius: 15px;
-        font-family: "Sora", sans-serif;
+        font-family: $font4;
         font-weight: lighter;
         color: rgba(255, 255, 255, 0.75);
         background-color: rgba(0, 0, 0, 0.2);
@@ -51,12 +121,11 @@
             overflow: hidden;
             margin: 30px;
         }
-       
+
         &-left {
             width: 35%;
-            
+
             &-content {
-                // background-color: rgba(255, 255, 255, 0.1);
                 height: 100%;
                 display: flex;
                 justify-content: center;
@@ -101,6 +170,12 @@
                             color: #ffffffda;
                             font-size: 25px;
                             font-family: $font4;
+
+                            .optional {
+                                display: block;
+                                font-size: .6em;
+                                opacity: .6;
+                            }
                         }
 
                         input, textarea {
@@ -111,10 +186,27 @@
                             padding: 10px;
                             font-size: 20px;
                             color: white;
+                            font-family: $font4;
                         }
 
                         textarea {
                             height: 200px;
+                            resize: vertical;
+                        }
+                    }
+
+                    .form-status {
+                        font-family: $font4;
+                        font-size: 17px;
+                        margin-bottom: 10px;
+                        min-height: 22px;
+
+                        &.is-error {
+                            color: rgba(var(--color2), 1);
+                        }
+
+                        &.is-success {
+                            color: rgba(var(--color3), 1);
                         }
                     }
 
@@ -127,14 +219,37 @@
                             padding: 5px 20px;
                             background-color: #00000095;
                             color: #ffffffd4;
-                            border: none;
                             border-radius: 10px;
                             box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px, rgba(var(--color2), 0.1) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
                             border: 1px solid rgba(255, 255, 255, 0.4);
+                            font-family: $font4;
+                            transition: opacity .2s;
+
+                            &[disabled] {
+                                opacity: 0.55;
+                            }
                         }
                     }
                 }
             }
         }
     }
+}
+
+// Formspree's honeypot: a real input that no sighted or assistive-tech user is
+// ever offered, so anything filling it in is a bot.
+.contact-honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+@media only screen and (max-width: $bp-mobile) {
+    @include contact-static-layout;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    @include contact-static-layout;
 }

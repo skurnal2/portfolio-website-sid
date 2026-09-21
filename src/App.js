@@ -1,5 +1,5 @@
 //Imports
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
 import ReactGA from 'react-ga4';
 
 // Font Awesome Imports
@@ -28,14 +28,17 @@ import Lenis from "lenis";
 
 //Function Imports
 import { setRandomTheme } from "./components/common/colors";
+import { ANIMATION_OK, SCROLL_EFFECTS_OK, prefersReducedMotion } from "./components/common/motion";
 
 library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane, faFaceSmile, faStar, faUser);
+gsap.registerPlugin(ScrollTrigger);
+
+const GITHUB_URL = "https://github.com/skurnal2";
+const RESUME_URL = `${process.env.PUBLIC_URL}/resume.pdf`;
+const EMAIL_URL = "mailto:contact@siddharthkurnal.com";
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [zIndex, setZIndex] = useState("-100");
-  const [opacity, setOpacity] = useState("0");
-  const [currentWidth, setCurrentWidth] = useState(window.screen.width);
 
   //Cursor States
   const [cursorScale, setCursorScale] = useState(1);
@@ -48,147 +51,119 @@ const App = () => {
   const [cursorBackdropBlur, setCursorBackdropBlur] = useState(true);
   const [cursorContent, setCursorContent] = useState(null);
 
+  const lenisRef = useRef(null);
+  const menuRef = useRef(null);
+  const menuButtonRef = useRef(null);
+  const wasOpen = useRef(false);
+  // A menu item that navigates has to wait for the menu to close before it
+  // scrolls, otherwise it scrolls behind a full-screen overlay.
+  const pendingScroll = useRef(null);
+
   const initializeGA = () => {
     ReactGA.initialize('G-VV8X7KDEV9');
   };
 
   useLayoutEffect(() => {
     setRandomTheme();
-    animationFunctions();
-  }, []);
 
-  useEffect(() => {
-    // Initialize Google Analytics on page load
-    initializeGA();
-    
-    // Track the initial pageview
-    ReactGA.send('pageview', {
-      page_path: window.location.pathname + window.location.search,
-    });
+    // gsap.matchMedia owns the lifecycle: it builds these on match, and
+    // reverts every inline style and ScrollTrigger it created when the query
+    // stops matching, which is what lets the CSS fallback layouts take over.
+    const mm = gsap.matchMedia();
 
-    window.scrollTo(0, 0);
-  }, []);
+    mm.add(ANIMATION_OK, () => {
+      gsap.from(".nav-links > *", {
+        duration: 1,
+        opacity: 0,
+        y: -30,
+        x: -20,
+        stagger: -0.25,
+        ease: 'elastic'
+      });
 
-  const trackNavClick = (navItem) => {
-    ReactGA.event({
-      category: 'Navigation',
-      action: `Clicked ${navItem}`,
-      label: navItem,
-    });
-  };
+      gsap.from("nav h1", {
+        scrollTrigger: {
+          trigger: ".services",
+          start: "top-=200 top",
+          end: "100px 15px",
+          scrub: true
+        },
+        y: -120,
+      });
 
-  // Custom Functions START
-  const animationFunctions = () => {
-    // Lenis
-    const lenis = new Lenis();
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 350);
-    });
-    gsap.ticker.lagSmoothing();
+      gsap.to("#title-first", {
+        scrollTrigger: {
+          trigger: ".services",
+          start: "top",
+          end: "100px 15px",
+          scrub: 0.5,
+          ease: "power1.inOut"
+        },
+        visibility: "visible",
+        marginRight: 50
+      });
 
-    //Reload GSAP animations on Screen thresholds
-    if (window.screen.width > 1024 && currentWidth < 1024) {      
-      setCurrentWidth(window.screen.width);
-      animationFunctions();
-    } else if (window.screen.width < 1024 && currentWidth > 1024) {
-      setCurrentWidth(window.screen.width);
-      animationFunctions();      
-    }
+      gsap.to("#title-second", {
+        scrollTrigger: {
+          trigger: ".services",
+          start: "top",
+          end: "100px 15px",
+          scrub: 0.5,
+          ease: "power1.inOut"
+        },
+        visibility: "visible",
+        marginLeft: 50
+      });
 
-    gsap.registerPlugin(ScrollTrigger);
-    // GSAP Animations
-    gsap.to(".nav-links a", {
-      duration: 1,
-      opacity: 1,
-      y: 30,
-      x: 20,
-      stagger: -0.25,
-      ease: 'elastic'
-    });
+      gsap.from(".circle", {
+        delay: 1,
+        duration: 4,
+        opacity: 0,
+        y: -250,
+        rotate: 20,
+        stagger: 0.3,
+        ease: "elastic"
+      });
 
-    gsap.from("nav h1", {
-      scrollTrigger: {
-        trigger: ".services",
-        start: "top-=200 top",
-        end: "100px 15px",
-        scrub: true
-      },
-      y: -120,
-    });
+      gsap.to(".first-h2", {
+        scrollTrigger: {
+          trigger: "nav",
+          start: "top",
+          end: "600px 10px",
+          scrub: true,
+        },
+        x: 400,
+        duration: 35,
+      });
 
-    gsap.to("#title-first", {
-      scrollTrigger: {
-        trigger: ".services",
-        start: "top",
-        end: "100px 15px",
-        scrub: 0.5,
-        ease: "power1.inOut"
-      },
-      visibility: "visible",
-      marginRight: 50
-    });
+      gsap.to(".second-h2", {
+        scrollTrigger: {
+          trigger: "nav",
+          start: "top",
+          end: "600px 10px",
+          scrub: true
+        },
+        x: -400,
+        duration: 35
+      });
 
-    gsap.to("#title-second", {
-      scrollTrigger: {
-        trigger: ".services",
-        start: "top",
-        end: "100px 15px",
-        scrub: 0.5,
-        ease: "power1.inOut"
-      },
-      visibility: "visible",
-      marginLeft: 50
-    });
-
-    gsap.from(".circle", {
-      delay: 1,
-      duration: 4,
-      opacity: 0,
-      y: -250,
-      rotate: 20,
-      stagger: 0.3,
-      ease: "elastic"
-    });
-
-    gsap.to(".first-h2", {
-      scrollTrigger: {
-        trigger: "nav",
-        start: "top",
-        end: "600px 10px",
-        scrub: true,
-      },
-      x: 400,
-      duration: 35,
-    });
-    gsap.to(".second-h2", {
-      scrollTrigger: {
-        trigger: "nav",
-        start: "top",
-        end: "600px 10px",
-        scrub: true
-      },
-      x: -400,
-      duration: 35
-    });
-
-    gsap.to(".services", {
-      scrollTrigger: {
-        trigger: ".services",
-        start: "top+=150 center",
-        end: "+=550",
-        scrub: 0.5,
-        ease: "power1.inOut"
-      },
-      y: 300,
-      scale: 0.5,
-      rotateX: 70,
-      opacity: 0
+      gsap.to(".services", {
+        scrollTrigger: {
+          trigger: ".services",
+          start: "top+=150 center",
+          end: "+=550",
+          scrub: 0.5,
+          ease: "power1.inOut"
+        },
+        y: 300,
+        scale: 0.5,
+        rotateX: 70,
+        opacity: 0
+      });
     });
 
     // Desktop animations
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 1025px)", () => {
+    mm.add(SCROLL_EFFECTS_OK, () => {
       gsap.to("nav", {
         scrollTrigger: {
           trigger: "nav",
@@ -200,45 +175,111 @@ const App = () => {
         stagger: true
       });
     });
-  }
 
-  const handleMenu = () => {
+    return () => mm.revert();
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
+
+    const lenis = new Lenis();
+    lenisRef.current = lenis;
+
+    const onScroll = () => ScrollTrigger.update();
+    lenis.on('scroll', onScroll);
+
+    // gsap.ticker reports elapsed time in SECONDS; Lenis expects MILLISECONDS.
+    const raf = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(raf);
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      gsap.ticker.remove(raf);
+      gsap.ticker.lagSmoothing();
+      lenis.off('scroll', onScroll);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    // Initialize Google Analytics on page load
+    initializeGA();
+
+    // Track the initial pageview
+    ReactGA.send('pageview', {
+      page_path: window.location.pathname + window.location.search,
+    });
+
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Menu open/close side effects: lock the page behind the overlay, move focus
+  // into the menu on open and back to the toggle on close, and run any
+  // navigation the closing menu item asked for.
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+
     if (isOpen) {
-      setIsOpen(false);
-      setZIndex("-100");
-      setOpacity("0");
-      console.log("Menu Open");
-    } else {
-      setIsOpen(true);
-      setZIndex("300");
-      setOpacity("1");
-      console.log("Menu Close");
+      menuRef.current?.querySelector('a, button')?.focus();
+    } else if (wasOpen.current) {
+      menuButtonRef.current?.focus();
+      const run = pendingScroll.current;
+      pendingScroll.current = null;
+      run?.();
     }
-  }
-  //Custom Functions END
+
+    wasOpen.current = isOpen;
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen]);
+
+  const trackNavClick = (navItem) => {
+    ReactGA.event({
+      category: 'Navigation',
+      action: `Clicked ${navItem}`,
+      label: navItem,
+    });
+  };
+
+  const handleMenu = () => setIsOpen((open) => !open);
 
   const menuStyle = {
-    zIndex,
-    opacity,
+    zIndex: isOpen ? 300 : -100,
+    opacity: isOpen ? 1 : 0,
+    visibility: isOpen ? 'visible' : 'hidden',
   };
-  
-  const goToProjects = (e) => {
-    e.preventDefault();
-    const projectsSection = document.querySelector('#projects');
-    const coordinates = projectsSection.getBoundingClientRect();
-    const offset = 20; // Add offset to account for nav bar height
-    window.scrollTo({
-      top: coordinates.top + window.scrollY + offset,
-      behavior: 'smooth'
-    });
-  }
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  }
+  const scrollTo = (top) => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(top);
+      return;
+    }
+    window.scrollTo({ top, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+  };
+
+  const goToProjects = () => {
+    const projectsSection = document.querySelector('#projects');
+    if (!projectsSection) return;
+    const offset = 20; // Add offset to account for nav bar height
+    scrollTo(projectsSection.getBoundingClientRect().top + window.scrollY + offset);
+  };
+
+  const scrollToTop = () => scrollTo(0);
+
+  // Queue navigation to run once the menu has actually closed.
+  const menuNavigate = (action, label) => () => {
+    pendingScroll.current = action;
+    trackNavClick(label);
+    setIsOpen(false);
+  };
 
   const navLinksEffects = (icon) => {
     return {
@@ -261,24 +302,34 @@ const App = () => {
     };
   }
 
-  const showResume = () => {
-    window.open('/resume.pdf', '_blank');
-  }
-
   return (
     <div className="parent">
       <div className="container">
-        <div className="full-menu-wrapper" style={menuStyle}>
-            <a onClick={scrollToTop}>Home</a>
-            <a onClick={handleMenu}>Projects</a>
-            <a href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
+        <div
+          id="full-menu"
+          className="full-menu-wrapper"
+          style={menuStyle}
+          aria-hidden={!isOpen}
+          ref={menuRef}
+        >
+            <button type="button" onClick={menuNavigate(scrollToTop, "Home")}>Home</button>
+            <button type="button" onClick={menuNavigate(goToProjects, "Projects")}>Projects</button>
+            <a
+              href={RESUME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackNavClick("Résumé")}
+            >
+              Résumé
+            </a>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackNavClick("GitHub")}>
               <FontAwesomeIcon
                 className="github-symbol"
                 icon={["fab", "github"]}
               />
               GitHub
             </a>
-            <a href="mailto:contact@siddharthkurnal.com">Contact</a> 
+            <a href={EMAIL_URL} onClick={() => trackNavClick("Contact")}>Contact</a>
         </div>
         <nav>
           <h1>
@@ -289,18 +340,58 @@ const App = () => {
             <span id="title-second">Kurnal</span>
           </h1>
           <div className="nav-links">
-            <a {...navLinksEffects(["fas", "home"])} onClick={(e) => { scrollToTop(e); trackNavClick("Home"); }}><span>Home</span></a>
-            <a {...navLinksEffects(["fas", "user"])} onClick={(e) => { showResume(e); trackNavClick("Résumé"); }}><span>Résumé</span></a>
-            <a {...navLinksEffects(["fas", "compass"])} onClick={(e) => { goToProjects(e); trackNavClick("Projects"); }}><span>Projects</span></a>
-            <a {...navLinksEffects(["fab", "github"])} href="http://github.com/skurnal2" target="_blank" rel="noopener noreferrer" onClick={() => { trackNavClick("GitHub"); }}>
+            <button
+              type="button"
+              {...navLinksEffects(["fas", "home"])}
+              onClick={() => { scrollToTop(); trackNavClick("Home"); }}
+            >
+              <span>Home</span>
+            </button>
+            <a
+              {...navLinksEffects(["fas", "user"])}
+              href={RESUME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackNavClick("Résumé")}
+            >
+              <span>Résumé</span>
+            </a>
+            <button
+              type="button"
+              {...navLinksEffects(["fas", "compass"])}
+              onClick={() => { goToProjects(); trackNavClick("Projects"); }}
+            >
+              <span>Projects</span>
+            </button>
+            <a
+              {...navLinksEffects(["fab", "github"])}
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackNavClick("GitHub")}
+            >
               <span><FontAwesomeIcon className="github-symbol" icon={["fab", "github"]}/>GitHub</span>
             </a>
-            <a {...navLinksEffects(["fas", "paper-plane"])} href="mailto:contact@siddharthkurnal.com"><span>Contact</span></a> 
+            <a
+              {...navLinksEffects(["fas", "paper-plane"])}
+              href={EMAIL_URL}
+              onClick={() => trackNavClick("Contact")}
+            >
+              <span>Contact</span>
+            </a>
           </div>
         </nav>
-        <div className="nav-menu-button" onClick={(e) => { handleMenu(e); trackNavClick("Menu"); }}>
+        <button
+          type="button"
+          className="nav-menu-button"
+          ref={menuButtonRef}
+          aria-expanded={isOpen}
+          aria-controls="full-menu"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          onClick={() => { handleMenu(); trackNavClick("Menu"); }}
+        >
           <FontAwesomeIcon className="menu-symbol" icon={["fa", "bars"]} />
-        </div>
+        </button>
         <HomePage
           projectProps={
             {
@@ -359,9 +450,11 @@ const App = () => {
         cursorContent = {cursorContent}
         cursorBorderRadius = {cursorBorderRadius}
       />
-      <div
+      <button
+        type="button"
         id="theme-info-popup"
-        onClick={setRandomTheme}
+        aria-label="Shuffle the colour theme"
+        onClick={() => setRandomTheme()}
         onMouseEnter={() => {
           setCursorScale(2);
           setCursorBackgroundRGB('0,0,0');
@@ -376,7 +469,7 @@ const App = () => {
       >
         <FontAwesomeIcon icon={["fa", "star"]}/>
         <span id="theme-info-popup-name"/>
-      </div>
+      </button>
     </div>
   );
 }

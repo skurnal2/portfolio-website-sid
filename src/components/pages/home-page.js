@@ -1,6 +1,6 @@
 import React from "react";
+// nav styles arrive with global.scss, which App.js loads first
 import '../../css/home-page.scss';
-import '../../css/nav.scss';
 
 //Component Imports
 import Services from "../sections/services";

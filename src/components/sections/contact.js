@@ -1,12 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import "../../css/contact.scss";
-import gsap from 'gsap';
+import { gsap, ScrollTrigger } from 'gsap/all';
+
+import { SCROLL_EFFECTS_OK } from "../common/motion";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldekqky";
+
+const emptyForm = {
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+};
 
 const Contact = (props) => {
 
-    useEffect(() => {
-        animateContactBackdrop();
-        animateContactCard();
+    useLayoutEffect(() => {
+        // Same gating as #projects: pinned + scrubbed only where there is room
+        // for it and the visitor has not asked for reduced motion.
+        const mm = gsap.matchMedia();
+
+        mm.add(SCROLL_EFFECTS_OK, () => {
+            animateContactBackdrop();
+            animateContactCard();
+        });
+
+        return () => mm.revert();
     }, []);
 
     const animateContactBackdrop = () => {
@@ -59,15 +81,9 @@ const Contact = (props) => {
         });
     };
 
-    const emptyForm = {
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
-    };
-
     const [formData, setFormData] = useState(emptyForm);
+    // 'idle' | 'sending' | 'success' | 'error'
+    const [status, setStatus] = useState('idle');
 
     const handleInputChange = (e) => {
         setFormData({
@@ -78,25 +94,38 @@ const Contact = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = new FormData();
-        data.append('name', formData.name);
-        data.append('email', formData.email);
-        data.append('phone', formData.phone);
-        data.append('subject', formData.subject);
-        data.append('message', formData.message);
-        const response = await fetch("https://formspree.io/f/mldekqky", {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json'
-            },
-            body: data
-        });
 
-        if(response.ok) {
-            alert("Thanks for your submission!");
-            setFormData(emptyForm);
+        // guards against a double-tap firing two submissions
+        if (status === 'sending') return;
+        setStatus('sending');
+
+        try {
+            const response = await fetch(FORMSPREE_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                body: new FormData(e.target)
+            });
+
+            if (response.ok) {
+                setFormData(emptyForm);
+                setStatus('success');
+            } else {
+                setStatus('error');
+            }
+        } catch {
+            // offline, blocked, DNS failure — previously this rejected and the
+            // form just sat there looking like nothing had happened
+            setStatus('error');
         }
     };
+
+    const statusMessage = {
+        sending: 'Sending…',
+        success: 'Thanks — your message is on its way. I will get back to you soon.',
+        error: 'Something went wrong sending that. Please try again, or email contact@siddharthkurnal.com directly.'
+    }[status];
 
     return(
         <div id="contact" className="contact" {...props}>
@@ -118,26 +147,43 @@ const Contact = (props) => {
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="name">Name</label>
-                                <input type="text" id="name" name="name" required onChange={handleInputChange} />
+                                <input type="text" id="name" name="name" autoComplete="name" required value={formData.name} onChange={handleInputChange} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="email">Email</label>
-                                <input type="email" id="email" name="email" required onChange={handleInputChange} />
+                                <input type="email" id="email" name="email" autoComplete="email" required value={formData.email} onChange={handleInputChange} />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="phone">Phone</label>
-                                <input type="tel" id="phone" name="phone" required onChange={handleInputChange} />
+                                <label htmlFor="phone">Phone <span className="optional">(optional)</span></label>
+                                <input type="tel" id="phone" name="phone" autoComplete="tel" value={formData.phone} onChange={handleInputChange} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="subject">Subject</label>
-                                <input type="text" id="subject" name="subject" onChange={handleInputChange} />
+                                <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleInputChange} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="message">Message</label>
-                                <textarea id="message" name="message" required onChange={handleInputChange}></textarea>
+                                <textarea id="message" name="message" required value={formData.message} onChange={handleInputChange}></textarea>
                             </div>
+
+                            {/* Formspree honeypot: bots fill it, people never see it */}
+                            <div className="contact-honeypot" aria-hidden="true">
+                                <label htmlFor="_gotcha">Leave this field empty</label>
+                                <input type="text" id="_gotcha" name="_gotcha" tabIndex={-1} autoComplete="off" />
+                            </div>
+
+                            <p
+                                className={`form-status${status === 'error' ? ' is-error' : ''}${status === 'success' ? ' is-success' : ''}`}
+                                role="status"
+                                aria-live="polite"
+                            >
+                                {statusMessage}
+                            </p>
+
                             <div className="submit-button-container">
-                                <button type="submit">Send</button>
+                                <button type="submit" disabled={status === 'sending'}>
+                                    {status === 'sending' ? 'Sending…' : 'Send'}
+                                </button>
                             </div>
                         </form>
                     </div>

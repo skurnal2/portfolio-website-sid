@@ -1,4 +1,85 @@
-@import 'variables';
+@use 'variables' as *;
+
+// The desktop treatment pins #projects and flies each card in on scrub. That
+// depends on the cards being absolutely stacked on top of each other. Wherever
+// the GSAP timeline does not run — narrow viewports, and users who asked for
+// reduced motion — the cards have to fall back to an ordinary vertical list,
+// or they render as four cards piled in the same spot with their content
+// clipped by the 80vh box.
+@mixin projects-static-layout {
+    #projects {
+        height: auto;
+        min-height: 0;
+        // stacked backdrop blurs are the most expensive thing on the page for
+        // a mid-tier phone GPU, and the panel already sits on a dark scrim
+        backdrop-filter: none;
+        margin: 1rem .75rem 2rem .75rem;
+
+        #projects-slides {
+            position: static;
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 15px 20px 15px;
+
+            div.project-slide {
+                // relative rather than static so the cards still paint above
+                // the absolutely positioned noise overlay
+                position: relative;
+                z-index: 1;
+                width: 100%;
+                height: auto;
+                margin: 0;
+                transform: none;
+                backdrop-filter: none;
+
+                .project-name {
+                    font-size: 19px;
+                    margin-left: 0;
+                    line-height: 1.4;
+                }
+
+                .project-content {
+                    flex-direction: column;
+                    height: auto;
+                    gap: 15px;
+
+                    &-image {
+                        width: 100%;
+                        height: auto;
+                        padding: 10px 0;
+                        box-shadow: none;
+
+                        img {
+                            max-height: 220px;
+                        }
+                    }
+
+                    &-description {
+                        width: 100%;
+                        height: auto;
+                        padding: 0;
+
+                        &-details {
+                            padding: 20px 18px 20px 34px;
+                            font-size: 15px;
+
+                            ul li {
+                                margin-bottom: 12px;
+
+                                &:last-child {
+                                    margin-bottom: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 #projects {
     height: 80vh;
@@ -7,7 +88,6 @@
     position: relative;
     background-color: rgba(0, 0, 0, 0.5);
     margin: 1rem 1rem 2rem 1rem;
-    // margin: 1rem 0;
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.4);
     overflow: hidden;
@@ -26,13 +106,13 @@
 
     h4 {
         height: 60px;
-        font-size: 30px;  
+        font-size: 30px;
         padding: 10px;
         margin: 0 2vw 1rem 0;
         border-right: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom-right-radius: 15px;
-        font-family: "Sora", sans-serif;
+        font-family: $font4;
         font-weight: lighter;
         color: rgba(255, 255, 255, 0.75);
         background-color: rgba(0, 0, 0, 0.2);
@@ -105,6 +185,8 @@
                         background-color: rgba(255, 255, 255, 0.75);
                         max-height: 400px;
                         max-width: 100%;
+                        width: auto;
+                        height: auto;
                         border-radius: 40px;
                         opacity: 0.75;
                     }
@@ -139,4 +221,12 @@
             }
         }
     }
+}
+
+@media only screen and (max-width: $bp-mobile) {
+    @include projects-static-layout;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    @include projects-static-layout;
 }
