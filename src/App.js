@@ -72,13 +72,25 @@ const App = () => {
     const mm = gsap.matchMedia();
 
     mm.add(ANIMATION_OK, () => {
+      // ease: 'elastic' is a decaying oscillation that dips back near 0
+      // opacity multiple times before settling. If the browser drops or
+      // delays a frame right at one of those dips -- common right after load,
+      // while images, fonts and the ScrollTrigger/Lenis setup below are all
+      // competing for the main thread -- the tween can stall there instead of
+      // finishing, leaving a link invisible. back.out() only overshoots once
+      // on its way to 1 and never dips back toward 0, so a stalled frame just
+      // looks like a paused fade-in and still resolves correctly. clearProps
+      // is a second safety net: once the tween is done, drop the inline
+      // styles entirely so the links fall back to their plain, always-visible
+      // CSS state no matter what GSAP rendered last.
       gsap.from(".nav-links > *", {
         duration: 1,
         opacity: 0,
         y: -30,
         x: -20,
         stagger: -0.25,
-        ease: 'elastic'
+        ease: 'back.out(1.7)',
+        clearProps: 'opacity,transform'
       });
 
       gsap.from("nav h1", {

@@ -17,7 +17,6 @@ const jobs = [
                     <>Built features across <b>.NET Core</b> microservices on <b>Azure</b> and an <b>Angular</b> / <b>TypeScript</b> front end in an <b>Nx</b> monorepo, with services talking over <b>gRPC</b> and <b>Kafka</b>.</>,
                     <><b>Won a company-wide AI hackathon</b> against teams across North America and Europe with an AI pull-request reviewer that uses <b>RAG</b> over the team's coding standards and code.</>,
                     <>Set up <b>Transloco</b> internationalization and delivered <b>WCAG 2.2</b> accessibility improvements.</>,
-                    <>Point of contact for university customers, including the University of Oxford, on support inquiries and bug fixes.</>,
                 ],
             },
         ],
