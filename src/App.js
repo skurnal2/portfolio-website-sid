@@ -14,7 +14,6 @@ import { gsap, ScrollTrigger } from "gsap/all";
 import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 //Common Imports within Routes
 import "./css/global.scss";
@@ -30,11 +29,10 @@ import Lenis from "lenis";
 import { setRandomTheme } from "./components/common/colors";
 import { ANIMATION_OK, SCROLL_EFFECTS_OK, prefersReducedMotion } from "./components/common/motion";
 
-library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane, faFaceSmile, faStar, faUser);
+library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane, faFaceSmile, faStar);
 gsap.registerPlugin(ScrollTrigger);
 
 const GITHUB_URL = "https://github.com/skurnal2";
-const RESUME_URL = `${process.env.PUBLIC_URL}/resume.pdf`;
 const EMAIL_URL = "mailto:contact@siddharthkurnal.com";
 
 const App = () => {
@@ -326,14 +324,6 @@ const App = () => {
         >
             <button type="button" onClick={menuNavigate(scrollToTop, "Home")}>Home</button>
             <button type="button" onClick={menuNavigate(goToProjects, "Projects")}>Projects</button>
-            <a
-              href={RESUME_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackNavClick("Résumé")}
-            >
-              Résumé
-            </a>
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackNavClick("GitHub")}>
               <FontAwesomeIcon
                 className="github-symbol"
@@ -359,15 +349,6 @@ const App = () => {
             >
               <span>Home</span>
             </button>
-            <a
-              {...navLinksEffects(["fas", "user"])}
-              href={RESUME_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackNavClick("Résumé")}
-            >
-              <span>Résumé</span>
-            </a>
             <button
               type="button"
               {...navLinksEffects(["fas", "compass"])}
