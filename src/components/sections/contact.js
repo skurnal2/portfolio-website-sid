@@ -161,7 +161,7 @@ const Contact = (props) => {
                                 <label htmlFor="subject">Subject</label>
                                 <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="form-group is-message">
                                 <label htmlFor="message">Message</label>
                                 <textarea id="message" name="message" required value={formData.message} onChange={handleInputChange}></textarea>
                             </div>
@@ -172,15 +172,15 @@ const Contact = (props) => {
                                 <input type="text" id="_gotcha" name="_gotcha" tabIndex={-1} autoComplete="off" />
                             </div>
 
-                            <p
-                                className={`form-status${status === 'error' ? ' is-error' : ''}${status === 'success' ? ' is-success' : ''}`}
-                                role="status"
-                                aria-live="polite"
-                            >
-                                {statusMessage}
-                            </p>
-
+                            {/* status sits beside Send so the form needs one less line */}
                             <div className="submit-button-container">
+                                <p
+                                    className={`form-status${status === 'error' ? ' is-error' : ''}${status === 'success' ? ' is-success' : ''}`}
+                                    role="status"
+                                    aria-live="polite"
+                                >
+                                    {statusMessage}
+                                </p>
                                 <button type="submit" disabled={status === 'sending'}>
                                     {status === 'sending' ? 'Sending…' : 'Send'}
                                 </button>

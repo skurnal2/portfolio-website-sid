@@ -59,9 +59,15 @@
                             }
                         }
 
-                        .submit-button-container button {
-                            font-size: 22px;
-                            width: 100%;
+                        .submit-button-container {
+                            flex-direction: column;
+                            align-items: stretch;
+                            gap: 10px;
+
+                            button {
+                                font-size: 22px;
+                                width: 100%;
+                            }
                         }
                     }
                 }
@@ -150,20 +156,43 @@
 
         &-right {
             width: 65%;
+            // The "Form" heading sits above the form, so the form gets the
+            // space that's left rather than the full panel height. Before,
+            // it was sized to 100% and overflowed by the heading's 60px,
+            // which pushed the Send button out of view.
+            display: flex;
+            flex-direction: column;
             border-radius: 20px;
+
+            // keep "Form" a small tab rather than a full-width bar
+            > .item-heading {
+                align-self: flex-start;
+            }
             background-color: rgba(0, 0, 0, 0.4);
             box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px, rgba(var(--color2), 0.1) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
             border: 1px solid rgba(255, 255, 255, 0.4);
 
             &-content {
-                height: 100%;
+                flex: 1 1 auto;
+                min-height: 0;
                 padding: 20px 40px;
 
                 form {
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+
                     .form-group {
                         display: flex;
                         justify-content: space-evenly;
                         margin-bottom: 15px;
+
+                        // the message box takes whatever height is left, so
+                        // Send stays on screen at any window height
+                        &.is-message {
+                            flex: 1 1 auto;
+                            min-height: 90px;
+                        }
 
                         label {
                             width: 20%;
@@ -190,16 +219,16 @@
                         }
 
                         textarea {
-                            height: 200px;
-                            resize: vertical;
+                            height: auto;
+                            resize: none;
                         }
                     }
 
                     .form-status {
+                        flex: 1 1 auto;
                         font-family: $font4;
                         font-size: 17px;
-                        margin-bottom: 10px;
-                        min-height: 22px;
+                        margin: 0;
 
                         &.is-error {
                             color: rgba(var(--color2), 1);
@@ -212,7 +241,8 @@
 
                     .submit-button-container {
                         display: flex;
-                        justify-content: flex-end;
+                        align-items: center;
+                        gap: 20px;
 
                         button {
                             font-size: 30px;
@@ -244,6 +274,37 @@
     width: 1px;
     height: 1px;
     overflow: hidden;
+}
+
+// Laptop-height windows (1366x768, 1280x720): the pinned panel is 80vh, so
+// tighten the fields until the whole form, Send included, fits inside it.
+@media only screen and (min-width: #{$bp-mobile + 1}) and (max-height: 820px) {
+    .contact-content-right-content {
+        padding: 12px 36px 16px;
+
+        form .form-group {
+            margin-bottom: 8px;
+
+            label {
+                font-size: 20px;
+            }
+
+            input,
+            textarea {
+                font-size: 17px;
+                padding: 6px 10px;
+            }
+
+            &.is-message {
+                min-height: 70px;
+            }
+        }
+
+        form .submit-button-container button {
+            font-size: 24px;
+            padding: 3px 18px;
+        }
+    }
 }
 
 @media only screen and (max-width: $bp-mobile) {

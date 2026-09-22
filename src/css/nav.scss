@@ -34,10 +34,15 @@ nav {
         overflow: hidden;
         outline: 1px solid rgba(255, 255, 255, 0.4);
         box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+        // The slanted link tabs are ::before layers at z-index -1. Put the
+        // name pill below them, or once scrolled it covers the Home tab.
+        z-index: -2;
 
         .h1-circle {
             position: absolute;
             border-radius: 30%;
+            // sits the two squares behind the name, as on the original site
+            margin-left: 45%;
 
             &:nth-child(2) {
                 background: linear-gradient(0.45turn,rgba(0,0,0,0), rgba(var(--color3), 1));
