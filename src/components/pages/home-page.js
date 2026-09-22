@@ -4,6 +4,7 @@ import '../../css/home-page.scss';
 
 //Component Imports
 import Services from "../sections/services";
+import Experience from "../sections/experience";
 import Projects from "../sections/projects";
 import Contact from "../sections/contact";
 
@@ -23,6 +24,7 @@ const HomePage = ({
         </div>
       </main>
       <Services />
+      <Experience />
       <Projects {...projectProps} />
       <Contact {...contactProps}/>
     </div>

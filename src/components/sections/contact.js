@@ -123,7 +123,7 @@ const Contact = (props) => {
 
     const statusMessage = {
         sending: 'Sending…',
-        success: 'Thanks — your message is on its way. I will get back to you soon.',
+        success: 'Thanks! Your message is on its way. I will get back to you soon.',
         error: 'Something went wrong sending that. Please try again, or email contact@siddharthkurnal.com directly.'
     }[status];
 

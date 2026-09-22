@@ -4,9 +4,9 @@ import React from "react";
 // page — a list that claims everything reads as claiming nothing, and it was
 // undercutting how specific the project write-ups are.
 const services = [
-  "Creative Web Development",
+  "Full-Stack Web Apps",
   "AI & RAG Systems",
-  "AWS Cloud",
+  "Azure & AWS Cloud",
   "Mobile Development"
 ];
 

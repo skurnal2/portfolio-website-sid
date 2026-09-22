@@ -3,6 +3,7 @@ import { gsap, ScrollTrigger } from "gsap/all";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons'; // Added import for font awesome star icon
 
+import nozaria_url from "../../images/nozaria.jpg";
 import rag_url from "../../images/rag.jpg";
 import sortable_tree_url from "../../images/sortable_tree.gif";
 import sortable_tree_static_url from "../../images/sortable_tree_static.png";
@@ -17,6 +18,23 @@ import "../../css/projects.scss";
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
+    {
+        name: "NOZARIA - Retail Platform for a Jewelry Business",
+        image: nozaria_url,
+        width: 1000,
+        height: 556,
+        alt: "The NOZARIA storefront home page, showing its AI try-on feature: a woman holding a phone next to the headline One photo. Any piece. Fifteen seconds.",
+        details: (
+            <ul>
+                <li>Built three apps for a jewelry retailer selling in Canada, the US and India: a <b>Next.js</b> admin and <b>REST API</b> on <b>PostgreSQL</b> (Supabase, Drizzle), an offline-first <b>Flutter</b> point-of-sale app, and a headless <b>Shopify</b> storefront.</li>
+                <li>Kept one-of-a-kind stock accurate across the shop, Etsy and Shopify with absolute stock counts and Shopify <b>webhooks</b>, so a piece sold in one place can't sell again elsewhere.</li>
+                <li>Added <b>AI virtual try-on</b> and AI-generated product listings with the <b>Gemini</b> and <b>OpenAI</b> APIs.</li>
+                <li>Deployed the Canada and India regions from one shared codebase, and integrated <b>Razorpay</b> payment webhooks.</li>
+                <li>Streamed the shop's CCTV to a remote TV through <b>Raspberry Pis</b> on a private <b>Tailscale VPN</b>, working around the ISP's carrier-grade NAT.</li>
+                <li>Live at <a href="https://nozaria.com" target="_blank" rel="noopener noreferrer">nozaria.com</a></li>
+            </ul>
+        )
+    },
     {
         name: "Knowledge Base Management with Pinecone for AI Agents",
         image: rag_url,

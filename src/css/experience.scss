@@ -1,0 +1,201 @@
+@use 'variables' as *;
+
+// Same glass panel and tab title as .services and #projects, with the
+// résumé's layout inside: a header bar per company, and every role as a ring
+// on one continuous dotted timeline.
+.experience {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 2rem 1rem 1rem 1rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    overflow: hidden;
+    color: white;
+    font-family: $font4;
+
+    &::before {
+        content: '';
+        background: url(../images/noise.svg);
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border-radius: 15px;
+        opacity: 0.1;
+        z-index: -1;
+    }
+
+    h4 {
+        height: 60px;
+        font-size: 30px;
+        padding: 10px;
+        margin: 0 2vw 1rem 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom-right-radius: 15px;
+        font-family: $font4;
+        font-weight: lighter;
+        color: rgba(255, 255, 255, 0.75);
+        background-color: rgba(0, 0, 0, 0.2);
+        display: inline-block;
+        box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    }
+}
+
+.experience-timeline {
+    position: relative;
+    padding: 0.5rem 3vw 2.5rem 4.2rem;
+
+    // the dotted line from the first role's ring to the last one's; the
+    // component measures --line-top and --line-height
+    &::before {
+        content: '';
+        position: absolute;
+        top: var(--line-top, 0);
+        height: var(--line-height, 0);
+        left: calc(2.35rem + 6px);
+        border-left: 2px dashed rgba(255, 255, 255, 0.55);
+    }
+}
+
+.experience-job + .experience-job {
+    margin-top: 2rem;
+}
+
+.experience-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 1rem;
+    padding: 0.55rem 1.1rem;
+    margin-bottom: 0.9rem;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03) 70%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+
+.experience-company {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: rgba(var(--color2), 1);
+}
+
+.experience-location {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    padding-left: 1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.experience-dates {
+    margin-left: auto;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+}
+
+.experience-role {
+    position: relative;
+
+    & + & {
+        margin-top: 1.2rem;
+    }
+
+    // role ring on the timeline; its centre (top + 7px) is RING_CENTER in experience.js
+    &::before {
+        content: '';
+        position: absolute;
+        z-index: 1;
+        left: calc(-4.2rem + 2.35rem);
+        top: 6px;
+        width: 14px;
+        height: 14px;
+        border: 3px solid rgba(var(--color2), 1);
+        border-radius: 50%;
+        background: rgba(20, 20, 20, 0.9);
+    }
+
+    h5 {
+        font-size: 1.3rem;
+        font-weight: 400;
+        font-style: italic;
+        margin-bottom: 0.4rem;
+    }
+
+    ul {
+        padding-left: 1.2rem;
+    }
+
+    li {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 0.35rem;
+        color: rgba(255, 255, 255, 0.88);
+
+        &::marker {
+            color: rgba(var(--color2), 1);
+        }
+
+        b {
+            color: white;
+        }
+    }
+}
+
+.experience-role-dates {
+    margin-left: 0.8rem;
+    font-size: 0.95rem;
+    color: rgba(var(--color2), 1);
+}
+
+@media (max-width: $bp-mobile) {
+    .experience {
+        margin: 1.5rem 0.75rem 1rem 0.75rem;
+    }
+
+    .experience-timeline {
+        padding: 0.25rem 1rem 1.5rem 2.6rem;
+
+        &::before {
+            left: calc(1.15rem - 1px);
+        }
+    }
+
+    .experience-head {
+        padding: 0.5rem 0.8rem;
+    }
+
+    .experience-company {
+        font-size: 1.3rem;
+    }
+
+    // on a phone the location wraps under the company, so drop the divider
+    .experience-location {
+        font-size: 0.9rem;
+        width: 100%;
+        padding-left: 0;
+        border-left: 0;
+    }
+
+    // on a phone the dates drop under the company instead of hugging the right edge
+    .experience-dates {
+        margin-left: 0;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .experience-role {
+        &::before {
+            left: calc(-2.6rem + 1.15rem - 7px);
+        }
+
+        h5 {
+            font-size: 1.1rem;
+        }
+
+        li {
+            font-size: 0.95rem;
+        }
+    }
+}
