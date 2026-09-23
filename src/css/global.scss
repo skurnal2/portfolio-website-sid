@@ -36,24 +36,21 @@
     border-radius: 4px;
 }
 
-//Scrollbar design
-* {
-    scrollbar-color: rgba(var(--color1), 1) rgba(var(--color3), 1);
+// Scrollbar: slim and quiet, in the theme's accent. The rail on the left
+// already shows where you are, so this only needs to be there when wanted.
+html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color2), 0.45) transparent;
+}
 
-    &::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background: rgba(var(--color3), 1);
-        transition: 1s;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: rgba(var(--color1), 1);
-        border-radius: 20px;
-        border: 3px solid rgba(var(--color3), 1);
-        transition: 1s;
+// Safari before scrollbar-color
+@supports not (scrollbar-color: auto) {
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(var(--color2), 0.45);
+        border-radius: 6px;
+        &:hover { background: rgba(var(--color2), 0.8); }
     }
 }
 

@@ -90,6 +90,9 @@ export const initSectionSnap = (lenisInstance, ScrollTrigger) => {
   const desktop = window.matchMedia(SCROLL_EFFECTS_OK);
   const onScroll = (l) => {
     if (!desktop.matches || busy || navigating || !zones.length) return;
+    // dragging the scrollbar, the keyboard or find-in-page: Lenis reports
+    // those as native scrolling, and the reader is steering, so don't snap
+    if (l.isScrolling === "native") return;
     const y = l.scroll;
     const dir = l.direction;
     if (!dir) return;
