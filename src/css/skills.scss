@@ -1,0 +1,153 @@
+@use 'variables' as *;
+
+// Skills: what I do (top), the toolkit (left) and background (right).
+.tk {
+    position: relative;
+    margin: 2rem 1rem 1rem;
+    padding-bottom: 2rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-family: $font4;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: url(../images/noise.png);
+        opacity: 0.1;
+        z-index: -1;
+    }
+
+    > h4 {
+        height: 60px;
+        font-size: 30px;
+        padding: 10px;
+        margin: 0 2vw 1rem 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom-right-radius: 15px;
+        font-weight: lighter;
+        color: rgba(255, 255, 255, 0.75);
+        background-color: rgba(0, 0, 0, 0.2);
+        display: inline-block;
+    }
+
+    h5 {
+        margin: 0 0 14px;
+        font-size: clamp(16px, 1.2vw, 20px);
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        color: rgb(var(--accent-text));
+    }
+}
+
+.tk-item {
+    position: relative;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: url(../images/noise.png);
+        opacity: 0.08;
+        pointer-events: none;
+    }
+}
+
+.tk-icon {
+    width: clamp(48px, 3.6vw, 64px);
+    height: clamp(48px, 3.6vw, 64px);
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    font-size: clamp(20px, 1.6vw, 28px);
+    background: rgba(var(--color2), 0.9);
+    color: rgb(var(--on-accent));
+    box-shadow: 0 8px 20px rgba(var(--color2), 0.35);
+}
+
+.tk-focus {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 8px 2vw 0;
+}
+
+.tk-focus-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: clamp(22px, 2vw, 32px);
+    b { font-family: $font2; font-weight: normal; font-size: clamp(21px, 1.7vw, 30px); line-height: 1.15; }
+    > span:last-child { font-size: clamp(15px, 1.1vw, 18px); line-height: 1.5; color: rgba(255, 255, 255, 0.75); }
+}
+
+.tk-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px 2vw 0;
+}
+
+.tk-groups {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.tk-group {
+    padding: clamp(20px, 1.8vw, 30px);
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+}
+
+.skills-chip {
+    padding: 8px 15px;
+    border-radius: 999px;
+    font-size: clamp(14px, 1vw, 17px);
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(var(--surface), 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: transform .2s cubic-bezier(.34,1.56,.64,1), border-color .2s, background .2s;
+
+    &:hover {
+        transform: translateY(-2px) scale(1.06);
+        border-color: rgba(var(--color2), 0.9);
+        background: rgba(var(--color2), 0.25);
+    }
+}
+
+
+
+
+
+
+
+
+
+@media only screen and (max-width: 1300px) {
+    .tk-groups { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media only screen and (max-width: $bp-mobile) {
+    .tk-focus { grid-template-columns: 1fr 1fr; padding: 0 1rem; }
+    .tk-body { grid-template-columns: 1fr; padding: 16px 1rem 0; }
+    .tk-groups { grid-template-columns: 1fr; }
+}
+
+@media only screen and (max-width: 520px) {
+    .tk-focus { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,92 @@
+@use 'variables' as *;
+
+// phones: tighter section margins everywhere
+@media only screen and (max-width: $bp-mobile) {
+    .xp, .pj, .tk { margin: 1rem 0.4rem 0.5rem; }
+    .tk-focus, .tk-body { padding-left: 0.6rem; padding-right: 0.6rem; }
+    .pj-text { padding: 18px 16px; }
+}
+
+// Section headings: a ring on the rail's colour, the section number, the
+// title, and a dashed rule running out to the panel's edge.
+.xp, .pj, .tk, .ct {
+    > h4.sec-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        height: auto;
+        margin: 0;
+        padding: clamp(18px, 2.4vh, 26px) clamp(18px, 2vw, 30px) clamp(6px, 1vh, 10px);
+        border: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+        font-weight: normal;
+        color: white;
+    }
+}
+
+.sec-ring {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid rgba(var(--color2), 1);
+    background: rgb(var(--surface));
+    box-shadow: 0 0 0 4px rgba(var(--color2), 0.18), 0 0 14px rgba(var(--color2), 0.45);
+}
+
+.sec-num {
+    font-family: $font2;
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: rgb(var(--accent-text));
+}
+
+.sec-title {
+    font-family: $font2;
+    font-size: clamp(26px, 2.6vw, 40px);
+    line-height: 1;
+    letter-spacing: 0.5px;
+    color: white;
+    text-shadow: 3px 3px 0 rgba(var(--color2), 0.35);
+}
+
+.sec-sub {
+    align-self: flex-end;
+    padding-bottom: 4px;
+    font-family: $font4;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.55);
+    white-space: nowrap;
+}
+
+.sec-rule {
+    flex: 1;
+    min-width: 24px;
+    height: 0;
+    margin-left: 6px;
+    border-top: 2px dashed rgba(255, 255, 255, 0.22);
+}
+
+@media only screen and (max-width: $bp-mobile) {
+    .xp, .pj, .tk, .ct {
+        > h4.sec-head { padding: 16px 14px 6px; gap: 10px; }
+    }
+    .sec-ring { width: 14px; height: 14px; border-width: 2px; }
+    .sec-title { font-size: 26px; }
+    .sec-sub { display: none; }
+}
+
+// The last section fills the screen below the top bar, so the end of the
+// page never leaves a sliver of the section above it showing.
+@media only screen and (min-width: #{$bp-mobile + 1}) and (prefers-reduced-motion: no-preference) {
+    .ct {
+        min-height: calc(100vh - var(--header-h) - 16px);
+        display: flex;
+        flex-direction: column;
+    }
+    .ct > .ct-layout { flex: 1; }
+    // the last section also needs room to scroll fully under the top bar
+    .ct { margin-bottom: 16px; }
+}

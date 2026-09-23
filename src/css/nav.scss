@@ -1,254 +1,169 @@
 @use 'variables' as *;
 
-// NAVBAR LAYOUT
-nav {
-    position: fixed;
-    width: 100%;
-    height: 8rem;
-    z-index: 150;
-    transition: height .75s;
-}
-
-//NAVBAR DESIGN
-// NAV
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: $font4;
-
-    h1 {
-        left: 15px;
-        font-family: $font2;
-        color: white;
-        width: 50%;
-        text-align: center;
-        text-transform: uppercase;
-        -webkit-text-stroke: 1px rgba(var(--color1), 1);
-        border-radius: 35px;
-        font-weight: normal;
-        font-size: 2.5vh;
-        position: relative;
-        background: rgba(var(--color1), 0.65);
-        backdrop-filter: blur(15px);
-        overflow: hidden;
-        outline: 1px solid rgba(255, 255, 255, 0.4);
-        box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-        // The slanted link tabs are ::before layers at z-index -1. Put the
-        // name pill below them, or once scrolled it covers the Home tab.
-        z-index: -2;
-
-        .h1-circle {
-            position: absolute;
-            border-radius: 30%;
-            // sits the two squares behind the name, as on the original site
-            margin-left: 45%;
-
-            &:nth-child(2) {
-                background: linear-gradient(0.45turn,rgba(0,0,0,0), rgba(var(--color3), 1));
-                height: 4rem;
-                width: 4rem;
-                top: 1px;
-                left: -40px;
-
-                animation: circle-up-down 2.5s ease-in-out infinite;
-            }
-
-            &:first-child {
-                background: linear-gradient(0.45turn,rgba(0,0,0,0), rgba(var(--color2), 1));
-                height: 7rem;
-                width: 7rem;
-                top: -3rem;
-                left: 10px;
-
-                animation: circle-up-down 3s ease-in-out infinite;
-
-            }
-
-            @keyframes circle-up-down {
-                50% {
-                    transform: translateY(-4vh) rotate(10deg);
-                }
-            }
-        }
-
-        span {
-            transition: margin .25s;
-            position: relative;
-        }
-
-        &:hover span {
-            margin: 0 !important;
-        }
-    }
-
-    .nav-links {
-        display: flex;
-        width: 50%;
-        padding-right: 10%;
-        gap: 45px;
-        height: 100%;
-        justify-content: flex-end;
-
-        // In-page actions are <button>s and real destinations are <a>s, so both
-        // need the same treatment. Buttons also need their UA chrome stripped.
-        // Resting state is the visible one. The entrance is a gsap.from(), so
-        // if GSAP never runs (reduced motion) the links are simply already
-        // here rather than stranded at opacity 0.
-        a,
-        button {
-            text-decoration: none;
-            padding: .4rem;
-            color: rgba(var(--color1), 1);
-            font-size: 20px;
-            position: relative;
-            transition: 0.2s;
-            background: none;
-            border: none;
-            font-family: inherit;
-            line-height: normal;
-
-            &::before {
-                content: '';
-                position: absolute;
-                top: -30px;
-                left: -10px;
-                right: -35px;
-                bottom: -10px;
-                background: rgba(var(--color3), 0.55);
-                backdrop-filter: blur(10px);
-                transform: skew(35deg, 0deg);
-                z-index: -1;
-                transition: transform 0.2s, background-color 1s, border-radius 0.15s;
-                box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-                border: 1px solid white;
-            }
-
-            &:first-child {
-                &::before {
-                    border-bottom-left-radius: 20px;
-                }
-            }
-
-            &:last-child {
-                &::before {
-                    border-bottom-right-radius: 25px;
-                }
-            }
-
-            span {
-                height: 100%;
-                display: inline-block;
-                position: relative;
-                top: 50%;
-                left: 32%;
-                transition: transform 0.2s, background-color 1s;
-                user-select: none;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-            }
-
-            &:hover,
-            &:focus-visible {
-                &:before {
-                    transform: skew(35deg, 0deg) translateY(25px);
-                }
-                span {
-                    transform: translateY(15px) translateX(10px);
-                }
-            }
-
-            &:active {
-                &:before {
-                    transform: skew(35deg, 0deg) translateY(20px);
-                }
-
-                span {
-                    transform: translateY(20px) translateX(15px);
-                }
-            }
-        }
-    }
-}
-
+// The phone menu: a round button in the top bar (three lines that fold into
+// an X) and a full-screen sheet listing the sections on the site's dotted rail.
 
 .nav-menu-button {
     display: none;
     position: fixed;
-    top: 1rem;
-    right: 2rem;
-    z-index: 350;
-    background: none;
-    border: none;
+    top: calc((var(--header-h) - 46px) / 2);
+    right: 14px;
+    z-index: 320;
+    width: 46px;
+    height: 46px;
     padding: 0;
-    line-height: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(var(--surface), 0.88);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+
+    @media only screen and (max-width: $bp-mobile) {
+        display: inline-flex;
+    }
 }
 
-//FULL MENU WRAPPER
+.mm-burger {
+    position: relative;
+    width: 20px;
+    height: 14px;
+
+    i {
+        position: absolute;
+        left: 0;
+        height: 2px;
+        border-radius: 2px;
+        background: white;
+        transition: transform .35s cubic-bezier(.65,0,.35,1), opacity .2s, width .35s, top .35s;
+    }
+    i:nth-child(1) { top: 0; width: 100%; }
+    i:nth-child(2) { top: 6px; width: 70%; background: rgb(var(--accent-text)); }
+    i:nth-child(3) { top: 12px; width: 100%; }
+}
+
+.nav-menu-button[aria-expanded="true"] .mm-burger {
+    i:nth-child(1) { top: 6px; transform: rotate(45deg); }
+    i:nth-child(2) { opacity: 0; width: 0; }
+    i:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+}
+
 .full-menu-wrapper {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    // visibility is part of the transition so the closed menu is genuinely
-    // removed from the accessibility tree and the tab order, rather than just
-    // being invisible while still focusable.
-    transition: opacity .5s, visibility .5s;
-    background: rgba(var(--color1), 0.85);
-    backdrop-filter: blur(20px);
-
-    //Aligning link items
+    inset: 0;
     display: flex;
-    align-items: center;
     flex-direction: column;
-    justify-content: space-around;
-    padding: 10rem 0;
+    justify-content: center;
+    gap: 36px;
+    padding: calc(var(--header-h) + 10px) 28px 40px;
+    background:
+        radial-gradient(circle at 85% 10%, rgba(var(--color2), 0.25), transparent 50%),
+        radial-gradient(circle at 10% 90%, rgba(var(--color3), 0.2), transparent 55%),
+        rgba(var(--surface), 0.97);
+    font-family: $font4;
+    color: white;
+    // visibility is part of the transition so the closed menu is removed from
+    // the tab order, not just made invisible
+    transition: opacity .4s, visibility .4s;
 
-    a,
-    button {
-        color: white;
-        text-decoration: none;
-        font-family: $font1;
-        text-align: center;
-        font-size: 3rem;
-        transition: .1s;
-        background: none;
-        border: none;
-
-        &:hover,
-        &:focus-visible {
-            color: rgba(var(--color3), 1);
-        }
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: url(../images/noise.png);
+        opacity: 0.1;
+        pointer-events: none;
     }
 }
 
-//MEDIA QUERY FOR MOBILE/TABLET LAYOUT
-@media only screen and (max-width: $bp-mobile) {
-    nav {
-        height: 5rem;
+.mm-list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    // the dotted rail behind the rings
+    &::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 18px;
+        bottom: 18px;
+        border-left: 2px dashed rgba(255, 255, 255, 0.3);
     }
 
-    .nav-links {
-        justify-content: flex-end;
-
-        a,
-        button {
-            display: none;
-        }
+    button {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 10px 0;
+        background: none;
+        border: 0;
+        color: white;
+        font-family: inherit;
+        text-align: left;
+        cursor: pointer;
     }
+}
 
-    .nav-menu-button {
-        display: inline-block;
-    }
+.mm-ring {
+    position: relative;
+    z-index: 1;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 3px solid rgba(var(--color2), 1);
+    background: rgb(var(--surface));
+}
 
-    .full-menu-wrapper {
-        a,
-        button {
-            font-size: 2.25rem;
-        }
+.mm-num {
+    font-family: $font2;
+    font-size: 14px;
+    color: rgb(var(--accent-text));
+}
+
+.mm-label {
+    font-family: $font2;
+    font-size: clamp(30px, 9vw, 44px);
+    line-height: 1.1;
+}
+
+.mm-links {
+    display: flex;
+    gap: 10px;
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.06);
+        color: white;
+        text-decoration: none;
+        font-size: 15px;
     }
+}
+
+// staggered entrance each time the menu opens
+.mm-list button,
+.mm-links {
+    opacity: 0;
+    transform: translateX(-24px);
+    transition: opacity .45s, transform .55s cubic-bezier(.34,1.56,.64,1);
+}
+.full-menu-wrapper.is-open {
+    .mm-list button,
+    .mm-links {
+        opacity: 1;
+        transform: none;
+        transition-delay: calc(0.08s + var(--i) * 0.06s);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mm-list button, .mm-links, .mm-burger i { transition: none; }
 }

@@ -1,201 +1,286 @@
 @use 'variables' as *;
 
-// Same glass panel and tab title as .services and #projects, with the
-// résumé's layout inside: a header bar per company, and every role as a ring
-// on one continuous dotted timeline.
-.experience {
+// Experience: roles on a picker wheel (left), the centred role's work (right).
+.xp {
     position: relative;
-    background-color: rgba(0, 0, 0, 0.5);
-    margin: 2rem 1rem 1rem 1rem;
+    margin: 2rem 1rem 1rem;
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.4);
-    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
     font-family: $font4;
+    overflow: hidden;
 
     &::before {
         content: '';
-        background: url(../images/noise.svg);
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
         position: absolute;
-        border-radius: 15px;
+        inset: 0;
+        background: url(../images/noise.png);
         opacity: 0.1;
         z-index: -1;
     }
 
-    h4 {
+    > h4 {
         height: 60px;
         font-size: 30px;
         padding: 10px;
-        margin: 0 2vw 1rem 0;
+        margin: 0 2vw 0 0;
         border-right: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom-right-radius: 15px;
-        font-family: $font4;
         font-weight: lighter;
         color: rgba(255, 255, 255, 0.75);
         background-color: rgba(0, 0, 0, 0.2);
         display: inline-block;
-        box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
     }
 }
 
-.experience-timeline {
-    position: relative;
-    padding: 0.5rem 3vw 2.5rem 4.2rem;
+.xp-layout {
+    display: grid;
+    grid-template-columns: 38% 1fr;
+    gap: 2.5vw;
+    padding: 1rem 2.5vw 2rem;
+}
 
-    // the dotted line from the first role's ring to the last one's; the
-    // component measures --line-top and --line-height
-    &::before {
+// ---- left: the wheel
+.xp-wheel {
+    position: relative;
+    display: grid;
+    align-items: center;
+    perspective: 1400px;
+
+    // the résumé's dotted timeline behind the cards
+}
+
+// the résumé's dotted timeline, curved through the rings as the wheel turns
+.xp-curve {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 0;
+
+    path {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.4);
+        stroke-width: 2;
+        stroke-dasharray: 5 7;
+        stroke-linecap: round;
+    }
+}
+
+.xp-card {
+    grid-area: 1 / 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-left: 44px;
+    padding: 20px 24px;
+    border-radius: 18px;
+    // dark glass with a hint of the theme colour, so contrast holds on every theme
+    background: rgba(var(--surface), 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+    backface-visibility: hidden;
+    transition: border-color .4s, box-shadow .4s;
+
+    &::after {
         content: '';
         position: absolute;
-        top: var(--line-top, 0);
-        height: var(--line-height, 0);
-        left: calc(2.35rem + 6px);
-        border-left: 2px dashed rgba(255, 255, 255, 0.55);
+        inset: 0;
+        border-radius: inherit;
+        background: url(../images/noise.png);
+        opacity: 0.1;
+        pointer-events: none;
+    }
+
+    &.is-active {
+        border-color: rgba(var(--color2), 0.9);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(var(--color2), 0.4);
     }
 }
 
-.experience-job + .experience-job {
-    margin-top: 2rem;
+.xp-ring {
+    position: absolute;
+    left: -32px;
+    top: 26px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 3px solid rgba(var(--color2), 1);
+    background: rgb(var(--surface));
+}
+.xp-card.is-active .xp-ring { box-shadow: 0 0 0 5px rgba(var(--color2), 0.2), 0 0 14px rgba(var(--color2), 0.6); }
+
+.xp-company {
+    font-family: $font2;
+    font-size: clamp(24px, 3vh, 32px);
+    color: rgb(var(--accent-text));
+    line-height: 1.1;
 }
 
-.experience-head {
+.xp-title {
+    font-size: clamp(16px, 2vh, 19px);
+    font-style: italic;
+}
+
+.xp-meta {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.4rem 1rem;
-    padding: 0.55rem 1.1rem;
-    margin-bottom: 0.9rem;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03) 70%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
+    gap: 4px 14px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.65);
+    svg { color: rgb(var(--accent-text)); }
 }
 
-.experience-company {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: rgba(var(--color2), 1);
+// ---- right: the centred role's work
+.xp-details {
+    display: grid;
+    align-items: center;
+    min-width: 0;
 }
 
-.experience-location {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.8);
-    padding-left: 1rem;
-    border-left: 1px solid rgba(255, 255, 255, 0.35);
-}
+.xp-detail {
+    grid-area: 1 / 1;
+    visibility: hidden;
+    opacity: 0;
+    // the outgoing role clears quickly so two never read on top of each other
+    transition: opacity .12s, visibility 0s linear .12s;
 
-.experience-dates {
-    margin-left: auto;
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-    white-space: nowrap;
-}
-
-.experience-role {
-    position: relative;
-
-    & + & {
-        margin-top: 1.2rem;
-    }
-
-    // role ring on the timeline; its centre (top + 7px) is RING_CENTER in experience.js
-    &::before {
-        content: '';
-        position: absolute;
-        z-index: 1;
-        left: calc(-4.2rem + 2.35rem);
-        top: 6px;
-        width: 14px;
-        height: 14px;
-        border: 3px solid rgba(var(--color2), 1);
-        border-radius: 50%;
-        background: rgba(20, 20, 20, 0.9);
-    }
-
-    h5 {
-        font-size: 1.3rem;
-        font-weight: 400;
-        font-style: italic;
-        margin-bottom: 0.4rem;
+    &.is-active {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity .35s;
     }
 
     ul {
-        padding-left: 1.2rem;
-    }
-
-    li {
-        font-size: 1.05rem;
-        line-height: 1.6;
-        margin-bottom: 0.35rem;
-        color: rgba(255, 255, 255, 0.88);
-
-        &::marker {
-            color: rgba(var(--color2), 1);
-        }
-
-        b {
-            color: white;
-        }
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(8px, 1.4vh, 14px);
     }
 }
 
-.experience-role-dates {
-    margin-left: 0.8rem;
-    font-size: 0.95rem;
-    color: rgba(var(--color2), 1);
+.xp-detail-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    margin-bottom: clamp(12px, 2vh, 22px);
+    span { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255, 255, 255, 0.55); }
+    b { font-family: $font2; font-weight: normal; font-size: clamp(22px, 2.8vh, 30px); }
+    em { color: rgba(255, 255, 255, 0.7); }
 }
 
-@media (max-width: $bp-mobile) {
-    .experience {
-        margin: 1.5rem 0.75rem 1rem 0.75rem;
+.xp-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: clamp(10px, 1.6vh, 16px) 18px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: clamp(14.5px, 1.9vh, 17px);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.88);
+    transition: background .25s, border-color .25s, transform .25s;
+
+    b { color: white; }
+
+    &:hover {
+        background: rgba(var(--color2), 0.12);
+        border-color: rgba(var(--color2), 0.6);
+        transform: translateX(4px);
     }
+}
 
-    .experience-timeline {
-        padding: 0.25rem 1rem 1.5rem 2.6rem;
+.xp-point-icon {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: rgba(var(--color2), 0.85);
+    color: rgb(var(--on-accent));
+    box-shadow: 0 6px 16px rgba(var(--color2), 0.35);
+}
 
-        &::before {
-            left: calc(1.15rem - 1px);
-        }
+.xp-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: clamp(12px, 2vh, 20px);
+    span {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        background: rgba(var(--surface), 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.16);
     }
+}
 
-    .experience-head {
-        padding: 0.5rem 0.8rem;
+// how the job worked: setup, process, scale
+.xp-work {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    margin: 0 0 clamp(12px, 2vh, 18px);
+
+    div {
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px dashed rgba(255, 255, 255, 0.22);
     }
-
-    .experience-company {
-        font-size: 1.3rem;
+    dt {
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: rgb(var(--accent-text));
     }
-
-    // on a phone the location wraps under the company, so drop the divider
-    .experience-location {
-        font-size: 0.9rem;
-        width: 100%;
-        padding-left: 0;
-        border-left: 0;
+    dd {
+        margin: 4px 0 0;
+        font-size: 14px;
+        line-height: 1.4;
+        color: rgba(255, 255, 255, 0.85);
     }
+}
 
-    // on a phone the dates drop under the company instead of hugging the right edge
-    .experience-dates {
-        margin-left: 0;
-        width: 100%;
-        font-size: 0.9rem;
+.xp-stack small {
+    align-self: center;
+    margin-right: 4px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+// Desktop with motion: pinned, the wheel fills the height
+@media only screen and (min-width: #{$bp-mobile + 1}) and (prefers-reduced-motion: no-preference) {
+    .xp { height: calc(100vh - var(--header-h) - 16px); display: flex; flex-direction: column; }
+    .xp-layout { flex: 1; min-height: 0; }
+    .xp-wheel {
+        height: 100%;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
+        mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
     }
+}
 
-    .experience-role {
-        &::before {
-            left: calc(-2.6rem + 1.15rem - 7px);
-        }
-
-        h5 {
-            font-size: 1.1rem;
-        }
-
-        li {
-            font-size: 0.95rem;
-        }
-    }
+// Everywhere else: each role card followed by its work
+@media only screen and (max-width: $bp-mobile), (prefers-reduced-motion: reduce) {
+    .xp-layout { grid-template-columns: 1fr; padding: 0.75rem 0.6rem; gap: 1rem; }
+    .xp-wheel, .xp-details { display: contents; }
+    .xp-curve { display: none; }
+    // the desktop wheel stacks everything in one cell; here they flow
+    .xp-card, .xp-detail { grid-area: auto; }
+    .xp-card { margin-left: 0; order: var(--o); }
+    .xp-ring { display: none; }
+    .xp-detail { visibility: visible; opacity: 1; margin-bottom: 1.5rem; order: var(--o); }
+    .xp-detail-head { display: none; }
 }

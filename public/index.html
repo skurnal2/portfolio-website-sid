@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="intro-wait">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -41,11 +41,13 @@
       discover them in the initial HTML instead of waiting for the CSS to parse.
       One request covers all four families.
     -->
+    <!-- the first paint is the page's own dark, not white, while the app loads -->
+    <style>html,body{margin:0;background:#0b1419}</style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Righteous&family=Rubik+Mono+One&family=Sora:wght@300;400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Righteous&family=Sora:wght@300;400;600&display=swap"
     />
   </head>
   <body>

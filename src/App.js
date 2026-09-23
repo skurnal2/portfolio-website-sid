@@ -5,49 +5,37 @@ import ReactGA from 'react-ga4';
 // Font Awesome Imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { faCompass } from "@fortawesome/free-solid-svg-icons";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { gsap, ScrollTrigger } from "gsap/all";
-import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
-import { faFaceSmile } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 //Common Imports within Routes
 import "./css/global.scss";
+import "./css/stage.scss";
 
 //Page imports
+import Spine from "./components/spine";
 import HomePage from "./components/pages/home-page";
 
 //Component Imports
 import Cursor from "./components/common/cursor";
+import ThemeHint from "./components/common/theme-hint";
 import Lenis from "lenis";
 
 //Function Imports
 import { setRandomTheme } from "./components/common/colors";
-import { ANIMATION_OK, SCROLL_EFFECTS_OK, prefersReducedMotion } from "./components/common/motion";
+import { ANIMATION_OK, prefersReducedMotion } from "./components/common/motion";
+import { setLenis, scrollToSection, scrollToY, initSectionSnap } from "./lib/scroll";
 
-library.add(faGithub, faBars, faSyncAlt, faCompass, faHome, faPaperPlane, faFaceSmile, faStar);
+library.add(faGithub, faLinkedin, faStar);
 gsap.registerPlugin(ScrollTrigger);
 
 const GITHUB_URL = "https://github.com/skurnal2";
-const EMAIL_URL = "mailto:contact@siddharthkurnal.com";
+const LINKEDIN_URL = "https://www.linkedin.com/in/siddharth-kurnal";
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  //Cursor States
-  const [cursorScale, setCursorScale] = useState(1);
-  const [cursorBorderRadius, setCursorBorderRadius] = useState("5px");
-  const [cursorBlendColor, setCursorBlendColor] = useState(false);
-  const [cursorBlur, setCursorBlur] = useState(false);
-  const [cursorBorder, setCursorBorder] = useState(true);
-  const [cursorBackgroundOpacity, setCursorBackgroundOpacity] = useState(0.3);
-  const [cursorBackgroundRGB, setCursorBackgroundRGB] = useState("");
-  const [cursorBackdropBlur, setCursorBackdropBlur] = useState(true);
-  const [cursorContent, setCursorContent] = useState(null);
 
   const lenisRef = useRef(null);
   const menuRef = useRef(null);
@@ -69,76 +57,20 @@ const App = () => {
     // stops matching, which is what lets the CSS fallback layouts take over.
     const mm = gsap.matchMedia();
 
+    // the top bar's name box and backdrop appear once the hero is behind you
+    const heroTrigger = ScrollTrigger.create({
+      trigger: "#home",
+      start: "bottom top+=160",
+      onToggle: (self) => document.querySelector(".topbar")?.classList.toggle("is-scrolled", self.isActive || self.progress === 1),
+      onUpdate: (self) => document.querySelector(".topbar")?.classList.toggle("is-scrolled", self.scroll() > self.start),
+      end: "max",
+    });
+
     mm.add(ANIMATION_OK, () => {
-      // ease: 'elastic' is a decaying oscillation that dips back near 0
-      // opacity multiple times before settling. If the browser drops or
-      // delays a frame right at one of those dips -- common right after load,
-      // while images, fonts and the ScrollTrigger/Lenis setup below are all
-      // competing for the main thread -- the tween can stall there instead of
-      // finishing, leaving a link invisible. back.out() only overshoots once
-      // on its way to 1 and never dips back toward 0, so a stalled frame just
-      // looks like a paused fade-in and still resolves correctly. clearProps
-      // is a second safety net: once the tween is done, drop the inline
-      // styles entirely so the links fall back to their plain, always-visible
-      // CSS state no matter what GSAP rendered last.
-      gsap.from(".nav-links > *", {
-        duration: 1,
-        opacity: 0,
-        y: -30,
-        x: -20,
-        stagger: -0.25,
-        ease: 'back.out(1.7)',
-        clearProps: 'opacity,transform'
-      });
-
-      gsap.from("nav h1", {
-        scrollTrigger: {
-          trigger: ".services",
-          start: "top-=200 top",
-          end: "100px 15px",
-          scrub: true
-        },
-        y: -120,
-      });
-
-      gsap.to("#title-first", {
-        scrollTrigger: {
-          trigger: ".services",
-          start: "top",
-          end: "100px 15px",
-          scrub: 0.5,
-          ease: "power1.inOut"
-        },
-        visibility: "visible",
-        marginRight: 50
-      });
-
-      gsap.to("#title-second", {
-        scrollTrigger: {
-          trigger: ".services",
-          start: "top",
-          end: "100px 15px",
-          scrub: 0.5,
-          ease: "power1.inOut"
-        },
-        visibility: "visible",
-        marginLeft: 50
-      });
-
-      gsap.from(".circle", {
-        delay: 1,
-        duration: 4,
-        opacity: 0,
-        y: -250,
-        rotate: 20,
-        stagger: 0.3,
-        ease: "elastic"
-      });
-
       gsap.to(".first-h2", {
         scrollTrigger: {
-          trigger: "nav",
-          start: "top",
+          trigger: "#home",
+          start: "top top",
           end: "600px 10px",
           scrub: true,
         },
@@ -148,8 +80,8 @@ const App = () => {
 
       gsap.to(".second-h2", {
         scrollTrigger: {
-          trigger: "nav",
-          start: "top",
+          trigger: "#home",
+          start: "top top",
           end: "600px 10px",
           scrub: true
         },
@@ -157,36 +89,10 @@ const App = () => {
         duration: 35
       });
 
-      gsap.to(".services", {
-        scrollTrigger: {
-          trigger: ".services",
-          start: "top+=150 center",
-          end: "+=550",
-          scrub: 0.5,
-          ease: "power1.inOut"
-        },
-        y: 300,
-        scale: 0.5,
-        rotateX: 70,
-        opacity: 0
-      });
     });
 
-    // Desktop animations
-    mm.add(SCROLL_EFFECTS_OK, () => {
-      gsap.to("nav", {
-        scrollTrigger: {
-          trigger: "nav",
-          start: "bottom",
-          scrub: true
-        },
-        height: "9vh",
-        ease: "ease",
-        stagger: true
-      });
-    });
 
-    return () => mm.revert();
+    return () => { heroTrigger.kill(); mm.revert(); };
   }, []);
 
   useEffect(() => {
@@ -194,6 +100,8 @@ const App = () => {
 
     const lenis = new Lenis();
     lenisRef.current = lenis;
+    setLenis(lenis);
+    const stopSnap = initSectionSnap(lenis, ScrollTrigger);
 
     const onScroll = () => ScrollTrigger.update();
     lenis.on('scroll', onScroll);
@@ -208,7 +116,9 @@ const App = () => {
       gsap.ticker.lagSmoothing();
       lenis.off('scroll', onScroll);
       lenis.destroy();
+      stopSnap();
       lenisRef.current = null;
+      setLenis(null);
     };
   }, []);
 
@@ -267,22 +177,9 @@ const App = () => {
     visibility: isOpen ? 'visible' : 'hidden',
   };
 
-  const scrollTo = (top) => {
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(top);
-      return;
-    }
-    window.scrollTo({ top, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-  };
-
-  const goToProjects = () => {
-    const projectsSection = document.querySelector('#projects');
-    if (!projectsSection) return;
-    const offset = 20; // Add offset to account for nav bar height
-    scrollTo(projectsSection.getBoundingClientRect().top + window.scrollY + offset);
-  };
-
-  const scrollToTop = () => scrollTo(0);
+  const scrollToTop = () => scrollToY(0);
+  const goToSection = (id) => () => scrollToSection(id);
+  const goToContact = () => scrollToSection("contact");
 
   // Queue navigation to run once the menu has actually closed.
   const menuNavigate = (action, label) => () => {
@@ -291,89 +188,58 @@ const App = () => {
     setIsOpen(false);
   };
 
-  const navLinksEffects = (icon) => {
-    return {
-      onMouseEnter: () => {
-        setCursorBackgroundRGB('0,0,0');
-        setCursorScale(3);
-        setCursorBackgroundOpacity(0.2);
-        setCursorBackdropBlur(true);
-        setCursorBorderRadius("20px");
-        setCursorContent(<FontAwesomeIcon icon={icon} style={{fontSize: '30px', color: 'white'}}/>);
-      },
-      onMouseLeave: () => {
-        setCursorBackgroundRGB('');
-        setCursorScale(1);
-        setCursorBackgroundOpacity(0.3);
-        setCursorBackdropBlur(true);
-        setCursorBorderRadius("5px");
-        setCursorContent(null);
-      }
-    };
-  }
 
   return (
     <div className="parent">
       <div className="container">
         <div
           id="full-menu"
-          className="full-menu-wrapper"
+          className={`full-menu-wrapper${isOpen ? " is-open" : ""}`}
           style={menuStyle}
           aria-hidden={!isOpen}
           ref={menuRef}
         >
-            <button type="button" onClick={menuNavigate(scrollToTop, "Home")}>Home</button>
-            <button type="button" onClick={menuNavigate(goToProjects, "Projects")}>Projects</button>
+          <nav className="mm-list" aria-label="Sections">
+            {[
+              ["Home", scrollToTop],
+              ["Experience", goToSection("experience")],
+              ["Projects", goToSection("projects")],
+              ["Skills", goToSection("skills")],
+              ["Contact", goToSection("contact")],
+            ].map(([label, action], i) => (
+              <button type="button" key={label} style={{ "--i": i }} onClick={menuNavigate(action, label)}>
+                <span className="mm-ring" />
+                <span className="mm-num">{String(i + 1).padStart(2, "0")}</span>
+                <span className="mm-label">{label}</span>
+              </button>
+            ))}
+          </nav>
+          <div className="mm-links" style={{ "--i": 5 }}>
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackNavClick("GitHub")}>
-              <FontAwesomeIcon
-                className="github-symbol"
-                icon={["fab", "github"]}
-              />
-              GitHub
+              <FontAwesomeIcon icon={["fab", "github"]} /> GitHub
             </a>
-            <a href={EMAIL_URL} onClick={() => trackNavClick("Contact")}>Contact</a>
-        </div>
-        <nav>
-          <h1>
-            <div className="h1-circle" />
-            <div className="h1-circle" />
-            <span id="title-first">Siddharth</span>
-            <br />
-            <span id="title-second">Kurnal</span>
-          </h1>
-          <div className="nav-links">
-            <button
-              type="button"
-              {...navLinksEffects(["fas", "home"])}
-              onClick={() => { scrollToTop(); trackNavClick("Home"); }}
-            >
-              <span>Home</span>
-            </button>
-            <button
-              type="button"
-              {...navLinksEffects(["fas", "compass"])}
-              onClick={() => { goToProjects(); trackNavClick("Projects"); }}
-            >
-              <span>Projects</span>
-            </button>
-            <a
-              {...navLinksEffects(["fab", "github"])}
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackNavClick("GitHub")}
-            >
-              <span><FontAwesomeIcon className="github-symbol" icon={["fab", "github"]}/>GitHub</span>
-            </a>
-            <a
-              {...navLinksEffects(["fas", "paper-plane"])}
-              href={EMAIL_URL}
-              onClick={() => trackNavClick("Contact")}
-            >
-              <span>Contact</span>
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackNavClick("LinkedIn")}>
+              <FontAwesomeIcon icon={["fab", "linkedin"]} /> LinkedIn
             </a>
           </div>
-        </nav>
+        </div>
+        <header className="topbar">
+          <button type="button" className="topbar-brand" onClick={() => { scrollToTop(); trackNavClick("Brand"); }} aria-label="Back to top">
+            <span className="topbar-sq" /><span className="topbar-sq" />
+            <span className="topbar-name"><span>Siddharth</span><span>Kurnal</span></span>
+          </button>
+          <div className="corner-bar">
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub" onClick={() => trackNavClick("GitHub")}>
+              <FontAwesomeIcon icon={["fab", "github"]} />
+            </a>
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" onClick={() => trackNavClick("LinkedIn")}>
+              <FontAwesomeIcon icon={["fab", "linkedin"]} />
+            </a>
+            <button type="button" className="corner-cta" onClick={() => { goToContact(); trackNavClick("Contact"); }}>
+              Let&rsquo;s talk
+            </button>
+          </div>
+        </header>
         <button
           type="button"
           className="nav-menu-button"
@@ -383,86 +249,22 @@ const App = () => {
           aria-label={isOpen ? "Close menu" : "Open menu"}
           onClick={() => { handleMenu(); trackNavClick("Menu"); }}
         >
-          <FontAwesomeIcon className="menu-symbol" icon={["fa", "bars"]} />
+          <span className="mm-burger" aria-hidden="true"><i /><i /><i /></span>
         </button>
-        <HomePage
-          projectProps={
-            {
-              containerProps: {
-                onMouseEnter: () => {
-                  setCursorBorderRadius(10);
-                },
-                onMouseLeave: () => {
-                  setCursorBorderRadius(5);
-                }
-              },
-              projectItemProps: {
-                onMouseEnter: () => {
-                  setCursorScale(3);
-                  setCursorBorderRadius(30);
-                  setCursorContent(<FontAwesomeIcon icon={["fa", "face-smile"]} style={{fontSize: '30px', color: '#ffffffc2'}}/>);
-                },
-                onMouseLeave: () => {
-                  setCursorScale(1);
-                  setCursorBorderRadius(10);
-                  setCursorContent("");
-                }
-              }
-            }
-          }
-          contactProps={{
-            onMouseEnter: () => {
-              setCursorBlendColor(true);
-              setCursorBackdropBlur(false);
-              setCursorBackgroundRGB('255,255,255');
-              setCursorBorder(false);
-              setCursorBackgroundOpacity(1);
-              setCursorScale(4);
-              setCursorBlur(3);
-            },
-            onMouseLeave: () => {
-              setCursorBlendColor(false);
-              setCursorBackdropBlur(true);
-              setCursorBackgroundRGB('');
-              setCursorBorder(true);
-              setCursorScale(1);
-              setCursorBlur(0);
-              setCursorBackgroundOpacity(0);
-            }
-          }}
-        />
+        <Spine onNavigate={(id, label) => { scrollToSection(id); trackNavClick(label); }} />
+        <HomePage />
       </div>
-      <Cursor
-        cursorScale = {cursorScale}
-        cursorBlendColor = {cursorBlendColor}
-        cursorBlur = {cursorBlur}
-        cursorBorder = {cursorBorder}
-        cursorBackgroundRGB= {cursorBackgroundRGB}
-        cursorBackgroundOpacity={cursorBackgroundOpacity}
-        cursorBackdropBlur = {cursorBackdropBlur}
-        cursorContent = {cursorContent}
-        cursorBorderRadius = {cursorBorderRadius}
-      />
+      <Cursor />
       <button
         type="button"
         id="theme-info-popup"
         aria-label="Shuffle the colour theme"
         onClick={() => setRandomTheme()}
-        onMouseEnter={() => {
-          setCursorScale(2);
-          setCursorBackgroundRGB('0,0,0');
-          setCursorContent(<FontAwesomeIcon icon={["fas", "sync-alt"]} style={{fontSize: '20px', color: '#ffffffc2'}}/>);
-        }}
-
-        onMouseLeave={() => {
-          setCursorScale(1);
-          setCursorBackgroundRGB('');
-          setCursorContent(null);
-        }}
       >
         <FontAwesomeIcon icon={["fa", "star"]}/>
         <span id="theme-info-popup-name"/>
       </button>
+      <ThemeHint />
     </div>
   );
 }

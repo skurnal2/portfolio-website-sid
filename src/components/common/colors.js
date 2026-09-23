@@ -1,3 +1,28 @@
+// Some themes have a pale accent (ice, gold) or a near-white color4, which
+// the newer sections can't use as-is for text or surfaces. Derive three safe
+// colours from every theme instead:
+//   --surface      a dark card background tinted with the theme's color1
+//   --accent-text  color2, lightened until it reads on --surface (4.5:1)
+//   --on-accent    black or white, whichever reads on a color2 fill
+const rgb = (s) => s.split(',').map((v) => Number(v.trim()));
+const lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+const luminance = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+const contrast = (a, b) => { const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+
+const applyDerivedColors = (theme) => {
+  const root = document.documentElement;
+  const accent = rgb(theme.color2);
+  let surface = rgb(theme.color1);
+  for (let i = 0; i < 20 && luminance(surface) > 0.02; i++) surface = mix(surface, [6, 10, 14], 0.25);
+  let accentText = accent;
+  for (let i = 0; i < 20 && contrast(accentText, surface) < 4.5; i++) accentText = mix(accentText, [255, 255, 255], 0.15);
+  const onAccent = contrast(accent, [255, 255, 255]) >= 3 ? '255, 255, 255' : '14, 20, 26';
+  root.style.setProperty('--surface', surface.join(', '));
+  root.style.setProperty('--accent-text', accentText.join(', '));
+  root.style.setProperty('--on-accent', onAccent);
+};
+
 export const setRandomTheme = () => {
   const themeLoaded = localStorage.getItem('themeLoaded') === 'true';
   let randomTheme = {};
@@ -20,6 +45,8 @@ export const setRandomTheme = () => {
           root.style.setProperty(`--${key}`, randomTheme[key]);
       }
   });
+
+  applyDerivedColors(randomTheme);
 
   // Theme Info Popup
   let themeInfoName = document.getElementById("theme-info-popup-name");

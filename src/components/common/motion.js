@@ -23,3 +23,11 @@ export const prefersReducedMotion = () =>
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
     window.matchMedia(REDUCED_MOTION).matches;
+
+// Height of the fixed top bar (--header-h in spine.scss). Pinned sections
+// lock this far down so they never slide under it.
+export const headerOffset = () => {
+    if (typeof window === 'undefined') return 84;
+    const v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'));
+    return Number.isFinite(v) ? v : 84;
+};

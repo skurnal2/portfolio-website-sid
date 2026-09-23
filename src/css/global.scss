@@ -72,11 +72,11 @@
     align-items: center;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    font-family: $font1;
+    font-family: $font2;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
     border: 1px solid rgba(255, 255, 255, 0.37);
     user-select: none;
-    animation: pop-in-slow 1s forwards 2s;
+    animation: pop-in-slow 1s forwards 2.2s;
     z-index: 100;
     transition: background-color 1s, color 1s;
     border-bottom: none;
@@ -136,4 +136,41 @@
         transition-delay: 0ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+// ---- the opening sequence (src/lib/intro.js)
+// Held at the first frame until the name font is ready, then everything
+// plays from the same moment.
+.intro-wait *,
+.intro-wait *::before,
+.intro-wait *::after {
+    animation-play-state: paused !important;
+}
+
+@keyframes intro-rise {
+    from { opacity: 0; translate: 0 18px; }
+    to { opacity: 1; translate: 0 0; }
+}
+@keyframes intro-drop {
+    from { opacity: 0; translate: 0 -16px; }
+    to { opacity: 1; translate: 0 0; }
+}
+@keyframes intro-slide {
+    from { opacity: 0; translate: -18px 0; }
+    to { opacity: 1; translate: 0 0; }
+}
+@keyframes intro-bg {
+    from { opacity: 0; scale: 1.12; }
+    to { opacity: 1; scale: 1; }
+}
+
+// the side rail, the corner buttons and the menu button come in last
+.spine { animation: intro-slide .9s cubic-bezier(.2,.8,.2,1) 1.5s both; }
+.corner-bar { animation: intro-drop .8s cubic-bezier(.2,.8,.2,1) 1.6s both; }
+.nav-menu-button { animation: intro-drop .8s cubic-bezier(.2,.8,.2,1) 1.6s both; }
+
+// on phones the next section already peeks in under the hero, so it joins
+// the sequence as its last step
+@media only screen and (max-width: $bp-mobile) {
+    #experience { animation: intro-rise .9s cubic-bezier(.2,.8,.2,1) 1.8s both; }
 }

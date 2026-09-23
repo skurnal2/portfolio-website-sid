@@ -1,0 +1,307 @@
+@use 'variables' as *;
+
+// The dotted rail, fixed to the left edge. It mirrors the resume's timeline:
+// a dashed line with hollow rings, coral where you have already been.
+.spine {
+    position: fixed;
+    top: 0;
+    left: 42px;
+    height: 100vh;
+    width: 160px;
+    z-index: 120;
+    pointer-events: none;
+
+    &-line {
+        position: absolute;
+        left: 0;
+        top: 12vh;
+        bottom: 12vh;
+        width: 2px;
+        // a dotted line drawn with a repeating gradient, so it scales cleanly
+        background-image: linear-gradient(rgba(255, 255, 255, 0.35) 45%, rgba(255, 255, 255, 0) 0%);
+        background-size: 2px 9px;
+        background-repeat: repeat-y;
+
+        &-fill {
+            background-image: linear-gradient(rgba(var(--color2), 1) 45%, rgba(255, 255, 255, 0) 0%);
+            // --fill is written by the scroll trigger
+            height: calc(76vh * var(--fill, 0));
+            bottom: auto;
+            filter: drop-shadow(0 0 6px rgba(var(--color2), 0.55));
+        }
+    }
+
+    &-stops {
+        position: absolute;
+        inset: 12vh 0;
+        pointer-events: none;
+    }
+
+    &-stop {
+        position: absolute;
+        left: -9px;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        pointer-events: auto;
+        color: rgba(255, 255, 255, 0.75);
+        font-family: $font4;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+    }
+
+    &-ring {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.45);
+        // solid so the dotted line reads as passing behind the ring
+        background: rgb(var(--surface));
+        transition: transform .35s cubic-bezier(.34,1.56,.64,1), border-color .35s, box-shadow .35s;
+        flex: none;
+    }
+
+    // A tooltip on hover or keyboard focus only. It used to show for the
+    // active ring too, which put a word over the section's content.
+    &-label {
+        padding: 5px 11px;
+        border-radius: 8px;
+        background: rgba(var(--surface), 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        opacity: 0;
+        transform: translateX(-6px);
+        transition: opacity .25s, transform .25s;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+
+    &-stop:hover &-label,
+    &-stop:focus-visible &-label {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    &-stop.is-passed &-ring {
+        border-color: rgba(var(--color2), 0.85);
+    }
+
+    &-stop.is-active &-ring {
+        transform: scale(1.45);
+        border-color: rgba(var(--color2), 1);
+        box-shadow: 0 0 0 4px rgba(var(--color2), 0.18), 0 0 14px rgba(var(--color2), 0.5);
+    }
+
+    // phones: just a thin progress line at the edge; the menu does navigation
+    @media only screen and (max-width: $bp-mobile) {
+        left: 4px;
+        width: 4px;
+
+        &-line { top: calc(var(--header-h) + 8px); bottom: 16px; }
+        &-line-fill { height: calc((100vh - var(--header-h) - 24px) * var(--fill, 0)); }
+        &-stops { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &-ring, &-label { transition: none; }
+        &-line-fill { filter: none; }
+    }
+}
+
+// Leave a gutter for the rail so it never sits on top of a panel.
+@media only screen and (min-width: #{$bp-mobile + 1}) {
+    .container > div:not(.spine):not(.full-menu-wrapper) {
+        padding-left: 96px;
+    }
+}
+@media only screen and (max-width: $bp-mobile) {
+    .container > div:not(.spine):not(.full-menu-wrapper) {
+        padding-left: 8px;
+    }
+}
+
+// The fixed top bar: the name box (left, once you've scrolled past the hero)
+// and the actions (right). Pinned sections lock below --header-h.
+:root { --header-h: 84px; }
+@media only screen and (max-width: $bp-mobile) { :root { --header-h: 64px; } }
+
+.topbar {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: var(--header-h);
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem 0 calc(96px + 1rem);
+    pointer-events: none;
+
+    // content scrolling underneath fades out instead of colliding with the bar
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(rgba(var(--surface), 0.92), rgba(var(--surface), 0.6) 60%, rgba(var(--surface), 0));
+        opacity: 0;
+        transition: opacity .4s;
+    }
+    &.is-scrolled::before { opacity: 1; }
+
+    > * { position: relative; pointer-events: auto; }
+
+    @media only screen and (max-width: $bp-mobile) {
+        padding: 0 70px 0 calc(8px + 0.4rem);
+    }
+}
+
+.topbar-brand {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: auto;
+    height: 50px;
+    // room on the right for the squares the name runs over
+    padding: 0 84px 0 24px;
+    border-radius: 35px;
+    border: 0;
+    outline: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(var(--surface), 0.72);
+    box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09), 0 32px 16px rgba(0, 0, 0, 0.09);
+    overflow: hidden;
+    cursor: pointer;
+    // hidden over the hero, where the big name already is
+    opacity: 0;
+    transform: translateY(-120%);
+    transition: opacity .45s, transform .6s cubic-bezier(.34,1.56,.64,1);
+
+    .is-scrolled & { opacity: 1; transform: none; }
+}
+
+// The name sits at the left with a normal word gap, and passes over the
+// hero's two squares, which bob at the right end of the pill.
+.topbar-name {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 0.45em;
+    font-family: $font2;
+    font-size: clamp(15px, 1.2vw, 19px);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: white;
+    -webkit-text-stroke: 1px rgba(var(--surface), 1);
+}
+
+.topbar-sq {
+    position: absolute;
+    border-radius: 30%;
+
+    &:nth-child(1) {
+        width: 4.6rem;
+        height: 4.6rem;
+        top: -2rem;
+        right: 6px;
+        background: linear-gradient(0.45turn, rgba(0, 0, 0, 0), rgba(var(--color2), 1));
+        animation: brand-bob 3s ease-in-out infinite;
+    }
+
+    &:nth-child(2) {
+        width: 2.8rem;
+        height: 2.8rem;
+        top: 6px;
+        right: 52px;
+        background: linear-gradient(0.45turn, rgba(0, 0, 0, 0), rgba(var(--color3), 1));
+        animation: brand-bob 2.5s ease-in-out infinite;
+    }
+}
+
+// Hover: the pill lifts and glows in the accent colour, a band of light
+// sweeps across it, and the squares swell. The name itself stays put.
+.topbar-brand {
+    transition: opacity .45s, transform .6s cubic-bezier(.34,1.56,.64,1),
+        translate .4s cubic-bezier(.34,1.56,.64,1), outline-color .3s, box-shadow .3s;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.28) 50%, transparent 70%);
+        translate: -110% 0;
+        pointer-events: none;
+    }
+
+    &:hover,
+    &:focus-visible {
+        translate: 0 -2px;
+        outline-color: rgba(var(--color2), 0.9);
+        box-shadow: 0 0 0 4px rgba(var(--color2), 0.18), 0 12px 28px rgba(var(--color2), 0.28);
+
+        &::after { translate: 110% 0; transition: translate .8s cubic-bezier(.3,.7,.2,1); }
+        .topbar-sq { scale: 1.15; }
+    }
+}
+.topbar-sq { transition: scale .45s cubic-bezier(.34,1.56,.64,1); }
+
+@keyframes brand-bob {
+    50% { transform: translateY(-14px) rotate(10deg); }
+}
+
+// phones and tablets have the menu button instead
+@media only screen and (max-width: $bp-mobile) {
+    .topbar-brand { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .topbar-sq { animation: none; }
+}
+
+.corner-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: $font4;
+
+    a, .corner-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 42px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        background: rgba(var(--surface), 0.8);
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        transition: transform .25s cubic-bezier(.34,1.56,.64,1), background .25s, border-color .25s;
+    }
+
+    a {
+        width: 42px;
+        font-size: 18px;
+    }
+
+    .corner-cta {
+        padding: 0 20px;
+        font-size: 15px;
+        cursor: pointer;
+        background: rgba(var(--color2), 0.9);
+        border-color: rgba(var(--color2), 1);
+        color: rgb(var(--on-accent));
+        box-shadow: 0 6px 20px rgba(var(--color2), 0.35);
+    }
+
+    a:hover, .corner-cta:hover {
+        transform: translateY(-2px) scale(1.05);
+        border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    // on phones the menu button already covers these
+    @media only screen and (max-width: $bp-mobile) {
+        display: none;
+    }
+}

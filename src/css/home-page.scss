@@ -8,45 +8,49 @@
 }
 
 main {
-    margin-top: 8rem;
-    height: 100vh;
+    margin-top: 3rem;
+    height: calc(100vh - 3rem);
 }
 
 //LAYOUT END -----------------------------------------------
 
 //Container
 .parent {
-    background: radial-gradient(circle at center, rgba(var(--color1), 1), rgba(var(--color2), 1), rgba(var(--color1), 1), rgba(var(--color2), 1));
-    background-size: 400% 400%;
-    animation: gradient 10s ease infinite;
+    position: relative;
+    isolation: isolate;
 
-    @keyframes gradient {
-        0% {
-            background-position: center;
-        }
-        50% {
-            background-position: 100% 100%;
-        }
-        100% {
-            background-position: center;
-        }
+    // A fixed layer twice the viewport, drifting with transform only. The old
+    // version animated background-position on the whole page, which repainted
+    // every pixel of it on every frame.
+    &::before {
+        content: '';
+        position: fixed;
+        inset: -50%;
+        z-index: -1;
+        background: radial-gradient(circle at center, rgba(var(--color1), 1), rgba(var(--color2), 1), rgba(var(--color1), 1), rgba(var(--color2), 1));
+        animation: bg-drift 24s ease-in-out infinite alternate, intro-bg 1.6s cubic-bezier(.2,.8,.2,1) both;
+        will-change: transform;
+        pointer-events: none;
     }
 }
+
+@keyframes bg-drift {
+    from { transform: translate3d(-12%, -8%, 0) rotate(0deg); }
+    to { transform: translate3d(12%, 8%, 0) rotate(20deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .parent::before { animation: none; }
+}
+
 .container {
     background-color: rgba(var(--color1), 0.65);
 }
 
 
-.github-symbol {
-    margin-right: .5rem;
-}
 
-.menu-symbol {
-    font-size: 3rem;
-    color: rgba(var(--color2), 1);
-    opacity: .9;
-    padding: .4rem .2rem;
-}
+
+
 
 
 
@@ -60,6 +64,10 @@ main {
 }
 
 #name-container {
+    user-select: none;
+    -webkit-user-select: none;
+    // how far the whole name group (name, title, cubes) sits below the bar
+    --nt: 7vh;
     position: relative;
     height: 100%;
     width: 100%;
@@ -68,44 +76,49 @@ main {
 
     h2 {
         -webkit-text-stroke: 5px rgba(var(--color1), 1);
-        font-size: 10vw;
+        // by width, but never so tall it runs into the pitch on a short screen
+        font-size: min(10vw, 15vh);
         position: absolute;
         font-weight: normal;
         font-style: normal;
         width: 100%;
         z-index: 100;
         transform: translateX(10px);
+        // the letters themselves flip in (GSAP, home-page.js)
         opacity: 0;
-        animation: text-reveal 2s forwards 1s;
+        animation: text-reveal .3s forwards .3s;
         transition: -webkit-text-stroke 1s;
 
+        // the two lines lean in toward each other
         &:first-child {
-           top: 0;
+           top: var(--nt);
            text-align: left;
-           padding-left: 3.5vw;
+           padding-left: 8vw;
         }
 
         &:nth-child(2) {
-            top: 18vh;
+            top: calc(var(--nt) + 18vh);
             text-align: right;
-            padding-right: 14vw;
+            padding-right: 20vw;
         }
     }
 
     h3 {
         -webkit-text-stroke: 3px rgba(var(--color1), 1);
-        font-size: 5vw;
+        // long titles (they come from the resume link) shrink to stay on one line
+        font-size: min(5vw, 7.5vh, calc(118vw / var(--len, 24)));
+        white-space: nowrap;
         position: absolute;
         font-weight: normal;
         font-style: normal;
         width: 100%;
         text-align: center;
-        top: 42vh;
+        top: calc(var(--nt) + 37vh);
         padding-right: 15vw;
         z-index: 100;
         transform: translateY(10px);
         opacity: 0;
-        animation: text-reveal 2s forwards 2s;
+        animation: text-reveal .8s forwards 1s;
         transition: -webkit-text-stroke 1s;
     }
 
@@ -130,7 +143,7 @@ main {
         &::before {
             content: '';
             position: absolute;
-            background: url(../images/noise.svg) repeat;
+            background: url(../images/noise.png) repeat;
             opacity: 0.075;
             top: 0;
             left: 0;
@@ -143,7 +156,7 @@ main {
             background: linear-gradient(0.45turn,rgba(0,0,0,0), rgba(var(--color2), 1));
             height: 21vw;
             width: 21vw;
-            top: 0;
+            top: var(--nt);
             left: 15vw;
             animation: circle-up-down 3s ease-in-out infinite;
             animation-delay: 2s;
@@ -153,7 +166,7 @@ main {
             background: linear-gradient(0.45turn,rgba(0,0,0,0), rgba(var(--color3), 1));
             height: 35vw;
             width: 35vw;
-            top: 5rem;
+            top: calc(var(--nt) + 5rem);
             left: 28vw;
             animation: circle-up-down 2.5s ease-in-out infinite;
             animation-delay: 2s;
@@ -169,73 +182,13 @@ main {
 }
 
 //Services
-.services {
-    position: relative;
-    background-color: rgba(0, 0, 0, 0.5);
-    margin: 0 1rem;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    overflow: hidden;
-
-    &::before {
-        content: '';
-        background: url(../images/noise.svg);
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        border-radius: 15px;
-        opacity: 0.1;
-        z-index: -1;
-    }
-
-    h4 {
-        height: 60px;
-        font-size: 30px;
-        padding: 10px;
-        margin: 0 2vw 1rem 0;
-        border-right: 1px solid rgba(255, 255, 255, 0.4);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-        border-bottom-right-radius: 15px;
-        font-family: $font4;
-        font-weight: lighter;
-        color: rgba(255, 255, 255, 0.75);
-        background-color: rgba(0, 0, 0, 0.2);
-        display: inline-block;
-        box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-    }
-
-    .services-container {
-        padding: 0 2vw 2vh 0;
-        font-family: $font3;
-        text-align: center;
-
-        span {
-            font-size: 3vw;
-            display: inline-block;
-            font-style: normal;
-            font-weight: normal;
-            margin-left: 2vw;
-            word-spacing: -1rem;
-            line-height: 1.25;
-            color: rgba(var(--color3), 0.85);
-
-            &:nth-child(odd) {
-                color: rgba(var(--color2), 0.85);
-            }
-        }
-
-    }
-
-}
 
 //MEDIA QUERY FOR MOBILE ITEMS -----------------------------------
 @media only screen and (max-width: $bp-mobile) {
     //MAIN
     main {
         display: block;
-        margin-top: 5rem;
+        margin-top: calc(var(--header-h) + 4px);
         height: 55vh;
     }
 
@@ -248,26 +201,30 @@ main {
             }
 
             &:nth-child(2) {
-                top: 10vh;
+                top: calc(var(--nt) + 10vh);
                 text-align: right;
             }
         }
 
+        // one line, lined up under the name rather than centred off to one side
         h3 {
-            -webkit-text-stroke: 1.5px rgba(var(--color1), 1);
-            top: 23vh;
+            -webkit-text-stroke: 1px rgba(var(--color1), 1);
+            top: calc(var(--nt) + 21vh);
+            font-size: min(4.8vw, 5.5vh, calc(128vw / var(--len, 24)));
+            text-align: left;
+            padding: 0 3.5vw;
         }
 
         .circle {
 
             &:nth-of-type(1) {
-                top: -5vh;
+                top: var(--nt);
                 width: 28vw;
                 height: 28vw;
             }
 
             &:nth-of-type(2) {
-                top: 4vh;
+                top: calc(var(--nt) + 4vh);
                 width: 45vw;
                 height: 45vw;
             }
@@ -276,16 +233,232 @@ main {
         }
     }
 
-    //Services
-    .services {
-        .services-container {
-            span {
-                // 3vw is ~11px on a phone. Scale with the smaller viewport so
-                // the list stays readable.
-                font-size: 5.5vw;
-                word-spacing: -.5rem;
-                margin-left: 3vw;
-            }
+}
+
+
+// Hero lower half: what he does, as the whole stack rather than one specialty.
+main { position: relative; }
+
+.hero-extra {
+    position: absolute;
+    left: 3.5vw;
+    bottom: 4vh;
+    z-index: 110;
+    max-width: 640px;
+    font-family: $font4;
+
+    // one line after another
+    > * { animation: intro-rise .8s cubic-bezier(.2,.8,.2,1) both; }
+    > :nth-child(1) { animation-delay: 1.25s; }
+    > :nth-child(2) { animation-delay: 1.37s; }
+    > :nth-child(3) { animation-delay: 1.49s; }
+    > :nth-child(4) { animation-delay: 1.61s; }
+}
+
+.hero-line {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: baseline;
+    gap: 0.35em;
+    flex-wrap: wrap;
+}
+
+// the swapping word: every word sits in the same grid cell, so the box is as
+// wide as the longest one and nothing is clipped; overflow masks the slide.
+.hero-rotator {
+    display: inline-grid;
+    overflow: hidden;
+    padding: 0.08em 0;
+    font-weight: 600;
+    color: rgb(var(--accent-text));
+
+    .hero-word {
+        grid-area: 1 / 1;
+        white-space: nowrap;
+    }
+}
+
+.hero-sub {
+    margin: 10px 0 18px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.hero-layers {
+    list-style: none;
+    margin: 0 0 22px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    li {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 12px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        background: rgba(var(--surface), 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        position: relative;
+        overflow: hidden;
+        transition: color .4s, border-color .4s, background .4s, transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .4s;
+
+        // the resume's grain on each pill
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url(../images/noise.png);
+            opacity: 0.12;
+            pointer-events: none;
+        }
+
+        svg { font-size: 13px; opacity: 0.8; }
+
+        &.is-on {
+            color: white;
+            border-color: rgba(var(--color2), 1);
+            background: rgba(var(--color2), 0.28);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(var(--color2), 0.3);
         }
     }
 }
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.hero-btn {
+    height: 48px;
+    padding: 0 24px;
+    border-radius: 999px;
+    font-family: $font4;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    background: rgba(var(--surface), 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1), background .25s;
+
+    &:hover { transform: translateY(-3px); }
+
+    &-primary {
+        background: rgba(var(--color2), 0.92);
+        color: rgb(var(--on-accent));
+        border-color: rgba(var(--color2), 1);
+        box-shadow: 0 8px 24px rgba(var(--color2), 0.35);
+    }
+}
+
+@media only screen and (max-width: $bp-mobile) {
+    main { height: auto; }
+    #name-container { height: 40vh; --nt: 3vh; }
+    .hero-extra {
+        position: static;
+        max-width: none;
+        padding: 2rem 1rem 1rem 0;
+    }
+    .hero-line { font-size: 22px; }
+    .hero-sub { font-size: 15px; }
+    .hero-layers li { padding: 7px 11px; font-size: 13px; }
+    .hero-btn { height: 44px; padding: 0 18px; font-size: 15px; white-space: nowrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-extra > * { animation: none; }
+    .hero-rotator .hero-word:not(:first-child) { display: none; }
+}
+
+// the furry cubes' canvas sits over the name block; the CSS squares it
+// replaces stay in the layout (the cubes are placed from them) but hide
+#name-container .fur-canvas {
+    position: absolute;
+    top: -30%;
+    left: -8%;
+    width: 116%;
+    height: 140%;
+    z-index: 60;
+    pointer-events: none;
+}
+// Hidden from the first paint, so they never flash before the cubes load;
+// they only show when WebGL is unavailable (fur-cubes adds .no-fur).
+#name-container .circle { visibility: hidden; }
+#name-container.no-fur .circle { visibility: visible; }
+
+// small phones: less room between the name and the pitch
+@media only screen and (max-width: 600px) {
+    #name-container { height: calc(30vh + var(--nt)); }
+    .hero-extra { padding-top: 0.5rem; }
+}
+
+// short desktop screens (e.g. 1280x720, 1366x768): the name and the pitch
+// both need to fit, so tighten the name block and drop the subline
+@media only screen and (min-width: #{$bp-mobile + 1}) and (max-height: 820px) {
+    #name-container {
+        --nt: 5vh;
+        h2 { font-size: min(10vw, 13vh); }
+        h2:nth-child(2) { top: calc(var(--nt) + 14vh); }
+        h3 { font-size: min(5vw, 6vh, calc(118vw / var(--len, 24))); top: calc(var(--nt) + 31vh); }
+    }
+    .hero-sub { display: none; }
+    .hero-line { font-size: 24px; }
+    .hero-layers { margin-bottom: 14px; }
+    .hero-extra { bottom: 3vh; }
+}
+
+// ---- the name: letters, wave, hover pop, pointer depth
+#name-container {
+    h2 {
+        // drift against the pointer (translate is separate from the
+        // transform the scroll animation uses)
+        translate: calc(var(--px, 0) * -14px) calc(var(--py, 0) * -8px);
+        transition: translate .6s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .nl {
+        display: inline-block;
+        // soft light-to-accent fill, the outline stays
+        background: linear-gradient(180deg, #ffffff 45%, rgb(var(--accent-text)) 160%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        // a slow wave across the name
+        animation: nl-wave 4.2s ease-in-out infinite;
+        animation-delay: calc(var(--i) * -0.22s);
+        transition: scale .35s cubic-bezier(.34,1.56,.64,1);
+        cursor: default;
+
+        &:hover { scale: 1.14; }
+    }
+
+    h3 {
+        text-transform: uppercase;
+        translate: calc(var(--px, 0) * -8px) calc(var(--py, 0) * -5px);
+        transition: translate .6s cubic-bezier(.2,.8,.2,1);
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+@keyframes nl-wave {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -0.06em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #name-container .nl { animation: none; }
+}
+
+// the cubes can be picked up and thrown (fur-cubes.js); the native cursor
+// shows only where the custom one isn't drawn
+#name-container.can-grab { cursor: grab; }
+#name-container.is-grabbing { cursor: none; user-select: none; -webkit-user-select: none; }

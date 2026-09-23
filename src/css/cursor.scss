@@ -1,30 +1,117 @@
-.awesome-cursor {
-    border-radius: 10px;
+@use 'variables' as *;
+
+// The cursor: a coral dot, and a trailing dotted ring like the spine's rings.
+.cursor-dot,
+.cursor-ring,
+.cursor-trail span,
+.cursor-ripple {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 200;
-    border: 1px solid transparent;
     pointer-events: none;
-    transition: transform 0.3s ease-out, height 0.3s ease-out, width 0.3s ease-out, backdrop-filter 0.3s ease-out, filter 0.3s ease-out, background-color 0.3s ease-in-out, border-radius 0.3s ease-out, border-color 0.3s ease-out;
+    z-index: 10000;
+}
+
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: rgba(var(--color2), 1);
+    box-shadow: 0 0 10px rgba(var(--color2), 0.8);
+    opacity: 0;
+    transition: width .25s, height .25s, margin .25s, opacity .25s;
+
+    // over anything interactive the ring does the talking
+    &.is-pill, &.is-hover, &.is-magnet { opacity: 0 !important; }
+    &.is-text { width: 2px; height: 22px; margin: -11px 0 0 -1px; border-radius: 1px; }
+}
+
+.cursor-ring {
+    opacity: 0;
     display: flex;
-    justify-content: center;
     align-items: center;
-    overflow: hidden;
+    justify-content: center;
+    color: white;
+    font-family: $font4;
+    font-size: 13px;
+    font-weight: 500;
+}
 
-    &.blend {
-        mix-blend-mode: difference;
-    }
+.cursor-shape {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    transition: background .3s, backdrop-filter .3s, border-radius .3s;
+}
 
-    &.blur {
-        filter: blur(10px);
-    }
+// the dotted stroke, turning slowly
+.cursor-border {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2px dotted rgba(255, 255, 255, 0.75);
+    animation: cursor-spin 6s linear infinite;
+}
 
-    &.backdrop-blur {
-        backdrop-filter: blur(10px);
-    }
+@keyframes cursor-spin { to { transform: rotate(360deg); } }
 
-    &.border {
-        border-color: white;
+.cursor-content {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity .2s, transform .35s cubic-bezier(.34,1.56,.64,1);
+    white-space: nowrap;
+
+    svg { font-size: 16px; }
+}
+
+.cursor-ring.is-hover .cursor-shape {
+    background: rgba(var(--color2), 0.18);
+}
+
+.cursor-ring.is-pill {
+    color: rgb(var(--on-accent));
+    .cursor-shape {
+        background: rgba(var(--color2), 0.92);
+        color: rgb(var(--on-accent));
+        box-shadow: 0 10px 30px rgba(var(--color2), 0.45);
     }
+    // spinning only works on a circle; a wide pill would swing out as an ellipse
+    .cursor-border { border-color: rgba(255, 255, 255, 0.5); animation: none; }
+    .cursor-content { opacity: 1; transform: scale(1); }
+}
+
+.cursor-ring.is-lens {
+    .cursor-shape {
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.16), rgba(var(--color2), 0.12) 55%, transparent 70%);
+    }
+    .cursor-border { border-color: rgba(255, 255, 255, 0.55); animation-duration: 10s; }
+}
+.cursor-dot.is-lens { width: 6px; height: 6px; margin: -3px 0 0 -3px; }
+
+.cursor-ring.is-magnet {
+    .cursor-shape { border-radius: 16px; background: rgba(var(--color2), 0.12); }
+    .cursor-border { border-color: rgba(var(--color2), 1); animation: none; }
+}
+
+.cursor-ring.is-text .cursor-border { opacity: 0; }
+
+.cursor-trail span {
+    width: 5px;
+    height: 5px;
+    margin: -2.5px 0 0 -2.5px;
+    border-radius: 50%;
+    background: rgba(var(--color2), 1);
+    opacity: 0;
+}
+
+.cursor-ripple {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px dotted rgba(var(--color2), 1);
 }

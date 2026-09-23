@@ -1,273 +1,316 @@
 @use 'variables' as *;
 
-// Same story as #projects: the pinned/scrubbed entrance only runs on wide
-// viewports with motion allowed, so everywhere else the section needs to lay
-// itself out as an ordinary stacked block that grows with its content.
-@mixin contact-static-layout {
-    .contact {
-        height: auto;
-        min-height: 0;
-        backdrop-filter: none;
-        margin: 1rem .75rem 2rem .75rem;
-
-        &-content {
-            position: static;
-            height: auto;
-            flex-direction: column;
-
-            > div {
-                margin: 15px;
-            }
-
-            &-left {
-                width: auto;
-
-                &-content-text {
-                    font-size: 2.5rem;
-                    text-shadow: 3px 3px 0px rgba(var(--color2), 0.75);
-                }
-            }
-
-            &-right {
-                width: auto;
-                transform: none;
-
-                &-content {
-                    padding: 15px 18px;
-
-                    form {
-                        .form-group {
-                            // side-by-side label/field collapses to two
-                            // unusable columns on a phone
-                            flex-direction: column;
-                            align-items: stretch;
-                            gap: 6px;
-
-                            label {
-                                width: 100%;
-                                font-size: 18px;
-                            }
-
-                            input,
-                            textarea {
-                                width: 100%;
-                                font-size: 16px; // < 16px makes iOS Safari zoom on focus
-                            }
-
-                            textarea {
-                                height: 130px;
-                            }
-                        }
-
-                        .submit-button-container {
-                            flex-direction: column;
-                            align-items: stretch;
-                            gap: 10px;
-
-                            button {
-                                font-size: 22px;
-                                width: 100%;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-.contact {
-    height: 80vh;
-    min-height: 80vh;
-    backdrop-filter: blur(10px);
+// Contact: a big line and direct links (left), the form (right), footer below.
+.ct {
     position: relative;
-    background-color: rgba(0, 0, 0, 0.5);
-    margin: 1rem 1rem 2rem 1rem;
+    margin: 2rem 1rem 1rem;
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.4);
+    background:
+        radial-gradient(circle at 90% 0%, rgba(var(--color2), 0.22), transparent 45%),
+        radial-gradient(circle at 0% 100%, rgba(var(--color3), 0.18), transparent 50%),
+        rgba(0, 0, 0, 0.5);
+    color: white;
+    font-family: $font4;
     overflow: hidden;
 
     &::before {
         content: '';
-        background: url(../images/noise.svg);
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
         position: absolute;
-        border-radius: 15px;
+        inset: 0;
+        background: url(../images/noise.png);
         opacity: 0.1;
+        z-index: -1;
     }
 
-    h4, .item-heading {
+    > h4 {
         height: 60px;
         font-size: 30px;
         padding: 10px;
-        margin: 0 2vw 1rem 0;
+        margin: 0 2vw 0 0;
         border-right: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom-right-radius: 15px;
-        font-family: $font4;
         font-weight: lighter;
         color: rgba(255, 255, 255, 0.75);
         background-color: rgba(0, 0, 0, 0.2);
         display: inline-block;
-        box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
     }
+}
 
-    &-content {
+.ct-layout {
+    display: grid;
+    // minmax(0, …) so a long email address can't widen a column past the card
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+    gap: 4vw;
+    align-items: center;
+    padding: 2.5rem 3vw 3rem;
+
+    > * { min-width: 0; }
+}
+
+.ct-intro {
+    position: relative;
+    isolation: isolate; // keeps the ring above the card's background
+
+    // the site's ring, large and slowly turning behind the heading
+    &::before {
+        content: '';
         position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: calc(100% - 60px);
+        left: -8%;
+        top: -18%;
+        width: min(400px, 34vw);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 2px dashed rgba(var(--color2), 0.22);
+        animation: ct-turn 40s linear infinite;
+        pointer-events: none;
+        z-index: -1;
+    }
+}
+
+@keyframes ct-turn { to { transform: rotate(360deg); } }
+
+.ct-heading {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: $font2;
+    font-weight: normal;
+    font-size: clamp(48px, 5.6vw, 104px);
+    line-height: 0.98;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.95);
+    -webkit-text-stroke: 2px rgba(var(--surface), 1);
+    text-shadow: 6px 6px 0 rgba(var(--color2), 0.55);
+}
+
+.ct-heading-accent {
+    color: rgb(var(--accent-text));
+    text-shadow: 6px 6px 0 rgba(0, 0, 0, 0.35);
+}
+
+.ct-lead {
+    margin: 24px 0 30px;
+    max-width: 460px;
+    font-size: clamp(17px, 1.3vw, 20px);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.ct-direct {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 480px;
+
+    a {
         display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 16px 20px;
+        border-radius: 16px;
+        text-decoration: none;
+        color: white;
+        background: rgba(var(--surface), 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        transition: transform .3s cubic-bezier(.34,1.56,.64,1), border-color .25s, background .25s;
 
-        > div {
-            overflow: hidden;
-            margin: 30px;
-        }
-
-        &-left {
-            width: 35%;
-
-            &-content {
-                height: 100%;
-                display: flex;
-                justify-content: center;
-
-                &-text {
-                    font-family: $font3;
-                    font-size: 70px;
-                    display: flex;
-                    flex-direction: column;
-                    color: rgba(255, 255, 255, 0.9);
-                    text-shadow: 6px 6px 0px rgba(var(--color2), 0.75);
-
-                    span {
-                        &:nth-child(2),
-                        &:nth-child(4) {
-                            text-align: right;
-                        }
-                    }
-                }
-            }
-        }
-
-        &-right {
-            width: 65%;
-            // The "Form" heading sits above the form, so the form gets the
-            // space that's left rather than the full panel height. Before,
-            // it was sized to 100% and overflowed by the heading's 60px,
-            // which pushed the Send button out of view.
-            display: flex;
-            flex-direction: column;
-            border-radius: 20px;
-
-            // keep "Form" a small tab rather than a full-width bar
-            > .item-heading {
-                align-self: flex-start;
-            }
-            background-color: rgba(0, 0, 0, 0.4);
-            box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px, rgba(var(--color2), 0.1) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-
-            &-content {
-                flex: 1 1 auto;
-                min-height: 0;
-                padding: 20px 40px;
-
-                form {
-                    height: 100%;
-                    display: flex;
-                    flex-direction: column;
-
-                    .form-group {
-                        display: flex;
-                        justify-content: space-evenly;
-                        margin-bottom: 15px;
-
-                        // the message box takes whatever height is left, so
-                        // Send stays on screen at any window height
-                        &.is-message {
-                            flex: 1 1 auto;
-                            min-height: 90px;
-                        }
-
-                        label {
-                            width: 20%;
-                            color: #ffffffda;
-                            font-size: 25px;
-                            font-family: $font4;
-
-                            .optional {
-                                display: block;
-                                font-size: .6em;
-                                opacity: .6;
-                            }
-                        }
-
-                        input, textarea {
-                            width: 80%;
-                            background-color: #00000095;
-                            border: 1px solid rgba(255, 255, 255, 0.4);
-                            border-radius: 10px;
-                            padding: 10px;
-                            font-size: 20px;
-                            color: white;
-                            font-family: $font4;
-                        }
-
-                        textarea {
-                            height: auto;
-                            resize: none;
-                        }
-                    }
-
-                    .form-status {
-                        flex: 1 1 auto;
-                        font-family: $font4;
-                        font-size: 17px;
-                        margin: 0;
-
-                        &.is-error {
-                            color: rgba(var(--color2), 1);
-                        }
-
-                        &.is-success {
-                            color: rgba(var(--color3), 1);
-                        }
-                    }
-
-                    .submit-button-container {
-                        display: flex;
-                        align-items: center;
-                        gap: 20px;
-
-                        button {
-                            font-size: 30px;
-                            padding: 5px 20px;
-                            background-color: #00000095;
-                            color: #ffffffd4;
-                            border-radius: 10px;
-                            box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px, rgba(var(--color2), 0.1) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-                            border: 1px solid rgba(255, 255, 255, 0.4);
-                            font-family: $font4;
-                            transition: opacity .2s;
-
-                            &[disabled] {
-                                opacity: 0.55;
-                            }
-                        }
-                    }
-                }
-            }
+        &:hover {
+            transform: translateX(6px);
+            border-color: rgba(var(--color2), 0.9);
+            background: rgba(var(--surface), 0.9);
+            .ct-direct-arrow { transform: translateX(4px); opacity: 1; }
         }
     }
 }
 
-// Formspree's honeypot: a real input that no sighted or assistive-tech user is
-// ever offered, so anything filling it in is a bot.
+.ct-direct-icon {
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    background: rgba(var(--color2), 0.9);
+    color: rgb(var(--on-accent));
+}
+
+.ct-direct-text {
+    display: flex;
+    flex-direction: column;
+    small { font-size: 12.5px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255, 255, 255, 0.55); }
+    span { font-size: 17px; }
+}
+
+.ct-direct-arrow {
+    margin-left: auto;
+    opacity: 0.45;
+    transition: transform .25s, opacity .25s;
+}
+
+// ---- the form
+.ct-form {
+    position: relative;
+    padding: clamp(24px, 3vw, 44px);
+    border-radius: 26px;
+    background: rgba(var(--surface), 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.35);
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: url(../images/noise.png);
+        opacity: 0.08;
+        pointer-events: none;
+    }
+}
+
+.ct-form-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+
+    b { display: block; font-family: $font2; font-weight: normal; font-size: clamp(24px, 2vw, 32px); }
+    div > span { font-size: 15px; color: rgba(255, 255, 255, 0.6); }
+}
+
+.ct-form-icon {
+    flex: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    color: rgb(var(--on-accent));
+    background: rgba(var(--color2), 0.92);
+    box-shadow: 0 10px 24px rgba(var(--color2), 0.35);
+}
+
+.ct-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+// floating labels: the label sits in the field until you type
+.ct-field {
+    position: relative;
+    display: block;
+
+    input, textarea {
+        width: 100%;
+        padding: 30px 18px 12px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(0, 0, 0, 0.28);
+        color: white;
+        font-family: $font4;
+        font-size: 17px; // < 16px makes iOS Safari zoom on focus
+        outline: none;
+        transition: border-color .25s, background .25s, box-shadow .25s;
+
+        &:focus {
+            border-color: rgba(var(--color2), 1);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4px rgba(var(--color2), 0.18);
+        }
+    }
+
+    textarea {
+        min-height: 210px;
+        resize: vertical;
+    }
+
+    span {
+        position: absolute;
+        left: 19px;
+        top: 21px;
+        font-size: 17px;
+        color: rgba(255, 255, 255, 0.55);
+        pointer-events: none;
+        transform-origin: left top;
+        transition: transform .25s cubic-bezier(.2,.8,.2,1), color .25s;
+    }
+
+    input:focus + span,
+    input:not(:placeholder-shown) + span,
+    textarea:focus + span,
+    textarea:not(:placeholder-shown) + span {
+        transform: translateY(-12px) scale(0.74);
+        color: rgb(var(--accent-text));
+    }
+}
+
+.ct-field-wide { grid-column: 1 / -1; }
+
+.ct-form-foot {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.ct-status {
+    flex: 1;
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.7);
+    &.is-error { color: #ff9b8f; }
+    &.is-success { color: #7ee2a0; }
+}
+
+.ct-send {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 58px;
+    padding: 0 32px;
+    border: 0;
+    border-radius: 999px;
+    font-family: $font4;
+    font-size: 17px;
+    cursor: pointer;
+    color: rgb(var(--on-accent));
+    background: rgba(var(--color2), 0.95);
+    box-shadow: 0 10px 26px rgba(var(--color2), 0.35);
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
+
+    svg { transition: transform .5s cubic-bezier(.5,0,.2,1); }
+    &:hover { transform: translateY(-2px); svg { transform: translate(3px, -3px); } }
+    &[disabled] { opacity: 0.6; }
+    // on success the plane flies off and comes back
+    &.is-sent svg { animation: ct-fly 1.2s cubic-bezier(.5,0,.2,1); }
+}
+
+@keyframes ct-fly {
+    0% { transform: none; }
+    45% { transform: translate(60px, -40px) rotate(-10deg); opacity: 0; }
+    55% { transform: translate(-40px, 20px); opacity: 0; }
+    100% { transform: none; opacity: 1; }
+}
+
+.ct-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 4vw 20px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+// Formspree's honeypot: a real input no person is ever offered
 .contact-honeypot {
     position: absolute;
     left: -9999px;
@@ -276,41 +319,37 @@
     overflow: hidden;
 }
 
-// Laptop-height windows (1366x768, 1280x720): the pinned panel is 80vh, so
-// tighten the fields until the whole form, Send included, fits inside it.
-@media only screen and (min-width: #{$bp-mobile + 1}) and (max-height: 820px) {
-    .contact-content-right-content {
-        padding: 12px 36px 16px;
-
-        form .form-group {
-            margin-bottom: 8px;
-
-            label {
-                font-size: 20px;
-            }
-
-            input,
-            textarea {
-                font-size: 17px;
-                padding: 6px 10px;
-            }
-
-            &.is-message {
-                min-height: 70px;
-            }
-        }
-
-        form .submit-button-container button {
-            font-size: 24px;
-            padding: 3px 18px;
-        }
-    }
-}
-
 @media only screen and (max-width: $bp-mobile) {
-    @include contact-static-layout;
+    .ct { margin: 1rem 0.4rem 0.5rem; }
+    .ct > h4 { font-size: 24px; height: 50px; }
+    .ct-layout { grid-template-columns: minmax(0, 1fr); padding: 1.25rem 0.9rem 1.5rem; gap: 1.75rem; }
+    .ct-intro::before { width: 62vw; left: auto; right: -14vw; top: -6%; }
+    .ct-lead { margin: 16px 0 20px; font-size: 16px; }
+    .ct-direct {
+        gap: 10px;
+        a { padding: 12px 14px; gap: 14px; border-radius: 14px; }
+        span { font-size: 14.5px; overflow-wrap: anywhere; }
+        // the arrow gives its room to the email address
+        .ct-direct-arrow { display: none; }
+    }
+    .ct-direct-icon { width: 44px; height: 44px; font-size: 19px; border-radius: 12px; }
+    .ct-form { padding: 18px 14px 20px; border-radius: 20px; }
+    .ct-form-head {
+        gap: 12px;
+        margin-bottom: 18px;
+        b { font-size: 22px; }
+        div > span { font-size: 13.5px; }
+    }
+    .ct-form-icon { width: 46px; height: 46px; font-size: 18px; border-radius: 13px; }
+    .ct-form-grid { gap: 12px; }
+    .ct-field textarea { min-height: 160px; }
+    .ct-heading { -webkit-text-stroke: 1px rgba(var(--surface), 1); text-shadow: 4px 4px 0 rgba(var(--color2), 0.55); }
+    .ct-form-grid { grid-template-columns: 1fr; }
+    .ct-form-foot { flex-direction: column; align-items: stretch; }
+    .ct-send { justify-content: center; }
+    .ct-footer { flex-direction: column; padding: 16px 0.9rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    @include contact-static-layout;
+    .ct-send.is-sent svg, .ct-intro::before { animation: none; }
 }
