@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPaperPlane, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { ANIMATION_OK } from "../common/motion";
+import { track, trackOnce } from "../../lib/analytics";
 import "../../css/contact.scss";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -91,13 +92,16 @@ const Contact = () => {
           if (response.ok) {
               setFormData(emptyForm);
               setStatus('success');
+              track('generate_lead', { form: 'contact' });
           } else {
               setStatus('error');
+              track('form_error', { form: 'contact', reason: `http_${response.status}` });
           }
       } catch {
           // offline, blocked, DNS failure — previously this rejected and the
           // form just sat there looking like nothing had happened
           setStatus('error');
+          track('form_error', { form: 'contact', reason: 'network' });
       }
   };
 
@@ -126,7 +130,7 @@ const Contact = () => {
           <ul className="ct-direct">
             {DIRECT.map((d) => (
               <li className="ct-item" key={d.label}>
-                <a href={d.href} {...(d.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+                <a href={d.href} data-track={`contact_${d.label.toLowerCase()}`} {...(d.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
                   <span className="ct-direct-icon"><FontAwesomeIcon icon={d.icon} /></span>
                   <span className="ct-direct-text"><small>{d.label}</small><span>{d.value}</span></span>
                   <FontAwesomeIcon className="ct-direct-arrow" icon={faArrowRight} />
@@ -136,7 +140,13 @@ const Contact = () => {
           </ul>
         </div>
 
-        <form className="ct-item ct-form" onSubmit={handleSubmit} noValidate={false}>
+        <form
+          className="ct-item ct-form"
+          onSubmit={handleSubmit}
+          noValidate={false}
+          // someone started writing (what they type is never sent to analytics)
+          onFocus={() => trackOnce('form_start', 'form_start', { form: 'contact' })}
+        >
           <div className="ct-form-head">
             <span className="ct-form-icon"><FontAwesomeIcon icon={faPaperPlane} /></span>
             <div>

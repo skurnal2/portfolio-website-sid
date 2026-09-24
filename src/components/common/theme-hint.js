@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPalette, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { setRandomTheme } from "./colors";
+import { track } from "../../lib/analytics";
 import "../../css/theme-hint.scss";
 
 // A one-time nudge toward the theme button: desktop only, first visit only.
@@ -44,6 +45,7 @@ const ThemeHint = () => {
       if (used) return;
       markSeen();
       setOpen(true);
+      track("theme_hint", { action: "shown" });
       hideIn(STAY_FOR);
     }, SHOW_AFTER);
     return () => {
@@ -70,7 +72,11 @@ const ThemeHint = () => {
         type="button"
         className="theme-hint-body"
         tabIndex={open ? 0 : -1}
-        onClick={() => { setRandomTheme(); close(); }}
+        onClick={() => {
+          track("theme_hint", { action: "clicked" });
+          track("theme_change", { theme: setRandomTheme() });
+          close();
+        }}
       >
         <span className="theme-hint-icon"><FontAwesomeIcon icon={faPalette} /></span>
         <span className="theme-hint-text">
@@ -78,7 +84,7 @@ const ThemeHint = () => {
           <span>Click here, or the button below, to shuffle it.</span>
         </span>
       </button>
-      <button type="button" className="theme-hint-close" tabIndex={open ? 0 : -1} aria-label="Dismiss" onClick={close}>
+      <button type="button" className="theme-hint-close" tabIndex={open ? 0 : -1} aria-label="Dismiss" onClick={() => { track("theme_hint", { action: "dismissed" }); close(); }}>
         <FontAwesomeIcon icon={faXmark} />
       </button>
     </div>

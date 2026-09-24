@@ -1,8 +1,8 @@
 import React, { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { scrollToSection } from "../../lib/scroll";
-import { readRole } from "../../lib/role";
 import { introReady } from "../../lib/intro";
+import { track } from "../../lib/analytics";
 import ScrambleText from "../scramble-text";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDesktop, faServer, faDatabase, faCloud, faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
@@ -22,6 +22,8 @@ const letters = (word, offset) => word.split("").map((ch, i) => (
 
 // He works across the whole stack rather than claiming one specialty, so the
 // hero cycles through the layers instead of naming a framework.
+const TITLE = "Experienced Full-Stack Developer";
+
 const LAYERS = [
   { word: 'front ends', label: 'Front end', icon: faDesktop },
   { word: 'APIs and services', label: 'Back end', icon: faServer },
@@ -47,8 +49,6 @@ const HomePage = () => {
 
   const heroRef = useRef(null);
   const nameRef = useRef(null);
-  const [role] = useState(readRole);
-  useEffect(() => { document.title = `Siddharth Kurnal | ${role}`; }, [role]);
 
   // Name: letters flip up into place in 3D, then keep a slow wave (CSS);
   // the whole name drifts a little against the pointer for depth.
@@ -108,7 +108,7 @@ const HomePage = () => {
         <div id="name-container" ref={nameRef}>
           <h2 className="first-h2" aria-label="Siddharth">{letters("SIDDHARTH", 0)}</h2>
           <h2 className="second-h2" aria-label="Kurnal">{letters("KURNAL", 9)}</h2>
-          <h3 style={{ "--len": role.length }}><ScrambleText text={role} delay={1000} waitFor={introReady} /></h3>
+          <h3 style={{ "--len": TITLE.length }}><ScrambleText text={TITLE} delay={1000} waitFor={introReady} /></h3>
           <div className="circle" />
           <div className="circle" />
           {showFur && <Suspense fallback={null}><FurCubes /></Suspense>}
@@ -132,8 +132,8 @@ const HomePage = () => {
             ))}
           </ul>
           <div className="hero-actions">
-            <button type="button" className="hero-btn hero-btn-primary" onClick={() => scrollToSection('projects')}>See my work</button>
-            <button type="button" className="hero-btn" onClick={() => scrollToSection('contact')}>Get in touch</button>
+            <button type="button" className="hero-btn hero-btn-primary" onClick={() => { scrollToSection('projects'); track('nav_click', { link_id: 'hero_see_my_work' }); }}>See my work</button>
+            <button type="button" className="hero-btn" onClick={() => { scrollToSection('contact'); track('nav_click', { link_id: 'hero_get_in_touch' }); }}>Get in touch</button>
           </div>
         </div>
       </main>

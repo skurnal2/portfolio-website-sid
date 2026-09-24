@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { introTime } from "../lib/intro";
+import { trackOnce } from "../lib/analytics";
 
 // The hero's two squares as soft, furry 3D cubes.
 //
@@ -262,6 +263,7 @@ export default function FurCubes({ containerSelector = "#name-container" }) {
       e.preventDefault();
       drag = { c, grab: new THREE.Vector2(c.off.x, c.off.y).sub(pt), target: new THREE.Vector2(c.off.x, c.off.y) };
       c.dragging = true;
+      trackOnce("cube_drag", "cube_drag", {});
       container.setPointerCapture?.(e.pointerId);
       container.classList.add("is-grabbing");
       window.dispatchEvent(new CustomEvent("cursor-hide", { detail: true }));

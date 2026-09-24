@@ -53,6 +53,7 @@ export const setRandomTheme = () => {
 
   // Update the content of the div
   themeInfoName.textContent = `${randomTheme.name}`;
+  return randomTheme.name;
 };
 
 export const themes = [

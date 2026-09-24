@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import usePinnedStage from "../../hooks/usePinnedStage";
 import { SCROLL_EFFECTS_OK } from "../common/motion";
+import { onScreen, trackDwell, trackItems } from "../../lib/analytics";
 import "../../css/experience.scss";
 
 // Work history. Keep in step with the résumé
@@ -76,6 +77,27 @@ const Experience = () => {
   const stageRef = useRef(null);
   const [active, setActive] = useState(0);
   const onIndex = useCallback((i) => setActive(i), []);
+
+  // Analytics: which roles people actually look at, once each
+  const activeRef = useRef(0);
+  activeRef.current = active;
+  const trackRole = (i) => ROLES[i] && trackDwell("role", `role:${i}`, "role_view", { role: `${ROLES[i].company} - ${ROLES[i].title}` });
+  useEffect(() => {
+    const root = stageRef.current;
+    if (!root) return undefined;
+    if (!window.matchMedia(SCROLL_EFFECTS_OK).matches) {
+      const cards = Array.from(root.querySelectorAll(".xp-card"));
+      return trackItems(cards, (el) => {
+        const i = cards.indexOf(el);
+        return [`role:${i}`, "role_view", { role: `${ROLES[i].company} - ${ROLES[i].title}` }];
+      });
+    }
+    // desktop: the wheel shows one role at a time; record the one showing on arrival
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) trackRole(activeRef.current); }, { rootMargin: "-33% 0px -33% 0px" });
+    io.observe(root);
+    return () => io.disconnect();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (onScreen(stageRef.current)) trackRole(active); }, [active]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The dotted line is drawn through each ring's live position, so it bends
   // with the wheel instead of the rings sliding off a straight line.

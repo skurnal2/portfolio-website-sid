@@ -1,6 +1,5 @@
 //Imports
 import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
-import ReactGA from 'react-ga4';
 
 // Font Awesome Imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,6 +25,7 @@ import Lenis from "lenis";
 import { setRandomTheme } from "./components/common/colors";
 import { ANIMATION_OK, prefersReducedMotion } from "./components/common/motion";
 import { setLenis, scrollToSection, scrollToY, initSectionSnap } from "./lib/scroll";
+import { initAnalytics, track, trackSections } from "./lib/analytics";
 
 library.add(faGithub, faLinkedin, faStar);
 gsap.registerPlugin(ScrollTrigger);
@@ -45,9 +45,6 @@ const App = () => {
   // scrolls, otherwise it scrolls behind a full-screen overlay.
   const pendingScroll = useRef(null);
 
-  const initializeGA = () => {
-    ReactGA.initialize('G-VV8X7KDEV9');
-  };
 
   useLayoutEffect(() => {
     setRandomTheme();
@@ -123,15 +120,13 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    // Initialize Google Analytics on page load
-    initializeGA();
-
-    // Track the initial pageview
-    ReactGA.send('pageview', {
-      page_path: window.location.pathname + window.location.search,
-    });
+    // Google Analytics: the page view, a resume link's ?ref=, links and
+    // scroll depth (src/lib/analytics.js); then which sections get seen
+    initAnalytics();
+    const stopSections = trackSections(["experience", "projects", "skills", "contact"]);
 
     window.scrollTo(0, 0);
+    return stopSections;
   }, []);
 
   // Menu open/close side effects: lock the page behind the overlay, move focus
@@ -161,13 +156,7 @@ const App = () => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [isOpen]);
 
-  const trackNavClick = (navItem) => {
-    ReactGA.event({
-      category: 'Navigation',
-      action: `Clicked ${navItem}`,
-      label: navItem,
-    });
-  };
+  const trackNavClick = (navItem) => track("nav_click", { link_id: navItem });
 
   const handleMenu = () => setIsOpen((open) => !open);
 
@@ -215,10 +204,10 @@ const App = () => {
             ))}
           </nav>
           <div className="mm-links" style={{ "--i": 5 }}>
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackNavClick("GitHub")}>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={["fab", "github"]} /> GitHub
             </a>
-            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackNavClick("LinkedIn")}>
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={["fab", "linkedin"]} /> LinkedIn
             </a>
           </div>
@@ -229,10 +218,10 @@ const App = () => {
             <span className="topbar-name"><span>Siddharth</span><span>Kurnal</span></span>
           </button>
           <div className="corner-bar">
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub" onClick={() => trackNavClick("GitHub")}>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
               <FontAwesomeIcon icon={["fab", "github"]} />
             </a>
-            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" onClick={() => trackNavClick("LinkedIn")}>
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <FontAwesomeIcon icon={["fab", "linkedin"]} />
             </a>
             <button type="button" className="corner-cta" onClick={() => { goToContact(); trackNavClick("Contact"); }}>
@@ -259,7 +248,7 @@ const App = () => {
         type="button"
         id="theme-info-popup"
         aria-label="Shuffle the colour theme"
-        onClick={() => setRandomTheme()}
+        onClick={() => track("theme_change", { theme: setRandomTheme() })}
       >
         <FontAwesomeIcon icon={["fa", "star"]}/>
         <span id="theme-info-popup-name"/>

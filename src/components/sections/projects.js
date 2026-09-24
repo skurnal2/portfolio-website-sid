@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,7 @@ import { PROJECTS } from "../../data/projects";
 import { Visual } from "../visuals";
 import { ANIMATION_OK, SCROLL_EFFECTS_OK, headerOffset } from "../common/motion";
 import { scrollToY } from "../../lib/scroll";
+import { track, trackDwell, trackItems } from "../../lib/analytics";
 import "../../css/projects.scss";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,6 +21,9 @@ const IN = { z: -900, rotateX: 26, yPercent: 38, autoAlpha: 0 };
 const REST = { z: 0, rotateX: 0, yPercent: 0, scale: 1, autoAlpha: 1 };
 const OUT = { z: -1300, rotateX: -8, yPercent: -16, scale: 0.72, autoAlpha: 0 };
 const PER_PROJECT = 640;
+
+// Analytics: each project recorded once, when it has been the card showing for a second
+const trackProject = (i) => PROJECTS[i] && trackDwell("project", `project:${PROJECTS[i].id}`, "project_view", { project: PROJECTS[i].id });
 
 const Projects = () => {
   const rootRef = useRef(null);
@@ -46,7 +50,11 @@ const Projects = () => {
           anticipatePin: 1,
           invalidateOnRefresh: true,
           snap: { snapTo: 1 / (n - 1), duration: { min: 0.3, max: 0.8 }, delay: 0.1, ease: "power2.inOut" },
-          onUpdate: (self) => setActive(Math.round(self.progress * (n - 1))),
+          onUpdate: (self) => {
+            const i = Math.round(self.progress * (n - 1));
+            setActive(i);
+            trackProject(i);
+          },
         },
       });
       triggerRef.current = tl.scrollTrigger;
@@ -96,7 +104,18 @@ const Projects = () => {
   }, [deck]);
   const isLive = (i) => (deck ? i === active : onScreen.has(i));
 
+  // phone layout: each card recorded once it's mostly on screen
+  useEffect(() => {
+    if (deck) return undefined;
+    const cards = Array.from(rootRef.current.querySelectorAll(".pj-card"));
+    return trackItems(cards, (el) => {
+      const p = PROJECTS[cards.indexOf(el)];
+      return [`project:${p.id}`, "project_view", { project: p.id }];
+    });
+  }, [deck]);
+
   const jumpTo = (i) => {
+    track("nav_click", { link_id: `project_index:${PROJECTS[i].id}` });
     const st = triggerRef.current;
     if (st) {
       const y = st.start + (st.end - st.start) * (i / (PROJECTS.length - 1));
@@ -135,7 +154,7 @@ const Projects = () => {
           <div className="pj-more">
             <div className="pj-more-row">
               <i aria-hidden="true" />
-              <a className="pj-more-link" href="https://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
+              <a className="pj-more-link" data-track="more_projects_github" href="https://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon icon={faGithub} /> Many more projects
               </a>
             </div>
@@ -154,7 +173,7 @@ const Projects = () => {
                 <h5>{p.title}</h5>
                 <p className="pj-summary">{p.summary}</p>
                 {p.link && (
-                  <a className="pj-link" href={p.link.href} target="_blank" rel="noopener noreferrer">
+                  <a className="pj-link" data-track={`live_link:${p.id}`} href={p.link.href} target="_blank" rel="noopener noreferrer">
                     <span className="pj-link-live" aria-hidden="true" />
                     <span className="pj-link-text">
                       <b>{p.link.cta}</b>
@@ -168,7 +187,7 @@ const Projects = () => {
               </div>
             </article>
           ))}
-          <a className="pj-more-card" href="https://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
+          <a className="pj-more-card" data-track="more_projects_github" href="https://github.com/skurnal2" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faGithub} /> Many more projects on GitHub
           </a>
         </div>
