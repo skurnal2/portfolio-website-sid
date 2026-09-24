@@ -1,11 +1,11 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPaperPlane, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { ANIMATION_OK } from "../common/motion";
-import { track, trackOnce } from "../../lib/analytics";
+import { onLeave, track, trackOnce } from "../../lib/analytics";
 import "../../css/contact.scss";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -66,6 +66,18 @@ const Contact = () => {
   // 'idle' | 'sending' | 'success' | 'error'
   const [status, setStatus] = useState('idle');
 
+  // Analytics: someone started the form and left without sending it. Only how
+  // many fields had something in them is sent, never what was typed.
+  const formRef = useRef({ started: false, sent: false, data: emptyForm });
+  formRef.current.data = formData;
+  useEffect(() => onLeave(() => {
+      const f = formRef.current;
+      if (!f.started || f.sent) return;
+      const filled = Object.values(f.data).filter((v) => String(v).trim()).length;
+      if (filled) track('form_abandon', { form: 'contact', fields_filled: filled });
+      f.started = false; // once per start
+  }), []);
+
   const handleInputChange = (e) => {
       setFormData({
           ...formData,
@@ -93,6 +105,7 @@ const Contact = () => {
               setFormData(emptyForm);
               setStatus('success');
               track('generate_lead', { form: 'contact' });
+              formRef.current.sent = true;
           } else {
               setStatus('error');
               track('form_error', { form: 'contact', reason: `http_${response.status}` });
@@ -145,7 +158,7 @@ const Contact = () => {
           onSubmit={handleSubmit}
           noValidate={false}
           // someone started writing (what they type is never sent to analytics)
-          onFocus={() => trackOnce('form_start', 'form_start', { form: 'contact' })}
+          onFocus={() => { formRef.current.started = true; trackOnce('form_start', 'form_start', { form: 'contact' }); }}
         >
           <div className="ct-form-head">
             <span className="ct-form-icon"><FontAwesomeIcon icon={faPaperPlane} /></span>

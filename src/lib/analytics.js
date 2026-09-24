@@ -15,7 +15,14 @@
 //   form_start / generate_lead / form_error            the contact form
 //   theme_change       the theme button                  (theme)
 //   theme_hint         the first-visit hint              (action)
-//   cube_drag          someone played with the hero cubes
+//   cube_drag          each time a cube is dragged       (cube, result: hit / miss)
+//   section_time       seconds a section was on screen   (section, engaged_seconds)
+//   time_on_page       30s / 1m / 2m / 5m of visible time (milestone)
+//   email_copy         the email address was copied      (section)
+//   form_abandon       form started, left unsent         (form, fields_filled)
+//   web_vitals         real-visitor page speed           (metric_name, metric_value, metric_rating)
+//   fur_quality        a slow device stepped the 3D fur down (level)
+//   js_error           a script error, first few per page (message)
 //
 // An arrival's app_ref is also set as a user property and on every later
 // event, so everything that visitor does counts toward that application,
@@ -78,6 +85,65 @@ export const initAnalytics = () => {
 
   trackLinks();
   trackScrollDepth();
+  trackTimeOnPage();
+  trackCopies();
+  trackErrors();
+  trackVitals();
+};
+
+// Before the page goes away (tab closed, navigated off, app switched): the
+// last moment to send totals. gtag sends these with sendBeacon.
+export const onLeave = (fn) => {
+  window.addEventListener("pagehide", fn);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) fn(); });
+};
+
+// Visible time on the page, in marks.
+const trackTimeOnPage = () => {
+  const marks = [30, 60, 120, 300];
+  let seconds = 0;
+  const timer = setInterval(() => {
+    if (document.hidden) return;
+    seconds += 1;
+    marks.forEach((m) => { if (seconds >= m) trackOnce(`time:${m}`, "time_on_page", { milestone: m }); });
+    if (seconds >= marks[marks.length - 1]) clearInterval(timer);
+  }, 1000);
+};
+
+// Copying the email address (instead of clicking it) is still reaching out.
+const trackCopies = () => {
+  document.addEventListener("copy", () => {
+    const text = String(window.getSelection?.() || "");
+    if (!/@/.test(text)) return;
+    const node = window.getSelection()?.anchorNode;
+    const el = node && (node.nodeType === 1 ? node : node.parentElement);
+    trackOnce("email_copy", "email_copy", { section: el ? sectionOf(el) : "unknown" });
+  });
+};
+
+// A few script errors per page, so a browser the site breaks on shows up.
+const trackErrors = () => {
+  let count = 0;
+  const report = (message) => {
+    if (count >= 5 || !message) return;
+    count += 1;
+    trackOnce(`err:${message}`, "js_error", { message: String(message).slice(0, 100) });
+  };
+  window.addEventListener("error", (e) => report(e.message));
+  window.addEventListener("unhandledrejection", (e) => report(e.reason?.message || e.reason));
+};
+
+// Real page speed from real devices (Core Web Vitals). Loaded after the page,
+// so measuring never slows it down.
+const trackVitals = () => {
+  import("web-vitals").then(({ onCLS, onFCP, onINP, onLCP, onTTFB }) => {
+    const send = (m) => track("web_vitals", {
+      metric_name: m.name,
+      metric_value: m.name === "CLS" ? Math.round(m.value * 1000) / 1000 : Math.round(m.value),
+      metric_rating: m.rating,
+    });
+    [onCLS, onFCP, onINP, onLCP, onTTFB].forEach((on) => on(send));
+  }).catch(() => {});
 };
 
 export const track = (name, params = {}) => {
@@ -143,15 +209,35 @@ const trackScrollDepth = () => {
 // Sections: recorded once each, when at least a third of the screen shows them.
 // (Watchers set up before initAnalytics runs, since React sets children up
 // first; sending stays off until then, and on localhost.)
+// Also times each one: seconds it held the middle of the screen while the
+// tab was visible, sent as section_time when the visitor leaves.
 export const trackSections = (ids) => {
   if (!("IntersectionObserver" in window)) return () => {};
+  const inFocus = new Set();
+  const seconds = new Map();
+  const timer = setInterval(() => {
+    if (document.hidden) return;
+    inFocus.forEach((id) => seconds.set(id, (seconds.get(id) || 0) + 1));
+  }, 1000);
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
-      if (e.isIntersecting) trackOnce(`section:${e.target.id}`, "section_view", { section: e.target.id });
+      const id = e.target.id;
+      if (e.isIntersecting) {
+        inFocus.add(id);
+        if (id !== "home") trackOnce(`section:${id}`, "section_view", { section: id });
+      } else inFocus.delete(id);
     });
   }, { rootMargin: "-33% 0px -33% 0px" });
-  ids.map((id) => document.getElementById(id)).filter(Boolean).forEach((el) => io.observe(el));
-  return () => io.disconnect();
+  ["home", ...ids].map((id) => document.getElementById(id)).filter(Boolean).forEach((el) => io.observe(el));
+  // send what's accumulated since the last send (the page can be hidden and shown again)
+  const flush = () => {
+    seconds.forEach((n, id) => {
+      if (n >= 2) track("section_time", { section: id, engaged_seconds: n });
+      seconds.set(id, 0);
+    });
+  };
+  onLeave(flush);
+  return () => { io.disconnect(); clearInterval(timer); };
 };
 
 // Items in a list (phone layout): each recorded once it has been mostly on
