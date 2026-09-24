@@ -15,7 +15,7 @@
 //   form_start / generate_lead / form_error            the contact form
 //   theme_change       the theme button                  (theme)
 //   theme_hint         the first-visit hint              (action)
-//   cube_drag          each time a cube is dragged       (cube, result: hit / miss)
+//   cube_drag          each time a cube is dragged (first 15) (cube: small / large, result: hit / miss)
 //   section_time       seconds a section was on screen   (section, engaged_seconds)
 //   time_on_page       30s / 1m / 2m / 5m of visible time (milestone)
 //   email_copy         the email address was copied      (section)

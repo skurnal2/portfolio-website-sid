@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { introTime } from "../lib/intro";
-import { trackOnce } from "../lib/analytics";
+import { track } from "../lib/analytics";
 
 // The hero's two squares as soft, furry 3D cubes.
 //
@@ -240,6 +240,8 @@ export default function FurCubes({ containerSelector = "#name-container" }) {
       );
     };
     let drag = null;
+    let bumps = 0; // collisions so far, to tell whether a drag ended in a hit
+    let drags = 0; // drag events sent this page load (capped)
     let canGrab = false;
     const setGrab = (on) => {
       if (on === canGrab) return;
@@ -263,7 +265,7 @@ export default function FurCubes({ containerSelector = "#name-container" }) {
       e.preventDefault();
       drag = { c, grab: new THREE.Vector2(c.off.x, c.off.y).sub(pt), target: new THREE.Vector2(c.off.x, c.off.y) };
       c.dragging = true;
-      trackOnce("cube_drag", "cube_drag", {});
+      drag.bumpsAtStart = bumps;
       container.setPointerCapture?.(e.pointerId);
       container.classList.add("is-grabbing");
       window.dispatchEvent(new CustomEvent("cursor-hide", { detail: true }));
@@ -280,6 +282,16 @@ export default function FurCubes({ containerSelector = "#name-container" }) {
     const onUp = (e) => {
       if (!drag) return;
       drag.c.dragging = false;
+      // Analytics: one event per drag, once a thrown cube has had a moment
+      // to land. The first cube is the small one, the second the large one.
+      const { c: thrown, bumpsAtStart } = drag;
+      if (drags < 15) {
+        drags += 1;
+        setTimeout(() => track("cube_drag", {
+          cube: thrown === cubes[0] ? "small" : "large",
+          result: bumps > bumpsAtStart ? "hit" : "miss",
+        }), 1200);
+      }
       // a flung cube keeps its speed, within reason
       const max = drag.c.radius * 9;
       if (drag.c.v.length() > max) drag.c.v.setLength(max);
@@ -374,6 +386,7 @@ export default function FurCubes({ containerSelector = "#name-container" }) {
           b.hitAngle = angle;
           a.wobV += hit * 11;
           b.wobV += hit * 11;
+          bumps += 1;
         }
       }
     };
@@ -442,6 +455,7 @@ export default function FurCubes({ containerSelector = "#name-container" }) {
           if (sampleSum / samples > 22 && level < STEPS.length) {
             STEPS[level]();
             level += 1;
+            track("fur_quality", { level });
             layout();
           }
           sampleSum = 0;
