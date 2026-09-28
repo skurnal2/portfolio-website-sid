@@ -140,7 +140,7 @@ const Projects = () => {
           <ol>
             {PROJECTS.map((p, i) => (
               <li key={p.id} className={`${i === active ? "is-active" : ""}${i < active ? " is-passed" : ""}`}>
-                <button type="button" onClick={() => jumpTo(i)}>
+                <button type="button" title={`${p.where}: ${p.title}`} onClick={() => jumpTo(i)}>
                   <span className="pj-index-ring" />
                   <span className="pj-index-text">
                     <small>{p.where}</small>

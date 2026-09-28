@@ -356,8 +356,59 @@
 @media only screen and (min-width: #{$bp-mobile + 1}) and (prefers-reduced-motion: no-preference) {
     .pj { height: calc(100vh - var(--header-h) - 16px); display: flex; flex-direction: column; }
     .pj-layout { flex: 1; min-height: 0; }
-    // one row the height of the stage, so a long card can't grow past the screen
+    // One row, the height of the section: neither a long card nor a long
+    // contents list can push the deck past the bottom of the screen.
+    .pj-layout { grid-template-rows: minmax(0, 1fr); }
+    .pj-index { min-height: 0; }
     .pj-stage { height: 100%; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+}
+
+// Shorter screens (laptops, tablets in landscape): the contents list is the
+// tallest thing in the section, so it gets compact. Titles go to one line (the
+// full title is in the button's tooltip) and the rail's tail keeps one row.
+@media only screen and (min-width: #{$bp-mobile + 1}) and (max-height: 960px) and (prefers-reduced-motion: no-preference) {
+    .pj-index {
+        li + li { margin-top: clamp(2px, 0.6vh, 6px); }
+        button { padding: 2px 6px 2px 0; }
+        .pj-index-text span {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .pj-index-text { min-width: 0; }
+    }
+    .pj-more { gap: 6px; padding-top: 6px; }
+    .pj-more-row:nth-child(n + 2) { display: none; }
+}
+
+// Narrower desktops and tablets in landscape: the text column gets more of the
+// card, so the longer projects don't run out of room. The card is held to the
+// stage's height; if text still doesn't fit, it scrolls inside the card
+// instead of being cut off.
+@media only screen and (min-width: #{$bp-mobile + 1}) and (prefers-reduced-motion: no-preference) {
+    .pj-card { grid-template-rows: minmax(0, 1fr); }
+}
+@media only screen and (min-width: #{$bp-mobile + 1}) and (max-width: 1500px) and (prefers-reduced-motion: no-preference) {
+    .pj-card { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); }
+}
+@media only screen and (min-width: #{$bp-mobile + 1}) and (max-width: 1250px) and (prefers-reduced-motion: no-preference) {
+    .pj-card { grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); }
+}
+@media only screen and (min-width: #{$bp-mobile + 1}) and (max-height: 860px) and (prefers-reduced-motion: no-preference) {
+    .pj-text {
+        gap: 8px;
+        padding: 16px clamp(16px, 1.8vw, 26px);
+        h5 { font-size: 24px; }
+        li { font-size: 14px; line-height: 1.4; }
+    }
+    .pj-summary { font-size: 15px; line-height: 1.4; }
+    .pj-stack { gap: 5px; padding-top: 2px; span { font-size: 11.5px; padding: 3px 8px; } }
+}
+
+// Very short screens: the company labels go too (each card still shows it)
+@media only screen and (min-width: #{$bp-mobile + 1}) and (max-height: 760px) and (prefers-reduced-motion: no-preference) {
+    .pj-index .pj-index-text small { display: none; }
 }
 
 // short desktop screens: the live-site button goes to one line

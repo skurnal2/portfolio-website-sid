@@ -263,13 +263,43 @@
 // Desktop with motion: pinned, the wheel fills the height
 @media only screen and (min-width: #{$bp-mobile + 1}) and (prefers-reduced-motion: no-preference) {
     .xp { height: calc(100vh - var(--header-h) - 16px); display: flex; flex-direction: column; }
-    .xp-layout { flex: 1; min-height: 0; }
+    .xp-layout { flex: 1; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+    .xp-details { min-height: 0; }
     .xp-wheel {
         height: 100%;
         overflow: hidden;
         -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
         mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
     }
+}
+
+// Pinned layout on narrower screens: the work panel gets more of the width,
+// so its bullets wrap less.
+@media only screen and (min-width: #{$bp-mobile + 1}) and (max-width: 1500px) and (prefers-reduced-motion: no-preference) {
+    .xp-layout { grid-template-columns: 32% 1fr; gap: 2vw; }
+}
+
+// Pinned layout on shorter screens (most laptops, tablets in landscape): the
+// work panel is the tallest thing in the section, so it gets compact. Same
+// content, tighter spacing and slightly smaller type.
+@media only screen and (min-width: #{$bp-mobile + 1}) and (max-height: 960px) and (prefers-reduced-motion: no-preference) {
+    .xp-layout { padding-top: 0.5rem; padding-bottom: 1rem; }
+    .xp-detail-head { margin-bottom: 10px; b { font-size: 22px; } }
+    .xp-work {
+        gap: 8px;
+        margin-bottom: 10px;
+        div { padding: 6px 12px; }
+        dd { font-size: 13px; line-height: 1.35; }
+    }
+    .xp-detail ul { gap: 6px; }
+    .xp-point {
+        gap: 12px;
+        padding: 8px 14px;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    .xp-point-icon { width: 30px; height: 30px; border-radius: 9px; font-size: 13px; }
+    .xp-stack { margin-top: 10px; gap: 5px; span { font-size: 11.5px; padding: 3px 8px; } }
 }
 
 // Everywhere else: each role card followed by its work
