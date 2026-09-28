@@ -33,10 +33,31 @@ const LAYERS = [
 ];
 
 // Three.js is only fetched once the page is idle, so it never delays the first paint.
-const FurCubes = lazy(() => import("../fur-cubes"));
+// If the download fails (slow or filtering networks), try once more before
+// giving up; the boundary below keeps a failure from taking the page down.
+const loadFur = () => import("../fur-cubes");
+const FurCubes = lazy(() => loadFur().catch(() => new Promise((r) => setTimeout(r, 2000)).then(loadFur)));
+
+// The cubes are decoration: if they can't load, show the flat squares instead
+// of letting the error unmount the whole page.
+class FurBoundary extends React.Component {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  componentDidCatch() { document.getElementById("name-container")?.classList.add("no-fur"); }
+  render() { return this.state.failed ? null : this.props.children; }
+}
 
 const HomePage = () => {
   const [showFur, setShowFur] = useState(false);
+  // On a slow connection, show the flat squares until the cubes arrive
+  // (fur-cubes swaps them out when it starts).
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const c = document.getElementById("name-container");
+      if (c && !c.classList.contains("has-fur")) c.classList.add("no-fur");
+    }, 4000);
+    return () => clearTimeout(t);
+  }, []);
   useEffect(() => {
     const go = () => setShowFur(true);
     if ("requestIdleCallback" in window) {
@@ -111,7 +132,7 @@ const HomePage = () => {
           <h3 style={{ "--len": TITLE.length }}><ScrambleText text={TITLE} delay={1000} waitFor={introReady} /></h3>
           <div className="circle" />
           <div className="circle" />
-          {showFur && <Suspense fallback={null}><FurCubes /></Suspense>}
+          {showFur && <FurBoundary><Suspense fallback={null}><FurCubes /></Suspense></FurBoundary>}
         </div>
         <div className="hero-extra">
           <p className="hero-line">

@@ -222,6 +222,7 @@ export default function FurCubes({ containerSelector = "#name-container" }) {
     };
     layout();
     container.classList.add("has-fur");
+    container.classList.remove("no-fur"); // the flat squares were only standing in
 
     const pointer = { x: 0, y: 0 };
     const onPointer = (e) => {
